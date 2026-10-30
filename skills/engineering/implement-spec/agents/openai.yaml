@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implement Spec"
+  short_description: "Integrate a local spec's ticket graph"
+policy:
+  allow_implicit_invocation: false

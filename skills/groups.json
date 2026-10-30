@@ -1,0 +1,30 @@
+{
+  "groups": {
+    "engineering": [
+      "code-review",
+      "codebase-design",
+      "diagnosing-bugs",
+      "domain-modeling",
+      "grill-me",
+      "grill-with-docs",
+      "guidelines",
+      "handoff",
+      "implement",
+      "implement-spec",
+      "setup-assist",
+      "show-me",
+      "tdd",
+      "to-spec",
+      "to-tickets"
+    ],
+    "productivity": [
+      "extracting-session-skills",
+      "find-skills",
+      "skill-creator",
+      "teach",
+      "wait-what",
+      "writing-for-agents",
+      "anatomy"
+    ]
+  }
+}

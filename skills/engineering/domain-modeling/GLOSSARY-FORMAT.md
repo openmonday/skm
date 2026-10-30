@@ -1,0 +1,36 @@
+# Glossary Format
+
+Use one project glossary at `.assist/GLOSSARY.md`. Create it only when a real domain term is resolved. Follow the workspace and ownership rules in [SKILL.md](SKILL.md).
+
+## Structure
+
+```md
+# {Project Name}
+
+{One or two sentence description of the project's domain.}
+
+## Language
+
+**Order**:
+{A one or two sentence description of the term}
+_Avoid_: Purchase, transaction
+
+**Invoice**:
+A request for payment sent to a customer after delivery.
+_Avoid_: Bill, payment request
+
+**Customer**:
+A person or organization that places orders.
+_Avoid_: Client, buyer, account
+```
+
+## Rules
+
+- **Be opinionated.** When multiple words exist for the same concept, pick the best one and list the others under `_Avoid_`.
+- **Keep definitions tight.** One or two sentences max. Define what it IS, not what it does.
+- **Only include terms specific to this project's domain.** General programming concepts (timeouts, error types, utility patterns) don't belong even if the project uses them extensively. Before adding a term, ask: is this a domain concept in this project, or a general programming concept? Only the former belongs.
+- **Group terms under subheadings** when natural clusters emerge. If all terms belong to a single cohesive area, a flat list is fine.
+
+## Project scope
+
+Keep all project terms in `.assist/GLOSSARY.md`. Use subheadings for distinct domain areas, with definitions that make each term's scope clear.

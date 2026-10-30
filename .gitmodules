@@ -1,0 +1,18 @@
+[submodule "upstream/anatomy"]
+	path = upstream/anatomy
+	url = https://github.com/wheresryan22/anatomy.git
+[submodule "upstream/andrej-karpathy-skills"]
+	path = upstream/andrej-karpathy-skills
+	url = https://github.com/multica-ai/andrej-karpathy-skills.git
+[submodule "upstream/anthropics-skills"]
+	path = upstream/anthropics-skills
+	url = https://github.com/anthropics/skills.git
+[submodule "upstream/diagram-design"]
+	path = upstream/diagram-design
+	url = https://github.com/cathrynlavery/diagram-design.git
+[submodule "upstream/humanlayer-skills"]
+	path = upstream/humanlayer-skills
+	url = https://github.com/humanlayer/skills.git
+[submodule "upstream/mattpocock-skills"]
+	path = upstream/mattpocock-skills
+	url = https://github.com/mattpocock/skills.git
