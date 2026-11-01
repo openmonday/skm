@@ -41,7 +41,7 @@ Model-invoked skills such as `domain-modeling`, `tdd`, and `code-review` can sup
 
 ## Productivity
 
-`extracting-session-skills` reviews a conversation's corrections, failed attempts, and verified workflows, then creates or updates reusable skills with checks that prevent the observed rework. Invoke it explicitly at the end of a session or after a useful portion of work. For example: “Use extracting-session-skills to review this session, especially my corrections, and save the reusable workflow.” It uses the available history, reports gaps, and follows the established skill source layout. Install it with `skm add extracting-session-skills` or as part of `@productivity`.
+`extract-skills` reviews a conversation's corrections, failed attempts, and verified workflows, then creates or updates reusable skills with checks that prevent the observed rework. Invoke it explicitly at the end of a session or after a useful portion of work. For example: “Use extract-skills to review this session, especially my corrections, and save the reusable workflow.” It uses the available history, reports gaps, and follows the established skill source layout. Install it with `skm add extract-skills` or as part of `@productivity`.
 
 `find-skills` helps discover and install skills from the open agent skills ecosystem. Install it with `skm add find-skills` or as part of `@productivity`.
 
