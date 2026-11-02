@@ -22,6 +22,50 @@ In Git, check `git ls-files -- .assist` before relying on ignore rules. If Assis
 
 Create `.assist/` if absent. Use [WORKSPACE.md](WORKSPACE.md) as the seed for `.assist/AGENTS.md`, the single source of truth for project-local conventions. On reruns, fill missing conventions while preserving project-specific edits. Create `CONTEXT.md`, `arch/`, and `features/` only when they have content. Debug captures go to the system temp directory; reports and handoffs stay in `.assist/` for manual cleanup.
 
+**Bootstrap arch records for existing code:** When `.assist/arch/` is empty and the repository contains source code, automatically analyze the codebase and create initial arch records:
+
+1. **Identify source directories.** Find main source code locations using common patterns:
+   ```bash
+   find . -type d \( -name src -o -name lib -o -name app -o -name pkg \) -not -path '*/node_modules/*' -not -path '*/vendor/*' | head -20
+   ```
+   Language-specific patterns: `src/main/java`, `lib/`, `app/models`, `pkg/`, etc.
+
+2. **Analyze by module.** For each significant module or closely related file group:
+   - Read the code to understand its purpose and patterns
+   - Identify key interfaces, data flows, and boundaries
+   - Extract observable constraints from the code (validation rules, interface contracts, data flow requirements)
+   - Note architectural patterns (layering, composition patterns, error handling approaches)
+
+3. **Create arch records.** Write records following the arch record format in `WORKSPACE.md`:
+   - One record per cohesive module or closely related file group
+   - Use descriptive slugs: `<module-name>-<purpose>.md`
+   - Set `type: feat` for feature modules, `type: refactor` for pure structural code
+   - List all analyzed files in the `files:` array
+   - Get the latest commit for those files:
+     ```bash
+     git log -1 --format='%H' -- <file-or-directory>
+     ```
+   - Set `since:` to that commit hash
+   - Write **Feature** section describing what the module does (omit for pure refactors)
+   - Write **Constraints** section capturing rules observable in the code
+   - Write **Architecture** section describing structure and key relationships
+
+4. **Prioritize major modules.** Focus on:
+   - Core business logic and domain models
+   - API boundaries and controllers
+   - Data access layers and persistence
+   - Authentication and authorization
+   - Integration points with external services
+   
+   Skip generated code, vendored dependencies, configuration files, and trivial utilities unless they encode important rules.
+
+5. **Report what was created.** List the new arch records, note they capture the current state, and recommend reviewing them for accuracy before relying on them.
+
+Skip bootstrapping when:
+- `.assist/arch/` already contains records (preserve existing records)
+- No source code exists yet (nothing to analyze)
+- The repository is not a Git repository (cannot determine `since:` commit hashes)
+
 For a Git project:
 
 1. Resolve the shared exclude file with `git rev-parse --path-format=absolute --git-path info/exclude`. Run from the project root and keep paths quoted.

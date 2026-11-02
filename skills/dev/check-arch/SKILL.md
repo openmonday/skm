@@ -1,103 +1,131 @@
 ---
 name: check-arch
-description: Find and review arch records for files you're about to change. Use before starting any implementation work to understand existing constraints and architecture decisions.
-argument-hint: "Which files or directories will you be editing?"
+description: Check arch records for staleness after others have committed. Scans recent git history to find which arch records have fallen behind their tracked files.
+argument-hint: "Optional: commit range or recent commit count (default: last 20 commits)"
 disable-model-invocation: true
 ---
 
-Find and review architecture records before changing code. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.assist/AGENTS.md` for workspace conventions.
+Check whether arch records are outdated after others have committed. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.assist/AGENTS.md` for workspace conventions.
 
 ## When to check
 
-Run this skill before:
-- Starting implementation of a spec or ticket
-- Making changes to existing code
-- Refactoring or restructuring modules
-- Any work that might conflict with existing architectural decisions
-
-Skip this for trivial changes where you already know no arch records exist (brand new code areas, documentation-only changes).
+Run this skill:
+- After pulling changes from others
+- Periodically to detect drift in a shared codebase
+- Before starting a development sprint to ensure documentation is current
+- When you suspect arch records may be stale
 
 ## Procedure
 
-1. **Identify the files you'll change.** Get them from the spec, ticket, or user. Include:
-   - Files you'll edit directly
-   - Directories containing new files you'll create
-   - Modules you'll restructure
-
-2. **Ensure `.assist/arch/` exists.** If the directory doesn't exist, create it:
+1. **Identify recent commits.** Use a commit range or recent commit count:
    ```bash
-   mkdir -p .assist/arch
-   ```
-   This is safe to run even if the directory already exists. When `.assist/AGENTS.md` is missing, suggest the user run `/setup-assist` to initialize the full workspace, but creating the arch directory alone is sufficient for check-arch to function.
-
-3. **Find matching arch records.** Use `scripts/find-arch.sh <file>...` or search manually:
-   ```bash
-   # For specific files
-   grep -l -e '- src/payments/stripe.ts' .assist/arch/*.md
+   # Last 20 commits (default)
+   git log --oneline -20
    
-   # For a directory (finds records for any file in that directory)
-   grep -l -e '- src/payments/' .assist/arch/*.md
+   # Specific range
+   git log --oneline abc123f..HEAD
+   
+   # Since last pull
+   git log --oneline @{upstream}..HEAD
    ```
 
-4. **Read each matched arch record.** Pay special attention to:
-   - **Constraints**: rules you must follow
-   - **Architecture**: structure you must preserve or extend consistently
-   - **Feature**: what the code is meant to do (helps you avoid breaking behavior)
-
-5. **Check drift.** For each arch record, see how much has changed since it was last confirmed:
+2. **Find affected files.** List files changed in those commits:
    ```bash
-   # Get the 'since:' value from the record's front matter
-   git log --oneline abc123f..HEAD -- src/payments/stripe.ts
+   git diff --name-only abc123f..HEAD
    ```
-   Many commits since `since:` suggests the record may be stale; read it critically.
 
-6. **Surface conflicts early.** If the work you're about to do would break a constraint or deviate from the recorded architecture, discuss with the user before proceeding:
-   - Can the constraint be loosened?
-   - Should the architecture evolve?
-   - Is there a better approach that preserves the constraint?
+3. **Find arch records for those files.** For each changed file, find its arch records:
+   ```bash
+   # Using the helper script
+   scripts/find-arch.sh <changed-file>...
+   
+   # Or search manually
+   grep -l -e '- src/payments/stripe.ts' .assist/arch/*.md
+   ```
 
-7. **Report findings.** Summarize:
-   - Which arch records apply
-   - Key constraints to follow
-   - Any drift or staleness concerns
-   - Whether the work conflicts with existing records
+4. **Check each arch record's staleness.** For each found record:
+   - Extract the `since:` field from its front matter
+   - Extract the `files:` list
+   - Check if any of those files have commits after `since:`:
+     ```bash
+     # Count commits since the record was last updated
+     git log --oneline <since>..HEAD -- <file>...
+     ```
+   - Record is stale if there are commits after its `since:` value
 
-When no records are found, report that and continue. Missing records are normal for new code areas.
+5. **Report stale arch records.** For each stale record, report:
+   - The record filename
+   - The files it describes
+   - Its current `since:` commit
+   - How many commits have happened since then
+   - Brief summary of what changed (from commit messages)
+   - Whether the changes likely invalidate the record's constraints or architecture
 
-Workers in a shared-worktree run return findings to the coordinator rather than changing the implementation plan directly.
+6. **Recommend action.** For stale records:
+   - If changes are minor (formatting, comments, small refactors), recommend updating `since:` only
+   - If changes affect constraints or architecture, recommend reviewing and updating the record content
+   - If changes completely replace the described behavior, recommend writing a new record
+
+When no arch records are found for the changed files, report that and note it's normal for new code areas or untracked modules.
 
 ## Example
 
-### In a repository with existing arch records:
+### Checking after pulling changes:
 
 ```bash
-# Check files before implementing a payment feature
-$ scripts/find-arch.sh src/payments/stripe.ts src/payments/paypal.ts
+# See recent commits
+$ git log --oneline -20
+abc789f fix: update payment validation
+def456a feat: add webhook verification  
+ghi123b refactor: extract stripe adapter
+
+# Find changed files
+$ git diff --name-only HEAD~20..HEAD
+src/payments/stripe.ts
+src/payments/webhook.ts
+src/payments/types.ts
+
+# Find arch records for those files
+$ scripts/find-arch.sh src/payments/stripe.ts src/payments/webhook.ts src/payments/types.ts
 .assist/arch/payment-gateway-integration.md
 
-# Read the record
-$ cat .assist/arch/payment-gateway-integration.md
+# Read the record and check its 'since:' field
+$ head -10 .assist/arch/payment-gateway-integration.md
+---
+type: feat
+files:
+  - src/payments/stripe.ts
+  - src/payments/types.ts
+since: ghi123b
+---
 
-# Check drift
-$ git log --oneline abc123f..HEAD -- src/payments/
-(shows 3 commits since the record was last updated)
+# Check drift: commits since the record was updated
+$ git log --oneline ghi123b..HEAD -- src/payments/
+abc789f fix: update payment validation
+def456a feat: add webhook verification
 
-# Report: "Found payment-gateway-integration.md. Key constraint: 
-# all payment methods must implement the PaymentProvider interface.
-# The record is from 3 commits ago but still current."
+# Report: "Found stale arch record: payment-gateway-integration.md
+# Last updated at ghi123b, but 2 commits have modified its files since then:
+# - abc789f: update payment validation
+# - def456a: add webhook verification
+#
+# The webhook verification feature may have introduced new constraints.
+# Recommend reviewing the record and updating both content and 'since:' field."
 ```
 
-### In a new repository:
+### When no staleness is detected:
 
 ```bash
-# Create the arch directory if it doesn't exist
-$ mkdir -p .assist/arch
+$ git log --oneline -20
+# (shows recent commits to other modules)
 
-# Search for records (will find none in a new repository)
-$ scripts/find-arch.sh src/payments/stripe.ts
-(no output - no records found)
+$ git diff --name-only HEAD~20..HEAD
+src/ui/components/Button.tsx
+src/ui/styles/theme.ts
 
-# Report: "No arch records found for these files. This is normal for 
-# a new code area. Any architectural constraints established during 
-# this work should be documented in a new arch record after completion."
+$ scripts/find-arch.sh src/ui/components/Button.tsx src/ui/styles/theme.ts
+(no output - no arch records for these files)
+
+# Report: "No arch records found for recently changed files. 
+# This is normal for UI components and styling code that may not need architectural documentation."
 ```
