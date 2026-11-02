@@ -12,4 +12,20 @@ Before adding complexity for a speculative or vanishingly unlikely race or secur
 
 ## Arch record compliance
 
-Before editing a file, find its arch records following "Finding arch records" in `.assist/AGENTS.md`. Read them and treat their Constraints as requirements. When a change would break a constraint, surface the conflict to the user instead of silently overriding it. A constraint can be changed, but not accidentally.
+Before editing a file, find its arch records (see Finding arch records below). Read them and treat their Constraints as requirements. When a change would break a constraint, surface the conflict to the user instead of silently overriding it. A constraint can be changed, but not accidentally.
+
+## Finding arch records
+
+Use the bundled helper to find the arch records that describe the files you will edit:
+
+```bash
+scripts/find-arch.sh path/to/file [...]
+```
+
+- Read all matching arch records.
+- Check drift: `git log --oneline <since>..HEAD -- <file>` shows what changed since a record was confirmed. Many commits means read the record critically; it may be stale.
+- When two arch records disagree, the one with the newer `since:` wins.
+- Silently continue when nothing is found or an arch record file is missing.
+- A renamed file may be listed under its old path; `git log --follow` traces the rename if a direct match fails.
+
+Arch records cover rules tied to code. Rules that apply to the whole project belong in the project-wide rules section of `.assist/AGENTS.md`.
