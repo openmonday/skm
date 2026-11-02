@@ -1,11 +1,16 @@
 ---
 name: update-arch
-description: Update arch records after committing code, setting the `since:` field to the latest commit hash. Use after any commit that completes a feature or introduces rules others must follow.
+description: Update arch records after committing code, setting the `since:` field to the latest commit hash. Use after completing a feature or fix that introduces rules others must follow.
 argument-hint: "Which files or arch records to update?"
 disable-model-invocation: true
 ---
 
 Update arch records after committing code. Read `.assist/AGENTS.md` for the arch record format and lookup procedure.
+
+This is the final step in the arch record workflow:
+1. `/check-arch` before work (find existing records)
+2. Develop (grill-me, to-spec, implement, etc.)
+3. `/update-arch` after work (record the new state)
 
 ## When to update
 
