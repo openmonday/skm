@@ -1,6 +1,6 @@
 {
   "groups": {
-    "dev": [
+    "development": [
       "check-arch",
       "code-review",
       "codebase-design",
@@ -19,14 +19,14 @@
       "to-tickets",
       "update-arch"
     ],
-    "learning": [
+    "teach": [
       "anatomy",
       "learn-by-doing",
       "show-me",
       "teach",
       "wait-what"
     ],
-    "skills-meta": [
+    "meta": [
       "extract-skills",
       "find-skills",
       "skill-creator",
