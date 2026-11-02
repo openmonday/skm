@@ -7,7 +7,7 @@ description: Test-driven development. Use when the user wants to build features 
 
 TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle: consult them before and during the loop, not after.
 
-When exploring the codebase, follow `.assist/AGENTS.md` when present, read `.assist/GLOSSARY.md` for test names and interface vocabulary, and respect relevant `.assist/adr/` decisions. Continue silently if domain docs are absent.
+When exploring the codebase, follow `.assist/AGENTS.md` when present, read `.assist/CONTEXT.md` for test names and interface vocabulary, and find the arch records for the files under test, following "Finding arch records" in `.assist/AGENTS.md`. Continue silently if they are absent.
 
 Follow the workspace's shared-file ownership rules. Fixtures required by lasting regression tests belong in the project's normal test directories, outside ignored `.assist/`.
 

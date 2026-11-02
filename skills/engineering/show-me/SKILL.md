@@ -118,12 +118,12 @@ function expandSkill(command: string): string {
 - For a visual UI, layout, state comparison, or concept too dense for Mermaid, write one focused HTML file — a diagram, an infographic, or a short slide deck, whichever fits the point. Match the product's colors, type, spacing, and components; use real labels and data; support desktop and mobile. Then open it for the user:
 
 ```
-Bash(open .assist/reports/show-me-{description}.html)
+Bash(open ${TMPDIR:-/tmp}/assist-reports/show-me-{description}.html)
 ```
 
 ### guidance
 
-For engineering HTML artifacts, follow `.assist/AGENTS.md` and save under `.assist/reports/`. If the engineering workspace is missing, ask the user to run `/setup-assist`. Workers return proposed artifacts to the coordinator to save. Teaching or non-engineering visuals use their own established workspace. Write local engineering visuals in Chinese; match the audience for product or collaborative visuals.
+For engineering HTML artifacts, save under `${TMPDIR:-/tmp}/assist-reports/` (create it if needed) unless the user names another location; they are disposable output for the developer and are not kept in `.assist/`. Workers return proposed artifacts to the coordinator to save. Teaching or non-engineering visuals use their own established workspace. Write local engineering visuals in Chinese; match the audience for product or collaborative visuals.
 
 Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
 

@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it.
 
-Read `.assist/AGENTS.md` for feature paths, ticket states, and dependency rules. If it is missing, ask the user to run `/setup-assist`. In a shared-worktree run, return drafts to the coordinator to save.
+Read `.assist/AGENTS.md` for work paths, ticket states, and dependency rules. If it is missing, ask the user to run `/setup-assist`. In a shared-worktree run, return drafts to the coordinator to save.
 
 ## Process
 
@@ -18,7 +18,7 @@ Work from whatever is already in the conversation context. Read any spec or loca
 
 ### 2. Explore the codebase (optional)
 
-If you have not already explored the codebase, do so to understand the current state of the code. Use `.assist/GLOSSARY.md` vocabulary when present, and respect relevant `.assist/adr/` decisions.
+If you have not already explored the codebase, do so to understand the current state of the code. Use `.assist/CONTEXT.md` vocabulary when present. Once you know which areas each ticket will touch, find their records following "Finding arch records" in `.assist/AGENTS.md`, and respect their Constraints.
 
 Look for opportunities to prefactor the code to make the implementation easier. "Make the change easy, then make the easy change."
 
@@ -57,7 +57,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Save and validate local tickets
 
-Save the approved tickets in Chinese, one file per ticket, using the workspace's paths and numbering rules. When working from a plan or conversation without a spec, save its confirmed requirements and testing decisions as the feature's `spec.md` so later implementation and review have a durable source. This is a concise source record; suggest `/to-spec` when the user wants a full specification.
+Save the approved tickets in Chinese, one file per ticket, using the workspace's paths and numbering rules. When working from a plan or conversation without a spec, save its confirmed requirements, constraints, and testing decisions as the feature's `spec.md` so later implementation and review have a durable source. This is a concise source record; suggest `/to-spec` when the user wants a full specification.
 
 Use the ticket template below. Preserve existing task IDs, implementation evidence, and completion states when extending a plan. Change an existing ticket's scope or dependencies only as part of the approved breakdown; if completed work needs correction, reopen it explicitly.
 
@@ -75,6 +75,10 @@ The end-to-end behavior this ticket delivers, from the user's perspective.
 
 - [ ] Observable result 1
 - [ ] Observable result 2
+
+## Constraints
+
+The spec's constraints that apply to this ticket, and the names of records found for the areas it touches. Omit when none apply.
 
 ## Verification
 

@@ -6,17 +6,17 @@ disable-model-invocation: true
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
-Read `.assist/AGENTS.md` for workspace conventions; if it is missing, ask the user to run `/setup-assist`. Use the existing feature directory when continuing work; otherwise choose a descriptive feature slug. Ask only when the feature reference is ambiguous. In a shared-worktree run, return the draft to the coordinator to save.
+Read `.assist/AGENTS.md` for workspace conventions; if it is missing, ask the user to run `/setup-assist`. Use the existing work directory when continuing work; otherwise choose a descriptive work slug. Ask only when the work reference is ambiguous. In a shared-worktree run, return the draft to the coordinator to save.
 
 ## Process
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use `.assist/GLOSSARY.md` vocabulary when present, and respect relevant `.assist/adr/` decisions.
+1. Explore the repo to understand the current state of the codebase, if you haven't already. Use `.assist/CONTEXT.md` vocabulary when present. Find the arch records for the areas the work will touch, following "Finding arch records" in `.assist/AGENTS.md`, and respect their Constraints.
 
 2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
 
 Check with the user that these seams match their expectations, honoring an agreement already reached in this conversation.
 
-3. Write the spec in Chinese using the template below and save it to `.assist/features/<feature-slug>/spec.md`. Preserve existing confirmed decisions when updating a spec. Report its path and any unresolved assumptions. The spec is ready when its requirements, scope, and testing decisions are explicit enough to guide implementation.
+3. Write the spec in Chinese using the template below and save it to `.assist/features/<feature-slug>/spec.md`. Collect every rule the user stated in the conversation, including during `grill-me` sessions, into the Constraints section; the spec is the only copy an implementing agent will see. Preserve existing confirmed decisions when updating a spec. Report its path and any unresolved assumptions. The spec is ready when its requirements, scope, and testing decisions are explicit enough to guide implementation.
 
 <spec-template>
 
@@ -47,7 +47,6 @@ A list of implementation decisions that were made. This can include:
 - The modules that will be built/modified
 - The interfaces of those modules that will be modified
 - Technical clarifications from the developer
-- Architectural decisions
 - Schema changes
 - API contracts
 - Specific interactions
@@ -55,6 +54,10 @@ A list of implementation decisions that were made. This can include:
 Do NOT include specific file paths or code snippets. They may end up being outdated very quickly.
 
 Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo, just the important bits.
+
+## Constraints
+
+Rules the implementation must follow and later changes must keep, each with its reason. Include what must NOT be done, and rules for new modules that have no history yet. Architectural boundaries and hard-to-reverse choices belong here. The closing record is built from this section, so keep each rule to one line.
 
 ## Testing Decisions
 

@@ -13,6 +13,9 @@
 [submodule "upstream/humanlayer-skills"]
 	path = upstream/humanlayer-skills
 	url = https://github.com/humanlayer/skills.git
+[submodule "upstream/learning-opportunities"]
+	path = upstream/learning-opportunities
+	url = https://github.com/DrCatHicks/learning-opportunities.git
 [submodule "upstream/mattpocock-skills"]
 	path = upstream/mattpocock-skills
 	url = https://github.com/mattpocock/skills.git

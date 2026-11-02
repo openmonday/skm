@@ -7,13 +7,13 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
-When exploring the codebase, follow `.assist/AGENTS.md` when present, read `.assist/GLOSSARY.md` to understand the relevant modules, and check relevant `.assist/adr/` decisions. Continue silently if domain docs are absent.
+When exploring the codebase, follow `.assist/AGENTS.md` when present, read `.assist/CONTEXT.md` to understand the relevant modules, and find the arch records for the files involved, following "Finding arch records" in `.assist/AGENTS.md`. Continue silently if they are absent.
 
 Follow the workspace's shared-file ownership rules. Workers return diagnostic artifact content and proposed document updates to the coordinator.
 
 ## Diagnostic artifacts
 
-Store temporary captures, repro inputs and scripts, and throwaway harnesses under `.assist/debug/<bug-slug>/`. Before saving local artifacts, require an initialized `.assist/AGENTS.md`; if it is missing, ask the user to run `/setup-assist`. Redact credentials before saving or sharing artifacts, following the rules below. Fixtures required by lasting regression tests belong in the project's normal test directories, outside ignored `.assist/`.
+Store temporary captures, repro inputs and scripts, and throwaway harnesses under `${TMPDIR:-/tmp}/assist-debug/<bug-slug>/`, outside the project and `.assist/`. Redact credentials before saving or sharing artifacts, following the rules below. Fixtures required by lasting regression tests belong in the project's normal test directories, outside ignored `.assist/`.
 
 ## Redact
 
@@ -140,6 +140,7 @@ Required before declaring done:
 - [ ] Original repro no longer reproduces (re-run the Phase 1 loop)
 - [ ] Regression test passes (or absence of seam is documented)
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
-- [ ] Disposable captures, repro scripts, and throwaway harnesses removed from `.assist/debug/<bug-slug>/`; retain helpful redacted diagnostic notes only when useful
+- [ ] Disposable captures, repro scripts, and throwaway harnesses removed from the temp debug directory `assist-debug/<bug-slug>/`
+- [ ] If the bug revealed a rule the code did not enforce, a `fix` arch record is written following "Arch records" in `.assist/AGENTS.md` and the fix commit gets a conventional commit message; otherwise no arch record
 - [ ] Fixtures required by lasting regression tests are in the project's normal test directories
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns

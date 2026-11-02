@@ -1,6 +1,6 @@
 ---
 name: setup-assist
-description: Initialize a local Assist workspace for specs, tickets, domain docs, and handoffs.
+description: Initialize a local Assist workspace for specs, tickets, domain terms, change records, and handoffs.
 disable-model-invocation: true
 ---
 
@@ -20,7 +20,7 @@ In Git, check `git ls-files -- .assist` before relying on ignore rules. If Assis
 
 ## 2. Create the local workspace
 
-Create `.assist/` if absent. Use [WORKSPACE.md](WORKSPACE.md) as the seed for `.assist/AGENTS.md`, the single source of truth for project-local conventions. On reruns, fill missing conventions while preserving project-specific edits. Create the glossary, ADRs, feature directories, handoffs, and debug material only when they have content.
+Create `.assist/` if absent. Use [WORKSPACE.md](WORKSPACE.md) as the seed for `.assist/AGENTS.md`, the single source of truth for project-local conventions. On reruns, fill missing conventions while preserving project-specific edits. Create `CONTEXT.md`, `arch/`, and `features/` only when they have content. Debug captures go to the system temp directory; reports and handoffs stay in `.assist/` for manual cleanup.
 
 For a Git project:
 
@@ -36,6 +36,6 @@ Outside Git, create the same workspace and report that Git exclusion is pending.
 
 ## 3. Verify and report
 
-Check that `.assist/AGENTS.md` is readable, no empty domain documents were scaffolded, and rerunning would preserve existing content and avoid duplicate exclude rules. Verify that project-level instruction files were neither created nor modified. Report the workspace and exclusion result. The installed `to-spec`, `to-tickets`, `implement`, `implement-spec`, `code-review`, and `domain-modeling` skills explicitly read `.assist/AGENTS.md` when invoked.
+Check that `.assist/AGENTS.md` is readable, no empty context, arch, or feature directories were scaffolded, and rerunning would preserve existing content and avoid duplicate exclude rules. Verify that project-level instruction files were neither created nor modified. Report the workspace and exclusion result. The installed `to-spec`, `to-tickets`, `implement`, `implement-spec`, `code-review`, and `domain-modeling` skills explicitly read `.assist/AGENTS.md` when invoked.
 
 Setup initializes the workspace. Later `implement-spec` runs create linked worktrees using the sharing procedure in `.assist/AGENTS.md`.

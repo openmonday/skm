@@ -12,9 +12,9 @@ Read `.assist/AGENTS.md` before starting. If it is missing, ask the user to run 
 
 ## 1. Validate the plan
 
-Read the complete spec and tickets. Resolve every dependency and check the graph for missing references and cycles. Read the glossary and relevant ADRs. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
+Read the complete spec and tickets. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following "Finding arch records" in `.assist/AGENTS.md`, and treat their Constraints as requirements alongside the spec's. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
 
-Record the starting worktree status. Pin the feature's initial review-base commit before implementation, record it in the spec, and reuse it on resume so final review covers the entire effort. If a resumed feature lacks that record, reconstruct and verify its original base from branch history before final review. Use a clean integration worktree so unrelated edits cannot enter merges or review. On resume, reconcile existing work and ticket ownership using the workspace rules.
+Record the starting worktree status. Pin the work's initial review-base commit before implementation, record it in the spec, and reuse it on resume so final review covers the entire effort. Choose the record name (`<YYYY-MM-DD>-<feature-slug>`) and note it in the spec too. If a resumed feature lacks that record, reconstruct and verify its original base from branch history before final review. Use a clean integration worktree so unrelated edits cannot enter merges or review. On resume, reconcile existing work and ticket ownership using the workspace rules.
 
 An optional exploration subagent may inspect code or external docs and return findings. The coordinator saves useful notes in the shared workspace; all workers receive pointers to these notes rather than duplicated context.
 
@@ -34,7 +34,7 @@ Run implementer subagents in the background when available. Each receives the sp
 
 1. Confirms its branch descends from the assigned integration commit before editing. Reports a mismatch so the coordinator can reconcile it while preserving existing work.
 2. Uses `tdd` to implement the ticket and verifies its acceptance criteria.
-3. Commits its scoped changes, merges the current integration tip into its ticket branch, resolves conflicts, and reruns affected checks.
+3. Commits its scoped changes with conventional commit messages, merges the current integration tip into its ticket branch, resolves conflicts, and reruns affected checks.
 4. Returns its branch/commit, check results, unresolved findings, and proposed shared-document updates.
 
 Use context pointers and concise results for communication. A worker report is ready for integration, not proof that a ticket is done.
@@ -43,13 +43,13 @@ Use context pointers and concise results for communication. A worker report is r
 
 Serialize integration merges. A merger subagent may perform each merge, but the coordinator owns scheduling and shared-document updates. If integration advanced after a worker synchronized, merge against the latest tip and resolve and verify any conflicts before accepting the ticket.
 
-Verify the merged acceptance behavior on the integration branch before recording completion. Recompute the frontier and launch newly ready tickets while independent workers continue. Apply agreed glossary/ADR updates centrally so later workers read current decisions.
+Verify the merged acceptance behavior on the integration branch before recording completion. Recompute the frontier and launch newly ready tickets while independent workers continue. Apply agreed glossary updates centrally so later workers read current terms.
 
 **Done:** all ticket implementations are integrated and verified, with recorded commit references and no outstanding worker failures.
 
 ## 5. Review the whole spec
 
-Run the full applicable test suite and typechecking on the integration branch. Invoke `code-review` against the feature's original review-base commit, passing the spec and all ticket paths.
+Run the full applicable test suite and typechecking on the integration branch. Invoke `code-review` against the work's original review-base commit, passing the spec and all ticket paths.
 
 Reopen tickets affected by review findings. Use one implementer subagent to fix the findings, with a shared workspace prepared as above; integrate its corrections and rerun affected checks. If subagents are unavailable, the coordinator performs the same work sequentially.
 
@@ -57,6 +57,6 @@ Reopen tickets affected by review findings. Use one implementer subagent to fix 
 
 ## 6. Close out locally
 
-Finalize ticket states and write the feature completion note in `spec.md`. Report the integration branch, commits, checks, and limitations. Completion ends at the local integration branch.
+Finalize ticket states. Write the feature's record following "Records" in `.assist/AGENTS.md`: start from the spec's Constraints and correct them for what was actually built, including changes made during review. Skip the record only when the change does not qualify. Then remove `.assist/features/<feature-slug>/` and tell the user. Report the integration branch, commits, checks, and limitations. Completion ends at the local integration branch.
 
-Clean up only worktrees created for this effort after confirming their work is integrated and safe to remove. Preserve the owner workspace and all useful local Assist records.
+Clean up only worktrees created for this effort after confirming their work is integrated and safe to remove. Preserve the owner workspace and the context file and arch records.
