@@ -9,6 +9,6 @@ Write a handoff that lets a fresh agent resume the work. For engineering work, r
 
 Include the objective, confirmed decisions, current progress, unresolved questions, and concrete next actions. Record the project location, branch/worktree, and how to find shared `.assist` context. Name the suggested skills for the next session.
 
-Reference existing specs, tickets, records, research, commits, and diffs by path instead of duplicating them. Use project-relative `.assist/...` pointers where possible. Redact secrets before saving. Write local engineering handoffs in Chinese, retaining useful English technical terms.
+Reference existing specs, tickets, records, research, commits, and diffs by path instead of duplicating them. Use project-relative `.assist/...` pointers where possible. Redact secrets before saving.
 
 If the user supplied a next-session focus, tailor the handoff to it. In a shared-worktree run, return handoff content to the coordinator to save. Finish by reporting the saved path.

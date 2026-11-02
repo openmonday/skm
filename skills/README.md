@@ -64,7 +64,7 @@ The template [engineering/setup-assist/WORKSPACE.md](engineering/setup-assist/WO
 └── reports/
 ```
 
-Local working documents are written in Chinese; skill definitions and instruction/configuration files are English. Teaching workspaces managed by `teach` keep their separate structure and vocabulary.
+Skill definitions and instruction/configuration files are English. Teaching workspaces managed by `teach` keep their separate structure and vocabulary.
 
 ## Parallel implementation
 

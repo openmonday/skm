@@ -57,7 +57,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Save and validate local tickets
 
-Save the approved tickets in Chinese, one file per ticket, using the workspace's paths and numbering rules. When working from a plan or conversation without a spec, save its confirmed requirements, constraints, and testing decisions as the feature's `spec.md` so later implementation and review have a durable source. This is a concise source record; suggest `/to-spec` when the user wants a full specification.
+Save the approved tickets, one file per ticket, using the workspace's paths and numbering rules. When working from a plan or conversation without a spec, save its confirmed requirements, constraints, and testing decisions as the feature's `spec.md` so later implementation and review have a durable source. This is a concise source record; suggest `/to-spec` when the user wants a full specification.
 
 Use the ticket template below. Preserve existing task IDs, implementation evidence, and completion states when extending a plan. Change an existing ticket's scope or dependencies only as part of the approved breakdown; if completed work needs correction, reopen it explicitly.
 
