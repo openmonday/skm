@@ -1,6 +1,7 @@
 {
   "groups": {
-    "engineering": [
+    "dev": [
+      "check-arch",
       "code-review",
       "codebase-design",
       "diagnosing-bugs",
@@ -15,17 +16,21 @@
       "show-me",
       "tdd",
       "to-spec",
-      "to-tickets"
+      "to-tickets",
+      "update-arch"
     ],
-    "productivity": [
+    "learning": [
+      "anatomy",
+      "learn-by-doing",
+      "show-me",
+      "teach",
+      "wait-what"
+    ],
+    "skills-meta": [
       "extract-skills",
       "find-skills",
-      "learning-opportunities",
       "skill-creator",
-      "teach",
-      "wait-what",
-      "writing-for-agents",
-      "anatomy"
+      "writing-for-agents"
     ]
   }
 }

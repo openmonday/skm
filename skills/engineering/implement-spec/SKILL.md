@@ -57,6 +57,10 @@ Reopen tickets affected by review findings. Use one implementer subagent to fix 
 
 ## 6. Close out locally
 
-Finalize ticket states. Write the feature's record following "Records" in `.assist/AGENTS.md`: start from the spec's Constraints and correct them for what was actually built, including changes made during review. Skip the record only when the change does not qualify. Then remove `.assist/features/<feature-slug>/` and tell the user. Report the integration branch, commits, checks, and limitations. Completion ends at the local integration branch.
+Finalize ticket states. Remove `.assist/features/<feature-slug>/` and tell the user. Report the integration branch, commits, checks, and limitations.
+
+If the feature qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the files modified in the integration branch to record the architectural decisions. The arch record should start from the spec's Constraints, adjusted for what was actually built, including changes made during review.
+
+Completion ends at the local integration branch.
 
 Clean up only worktrees created for this effort after confirming their work is integrated and safe to remove. Preserve the owner workspace and the context file and arch records.

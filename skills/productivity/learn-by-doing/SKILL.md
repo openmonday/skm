@@ -1,10 +1,10 @@
 ---
-name: learning-opportunities
+name: learn-by-doing
 description: Facilitates deliberate skill development during AI-assisted coding. Offers interactive learning exercises after architectural work (new files, schema changes, refactors). Use when completing features, making design decisions, or when user asks to understand code better. Supports the user's stated goal of understanding design choices as learning opportunities.
 license: CC-BY-4.0
 ---
 
-# Learning Opportunities
+# Learn By Doing
 
 ## Purpose
 

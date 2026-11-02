@@ -141,6 +141,6 @@ Required before declaring done:
 - [ ] Regression test passes (or absence of seam is documented)
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
 - [ ] Disposable captures, repro scripts, and throwaway harnesses removed from the temp debug directory `assist-debug/<bug-slug>/`
-- [ ] If the bug revealed a rule the code did not enforce, a `fix` arch record is written following "Arch records" in `.assist/AGENTS.md` and the fix commit gets a conventional commit message; otherwise no arch record
+- [ ] If the bug revealed a rule the code did not enforce, recommend calling `/update-arch` with the fixed files to record the rule; the fix commit should use a conventional commit message
 - [ ] Fixtures required by lasting regression tests are in the project's normal test directories
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns
