@@ -1,6 +1,6 @@
 {
   "groups": {
-    "development": [
+    "dev": [
       "check-arch",
       "code-review",
       "codebase-design",
