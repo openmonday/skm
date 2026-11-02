@@ -1,6 +1,7 @@
 ---
 name: extract-skills
 description: Extracts reusable skills from a work session by analyzing user corrections, failed attempts, rework causes, and verified workflows. Use when the user asks to distill a conversation into skills, capture lessons at session end, or improve a skill from repeated guidance. Not a progress summary or handoff.
+disable-model-invocation: true
 ---
 
 # Extract Skills
@@ -29,14 +30,14 @@ Group evidence into a few task capabilities, not one skill per incident. A candi
 
 Search existing skills by task, trigger, and failure mechanism, and read the closest matches.
 
-| Finding | Action |
-| --- | --- |
+| Finding                                                                         | Action                                                                       |
+| ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | Existing capability with a missing check, wrong default, or new verified branch | Update that skill at its authoritative source, not a cache or installed copy |
-| Distinct repeatable task | Create a focused skill |
-| Overlapping candidates forming one procedure | Consolidate |
-| One-off state or unresolved work | Exclude |
-| Preference or project fact with no procedure | Report separately; do not change global or project config |
-| Generic or unsupported advice | Skip |
+| Distinct repeatable task                                                        | Create a focused skill                                                       |
+| Overlapping candidates forming one procedure                                    | Consolidate                                                                  |
+| One-off state or unresolved work                                                | Exclude                                                                      |
+| Preference or project fact with no procedure                                    | Report separately; do not change global or project config                    |
+| Generic or unsupported advice                                                   | Skip                                                                         |
 
 If nothing qualifies, say why and create nothing.
 

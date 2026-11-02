@@ -1,6 +1,7 @@
 ---
 name: skill-creator
 description: Creates, revises, and evaluates reusable agent skills with SKILL.md instructions and supporting resources. Applies when turning a workflow into a skill or improving an existing skill's instructions or discovery.
+disable-model-invocation: true
 ---
 
 # Skill Creator
@@ -59,21 +60,21 @@ Treat information as three levels: name and description for discovery, the body 
 
 Choose constraints per operation according to the number of valid approaches and the consequences of error. A single skill may contain operations at different levels.
 
-| Freedom | Task characteristics | Instruction design | Example |
-| --- | --- | --- | --- |
-| High | Several approaches can work; judgment depends on context | Give goals, decision criteria, and relevant checks; leave the method open | Code review guided by correctness, maintainability, and project conventions |
-| Medium | A preferred pattern exists with legitimate variations | Give a template, pseudocode, or parameterized helper; identify configurable choices | Report generation with selectable output format and optional charts |
-| Low | Order or parameters are fragile; deviation can cause concrete harm | Give verified commands or scripts, prerequisites, required order, failure handling, and stopping conditions | A database migration with prescribed backup and verification steps |
+| Freedom | Task characteristics                                               | Instruction design                                                                                          | Example                                                                     |
+| ------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| High    | Several approaches can work; judgment depends on context           | Give goals, decision criteria, and relevant checks; leave the method open                                   | Code review guided by correctness, maintainability, and project conventions |
+| Medium  | A preferred pattern exists with legitimate variations              | Give a template, pseudocode, or parameterized helper; identify configurable choices                         | Report generation with selectable output format and optional charts         |
+| Low     | Order or parameters are fragile; deviation can cause concrete harm | Give verified commands or scripts, prerequisites, required order, failure handling, and stopping conditions | A database migration with prescribed backup and verification steps          |
 
 Explain why a restriction matters. Reserve fixed commands and narrow parameters for operations whose correctness depends on them; confirm that the prescribed script exists and supports the documented arguments. Authorization remains a separate prerequisite for consequential actions.
 
 ### Supporting resources
 
-| Directory | Use when | Handling |
-| --- | --- | --- |
-| `scripts/` | Repeated logic or fragile operations benefit from deterministic execution | Document inputs, outputs, dependencies, and side effects; run new or changed scripts against representative inputs |
-| `references/` | Substantial schemas, domain rules, examples, or mode-specific procedures are needed | Link each resource where relevant and state when to read it; keep each fact in one authoritative place |
-| `assets/` | Templates, images, fonts, or starter files belong in generated output | Explain how to locate and use them; inspect them only when the task needs it |
+| Directory     | Use when                                                                            | Handling                                                                                                           |
+| ------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `scripts/`    | Repeated logic or fragile operations benefit from deterministic execution           | Document inputs, outputs, dependencies, and side effects; run new or changed scripts against representative inputs |
+| `references/` | Substantial schemas, domain rules, examples, or mode-specific procedures are needed | Link each resource where relevant and state when to read it; keep each fact in one authoritative place             |
+| `assets/`     | Templates, images, fonts, or starter files belong in generated output               | Explain how to locate and use them; inspect them only when the task needs it                                       |
 
 Resolve bundled resource links relative to the skill directory. Distinguish those paths from paths in the user's working project, and state the base when ambiguity would affect execution. Make external dependencies discoverable without embedding machine-specific absolute paths.
 

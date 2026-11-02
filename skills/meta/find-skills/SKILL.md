@@ -1,6 +1,7 @@
 ---
 name: find-skills
 description: Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.
+disable-model-invocation: true
 ---
 
 # Find Skills
@@ -45,6 +46,7 @@ When a user asks for help with something, identify:
 Before running a CLI search, check the [skills.sh leaderboard](https://skills.sh/) to see if a well-known skill already exists for the domain. The leaderboard ranks skills by total installs, surfacing the most popular and battle-tested options.
 
 For example, top skills for web development include:
+
 - `vercel-labs/agent-skills` — React, Next.js, web design (100K+ installs each)
 - `anthropics/skills` — Frontend design, document processing (100K+ installs)
 
