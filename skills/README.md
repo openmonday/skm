@@ -14,7 +14,7 @@ skm add @engineering @productivity
 skm add setup-assist implement handoff
 ```
 
-Then run `/setup-assist` once in the target project. Setup writes `.assist/AGENTS.md` and excludes `/.assist` through Git's shared `info/exclude`. Installed Assist skills explicitly read the local instructions when invoked; setup leaves project-level `AGENTS.md` and `CLAUDE.md` unchanged.
+Then run `/setup-assist` once in the target project. Setup writes `.desk/AGENTS.md` and excludes `/.desk` through Git's shared `info/exclude`. Installed Assist skills explicitly read the local instructions when invoked; setup leaves project-level `AGENTS.md` and `CLAUDE.md` unchanged.
 
 Setup uses fixed local defaults and preserves existing content on reruns. It asks only when existing data creates a conflict. Domain docs and feature files are created when needed. A separate clone needs its own setup because Assist files are untracked.
 
@@ -49,10 +49,10 @@ Model-invoked skills such as `domain-modeling`, `tdd`, and `code-review` can sup
 
 ## Local workspace
 
-The template [engineering/setup-assist/WORKSPACE.md](engineering/setup-assist/WORKSPACE.md) becomes the project's `.assist/AGENTS.md`. That generated file is the authoritative source for paths, ticket states, dependencies, language, and worktree sharing. Customize project conventions there.
+The template [engineering/setup-assist/WORKSPACE.md](engineering/setup-assist/WORKSPACE.md) becomes the project's `.desk/AGENTS.md`. That generated file is the authoritative source for paths, ticket states, dependencies, language, and worktree sharing. Customize project conventions there.
 
 ```text
-.assist/
+.desk/
 ├── AGENTS.md
 ├── GLOSSARY.md
 ├── adr/
@@ -68,7 +68,7 @@ Skill definitions and instruction/configuration files are English. Teaching work
 
 ## Parallel implementation
 
-Each ticket worker has its own branch and worktree. The coordinator creates a `.assist` symlink in that worktree to the owner workspace's actual directory, so all agents use the same project-relative paths. The shared Git exclusion ignores both the actual directory and these symlink entries. The coordinator alone changes shared records and advances task states after integration and verification.
+Each ticket worker has its own branch and worktree. The coordinator creates a `.desk` symlink in that worktree to the owner workspace's actual directory, so all agents use the same project-relative paths. The shared Git exclusion ignores both the actual directory and these symlink entries. The coordinator alone changes shared records and advances task states after integration and verification.
 
 Only project source, permanent tests, and required fixtures enter implementation commits. Specs and other Assist material remain outside Git history. Assist does not provide version history or backup of its local documents. Platforms unable to create directory symlinks use sequential implementation.
 

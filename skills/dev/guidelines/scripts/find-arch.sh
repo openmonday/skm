@@ -10,7 +10,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-ARCH_DIR=".assist/arch"
+ARCH_DIR=".desk/arch"
 [ -d "$ARCH_DIR" ] || exit 0
 
 for record in "$ARCH_DIR"/*.md; do

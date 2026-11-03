@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it.
 
-Read `.assist/AGENTS.md` for work paths, ticket states, and dependency rules. If it is missing, ask the user to run `/setup-assist`. In a shared-worktree run, return drafts to the coordinator to save.
+Read `.desk/AGENTS.md` for work paths, ticket states, and dependency rules. If it is missing, ask the user to run `/setup-assist`. In a shared-worktree run, return drafts to the coordinator to save.
 
 ## Process
 
@@ -18,7 +18,7 @@ Work from whatever is already in the conversation context. Read any spec or loca
 
 ### 2. Explore the codebase (optional)
 
-If you have not already explored the codebase, do so to understand the current state of the code. Use `.assist/CONTEXT.md` vocabulary when present. Once you know which areas each ticket will touch, find their records following "Finding arch records" in `.assist/AGENTS.md`, and respect their Constraints.
+If you have not already explored the codebase, do so to understand the current state of the code. Use `.desk/CONTEXT.md` vocabulary when present. Once you know which areas each ticket will touch, find their records following "Finding arch records" in `.desk/AGENTS.md`, and respect their Constraints.
 
 Look for opportunities to prefactor the code to make the implementation easier. "Make the change easy, then make the easy change."
 

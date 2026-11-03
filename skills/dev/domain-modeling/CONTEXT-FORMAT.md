@@ -1,6 +1,6 @@
 # Context Format
 
-Use one project context file at `.assist/CONTEXT.md`. Create it only when a real domain term is resolved. Follow the workspace and ownership rules in [SKILL.md](SKILL.md).
+Use one project context file at `.desk/CONTEXT.md`. Create it only when a real domain term is resolved. Follow the workspace and ownership rules in [SKILL.md](SKILL.md).
 
 ## Structure
 
@@ -33,4 +33,4 @@ _Avoid_: Client, buyer, account
 
 ## Project scope
 
-Keep all project terms in `.assist/CONTEXT.md`. Use subheadings for distinct domain areas, with definitions that make each term's scope clear.
+Keep all project terms in `.desk/CONTEXT.md`. Use subheadings for distinct domain areas, with definitions that make each term's scope clear.

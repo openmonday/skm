@@ -5,7 +5,7 @@ argument-hint: "Which files or arch records to update?"
 disable-model-invocation: true
 ---
 
-Update arch records after committing code. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.assist/AGENTS.md` for workspace conventions.
+Update arch records after committing code. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.desk/AGENTS.md` for workspace conventions.
 
 This is the final step in the arch record workflow:
 1. `/check-arch` before work (find existing records)
@@ -26,15 +26,15 @@ Skip this for typo fixes, formatting, dependency bumps, or changes with no arch 
 
 1. **Identify the committed files.** Use `git diff --name-only <before>..HEAD` or get them from the user. These are the files you just committed.
 
-2. **Ensure `.assist/arch/` exists.** If creating a new arch record or updating existing ones:
+2. **Ensure `.desk/arch/` exists.** If creating a new arch record or updating existing ones:
    ```bash
-   mkdir -p .assist/arch
+   mkdir -p .desk/arch
    ```
    This is safe to run even if the directory already exists.
 
 3. **Find matching arch records.** Use `scripts/find-arch.sh <file>...` or search manually:
    ```bash
-   grep -l -e '- src/payments/stripe.ts' .assist/arch/*.md
+   grep -l -e '- src/payments/stripe.ts' .desk/arch/*.md
    ```
 
 4. **Get the latest commit hash** for the files just committed:
@@ -48,7 +48,7 @@ Skip this for typo fixes, formatting, dependency bumps, or changes with no arch 
 
 7. **Validate the updated records** using `scripts/validate-arch.sh` to catch formatting errors:
    ```bash
-   scripts/validate-arch.sh .assist/arch/payment-gateway-integration.md
+   scripts/validate-arch.sh .desk/arch/payment-gateway-integration.md
    ```
 
 8. **Report which arch records were updated** and the new commit hash.
@@ -65,7 +65,7 @@ $ git log -1 --format='%H' -- src/payments
 abc123f456...
 
 $ scripts/find-arch.sh src/payments
-.assist/arch/payment-gateway-integration.md
+.desk/arch/payment-gateway-integration.md
 
 # Edit payment-gateway-integration.md front matter:
 # since: abc123f456...
@@ -75,9 +75,9 @@ $ scripts/find-arch.sh src/payments
 
 ```bash
 # After committing a new feature with architectural constraints
-$ mkdir -p .assist/arch
+$ mkdir -p .desk/arch
 
-# Create .assist/arch/payment-gateway-integration.md with:
+# Create .desk/arch/payment-gateway-integration.md with:
 ---
 type: feat
 files:

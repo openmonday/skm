@@ -5,7 +5,7 @@ argument-hint: "Optional: commit range or recent commit count (default: last 20 
 disable-model-invocation: true
 ---
 
-Check whether arch records are outdated after others have committed. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.assist/AGENTS.md` for workspace conventions.
+Check whether arch records are outdated after others have committed. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.desk/AGENTS.md` for workspace conventions.
 
 ## When to check
 
@@ -40,7 +40,7 @@ Run this skill:
    scripts/find-arch.sh <changed-file>...
    
    # Or search manually
-   grep -l -e '- src/payments/stripe.ts' .assist/arch/*.md
+   grep -l -e '- src/payments/stripe.ts' .desk/arch/*.md
    ```
 
 4. **Check each arch record's staleness.** For each found record:
@@ -87,10 +87,10 @@ src/payments/types.ts
 
 # Find arch records for those files
 $ scripts/find-arch.sh src/payments/stripe.ts src/payments/webhook.ts src/payments/types.ts
-.assist/arch/payment-gateway-integration.md
+.desk/arch/payment-gateway-integration.md
 
 # Read the record and check its 'since:' field
-$ head -10 .assist/arch/payment-gateway-integration.md
+$ head -10 .desk/arch/payment-gateway-integration.md
 ---
 type: feat
 files:

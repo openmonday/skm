@@ -28,4 +28,4 @@ scripts/find-arch.sh path/to/file [...]
 - Silently continue when nothing is found or an arch record file is missing.
 - A renamed file may be listed under its old path; `git log --follow` traces the rename if a direct match fails.
 
-Arch records cover rules tied to code. Rules that apply to the whole project belong in the project-wide rules section of `.assist/AGENTS.md`.
+Arch records cover rules tied to code. Rules that apply to the whole project belong in the project-wide rules section of `.desk/AGENTS.md`.

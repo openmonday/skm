@@ -5,31 +5,31 @@ description: Build and sharpen a project's domain model. Use when discussing cod
 
 # Domain Modeling
 
-Actively build and sharpen the project's domain model as you design. This is the *active* discipline: challenging terms, inventing edge-case scenarios, and writing the glossary down the moment terms crystallise, while surfacing the rules the design must follow. (Merely *reading* `.assist/CONTEXT.md` for vocabulary is not this skill: that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
+Actively build and sharpen the project's domain model as you design. This is the *active* discipline: challenging terms, inventing edge-case scenarios, and writing the glossary down the moment terms crystallise, while surfacing the rules the design must follow. (Merely *reading* `.desk/CONTEXT.md` for vocabulary is not this skill: that's a one-line habit any skill can do. This skill is for when you're changing the model, not just consuming it.)
 
 ## File structure
 
-Read `.assist/AGENTS.md` when present for canonical runtime conventions and `.assist/CONTEXT.md` if it exists. Find the arch records for the areas under discussion, following "Finding arch records" in `.assist/AGENTS.md`. If these are missing, continue silently.
+Read `.desk/AGENTS.md` when present for canonical runtime conventions and `.desk/CONTEXT.md` if it exists. Find the arch records for the areas under discussion, following "Finding arch records" in `.desk/AGENTS.md`. If these are missing, continue silently.
 
 Use one project context file:
 
 ```
 /
-├── .assist/
+├── .desk/
 │   ├── AGENTS.md
 │   └── CONTEXT.md
 └── src/
 ```
 
-Create `.assist/CONTEXT.md` lazily, when the first real term is resolved. Before saving, require an initialized `.assist/AGENTS.md`; if it is missing, keep the proposed content in the conversation and ask the user to run `/setup-assist`.
+Create `.desk/CONTEXT.md` lazily, when the first real term is resolved. Before saving, require an initialized `.desk/AGENTS.md`; if it is missing, keep the proposed content in the conversation and ask the user to run `/setup-assist`.
 
-For shared-worktree ownership, follow `.assist/AGENTS.md`: workers return proposed changes, and the coordinator applies the inline updates below.
+For shared-worktree ownership, follow `.desk/AGENTS.md`: workers return proposed changes, and the coordinator applies the inline updates below.
 
 ## During the session
 
 ### Challenge against the glossary
 
-When the user uses a term that conflicts with the existing language in `.assist/CONTEXT.md`, call it out immediately. "Your context file defines 'cancellation' as X, but you seem to mean Y. Which is it?"
+When the user uses a term that conflicts with the existing language in `.desk/CONTEXT.md`, call it out immediately. "Your context file defines 'cancellation' as X, but you seem to mean Y. Which is it?"
 
 ### Sharpen fuzzy language
 
@@ -45,9 +45,9 @@ When the user states how something works, check whether the code agrees. If you 
 
 ### Update the glossary inline
 
-When a term is resolved, update `.assist/CONTEXT.md` right there. Don't batch these up: capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+When a term is resolved, update `.desk/CONTEXT.md` right there. Don't batch these up: capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
 
-`.assist/CONTEXT.md` should be totally devoid of implementation details. Do not treat it as a spec, a scratch pad, or a repository for implementation decisions. It is a context and nothing else.
+`.desk/CONTEXT.md` should be totally devoid of implementation details. Do not treat it as a spec, a scratch pad, or a repository for implementation decisions. It is a context and nothing else.
 
 ### Surface rules as constraints
 

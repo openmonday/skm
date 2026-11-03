@@ -8,11 +8,11 @@ disable-model-invocation: true
 
 Deliver the entire spec on one **integration branch**. Treat its tickets as a dependency graph, scheduling the **frontier** as prerequisites complete.
 
-Read `.assist/AGENTS.md` before starting. If it is missing, ask the user to run `/setup-assist`. It defines paths, ticket states, ownership, and the shared-worktree procedure. If the spec has no tickets, ask the user to run `/to-tickets` first; describe any missing input precisely.
+Read `.desk/AGENTS.md` before starting. If it is missing, ask the user to run `/setup-assist`. It defines paths, ticket states, ownership, and the shared-worktree procedure. If the spec has no tickets, ask the user to run `/to-tickets` first; describe any missing input precisely.
 
 ## 1. Validate the plan
 
-Read the complete spec and tickets. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following "Finding arch records" in `.assist/AGENTS.md`, and treat their Constraints as requirements alongside the spec's. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
+Read the complete spec and tickets. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following "Finding arch records" in `.desk/AGENTS.md`, and treat their Constraints as requirements alongside the spec's. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
 
 Record the starting worktree status. Pin the work's initial review-base commit before implementation, record it in the spec, and reuse it on resume so final review covers the entire effort. Choose the record name (`<YYYY-MM-DD>-<feature-slug>`) and note it in the spec too. If a resumed feature lacks that record, reconstruct and verify its original base from branch history before final review. Use a clean integration worktree so unrelated edits cannot enter merges or review. On resume, reconcile existing work and ticket ownership using the workspace rules.
 
@@ -22,9 +22,9 @@ An optional exploration subagent may inspect code or external docs and return fi
 
 ## 2. Prepare integration and workers
 
-Create the integration branch from the agreed base, or resume the existing integration branch for this feature. If the owner worktree has unrelated edits, use a separate clean integration worktree and prepare its shared `.assist` link too. Record the integration branch and owner workspace in the spec. For each ready ticket, the coordinator claims it and prepares a dedicated branch and worktree from the current integration tip, following the sharing procedure in `.assist/AGENTS.md`.
+Create the integration branch from the agreed base, or resume the existing integration branch for this feature. If the owner worktree has unrelated edits, use a separate clean integration worktree and prepare its shared `.desk` link too. Record the integration branch and owner workspace in the spec. For each ready ticket, the coordinator claims it and prepares a dedicated branch and worktree from the current integration tip, following the sharing procedure in `.desk/AGENTS.md`.
 
-Workers read ordinary `.assist/...` paths and leave shared files to the coordinator. If parallel worktrees are unavailable, work sequentially in the owner workspace with the same ticket graph, verification, and review requirements.
+Workers read ordinary `.desk/...` paths and leave shared files to the coordinator. If parallel worktrees are unavailable, work sequentially in the owner workspace with the same ticket graph, verification, and review requirements.
 
 **Done:** each dispatched ticket has one owner and a verified, isolated workspace with readable shared context.
 
@@ -57,7 +57,7 @@ Reopen tickets affected by review findings. Use one implementer subagent to fix 
 
 ## 6. Close out locally
 
-Finalize ticket states. Remove `.assist/features/<feature-slug>/` and tell the user. Report the integration branch, commits, checks, and limitations.
+Finalize ticket states. Remove `.desk/features/<feature-slug>/` and tell the user. Report the integration branch, commits, checks, and limitations.
 
 If the feature qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the files modified in the integration branch to record the architectural decisions. The arch record should start from the spec's Constraints, adjusted for what was actually built, including changes made during review.
 

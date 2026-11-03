@@ -1,8 +1,8 @@
 # Arch Record Format
 
-Architecture records live at `.assist/arch/<descriptive-slug>.md`. Each record documents one finished change: what it built, the rules it set, and its shape.
+Architecture records live at `.desk/arch/<descriptive-slug>.md`. Each record documents one finished change: what it built, the rules it set, and its shape.
 
-Follow the workspace rules in `.assist/AGENTS.md`. Check-arch and update-arch skills use this format.
+Follow the workspace rules in `.desk/AGENTS.md`. Check-arch and update-arch skills use this format.
 
 ## When to write
 
@@ -86,7 +86,7 @@ One of: `feat`, `fix`, `refactor`
 ### files (required)
 List of file paths this record describes. Used for lookup:
 ```bash
-grep -l -e '- src/payments/stripe.ts' .assist/arch/*.md
+grep -l -e '- src/payments/stripe.ts' .desk/arch/*.md
 ```
 
 Paths are relative to project root. Use exact paths; wildcards are not supported.
@@ -112,10 +112,10 @@ Never edit an old record to match new behavior. Write a new record or update the
 
 Use `validate-arch.sh` to check arch records for common mistakes:
 ```bash
-.assist/arch/validate-arch.sh payment-gateway-integration.md
+.desk/arch/validate-arch.sh payment-gateway-integration.md
 ```
 
 Or validate all records:
 ```bash
-.assist/arch/validate-arch.sh .assist/arch/*.md
+.desk/arch/validate-arch.sh .desk/arch/*.md
 ```
