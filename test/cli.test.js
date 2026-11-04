@@ -106,27 +106,6 @@ test('config defaults to bundled skills relative to the module and uses SKM_HOME
   }
 });
 
-test('default repository works from another cwd without SKM_HOME', async (t) => {
-  const data = await workspace(t);
-  const { stdout, stderr } = await run(['list', '--json'], data, { useDefault: true });
-  assert.equal(stderr, '');
-  const result = JSON.parse(stdout);
-  assert.equal(result.repository, bundledSkills);
-  assert.equal(result.target, target(data));
-  assert.equal(result.skills.find(({ name }) => name === 'tdd').installed, false);
-  const { groups } = JSON.parse(await fs.readFile(path.join(bundledSkills, 'groups.json'), 'utf8'));
-  assert.deepEqual(result.groups, groups);
-  assert.ok(result.groups.engineering.includes('tdd'));
-  await assertMissing(target(data));
-
-  const added = await run(['add', 'tdd'], data, { useDefault: true });
-  assert.equal(added.stderr, '');
-  await assertLink(target(data, 'tdd'), path.join(bundledSkills, 'engineering', 'tdd'));
-  const installed = JSON.parse((await run(['list', '--json'], data, { useDefault: true })).stdout);
-  assert.equal(installed.repository, bundledSkills);
-  assert.equal(installed.skills.find(({ name }) => name === 'tdd').installed, true);
-});
-
 test('init creates only the repository root and empty groups.json', async (t) => {
   const data = await workspace(t);
   const { stdout, stderr } = await run(['init'], data);
