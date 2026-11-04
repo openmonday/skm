@@ -19,7 +19,7 @@ Establish the problem before the solution. Explain why each choice exists instea
 
 Apply the full progression to the main concept only. For follow-ups, explain the missing link and its prerequisites. When the user proposes an alternative, show when it works before showing where it falls short.
 
-Stop when the question is answered. For requests solely for code, syntax, or direct instructions, answer directly.
+Stop when the question is answered.
 
 ## Explanation Guidelines
 
@@ -42,17 +42,16 @@ Use high-trust sources for claims that are specialized, current, or easy to misr
 
 When the user is likely to revisit the material, create a concise reference in a fitting format (glossary, checklist, flowchart, code example, formula sheet, procedure). Keep it to reusable knowledge, and keep the terminology and notation of any existing reference.
 
+## Lesson Output
+
+Write the tutorial as Markdown to `.lesson/<topic>/<lesson-slug>.md`, creating directories when absent. Use a precise topic name such as `database` or `data-structure`. Keep generated diagrams and artifacts in the topic directory and link them with relative paths.
+
 ## Visualization
 
 Include a diagram, without being asked, when text alone would force the reader to mentally reconstruct a structure, track several relationships, or compare changing states. Skip it when prose, code, or a table is already clear.
 
 Generate and show the visual; do not just suggest one. Default to Graphviz for static structures and flows. Use D3 with HTML/SVG for interaction or step-by-step state changes. Use ELK with SVG only when compound graphs or explicit ports need more layout control.
 
-If a tool is missing, set it up in a throwaway environment instead of asking the user to install it, and never install globally or add dependencies to the user's project.
-
-- `uv`: if missing, create a venv in a temp directory (`python3 -m venv "$TMPDIR/uv-env" && "$TMPDIR/uv-env/bin/pip" install uv`) and use `"$TMPDIR/uv-env/bin/uv"` in its place.
-- Graphviz: if `dot` is not on `PATH`, use the `wasi-graphviz` package with the `wasmtime` extra on Python 3.11 or later, run through `uv`. Call `wasi_graphviz.render(dot_source, format="svg", engine="dot")` and write the returned bytes. Do not use `graphviz-static`: it has no macOS binary and runs `sudo apt-get` on Linux.
-- D3 or ELK: run in a temporary directory with `npx` or `uv run --with`.
-- Convert SVG to PNG only if inspection or the user's format requires it.
+Check that the required tools are installed before rendering (`dot -V` for Graphviz, `npx --version` for D3 or ELK). If a tool or package is missing, stop and ask the user to install it; do not create environments, install packages, or add dependencies to the user's project. Convert SVG to PNG only if inspection or the user's format requires it.
 
 Let the primary relationships determine the layout, and split crowded views or show successive states. Render and inspect the output, and fix misleading placement, overlaps, unreadable labels, and confusing connections before presenting it. If inspection is unavailable, say so. Do not substitute source code for the rendered visual unless asked.
