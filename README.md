@@ -21,11 +21,11 @@ The skill root is the directory containing the categories and `groups.json` dire
 ```text
 skills/
 ├── groups.json
-├── engineering/
+├── dev/
 │   ├── code-review/
 │   │   └── SKILL.md
 │   └── ...
-└── productivity/
+└── teach/
     ├── teach/
     │   └── SKILL.md
     └── ...
@@ -79,4 +79,4 @@ When a command selects the same skill more than once, `add` warns on stderr with
 
 Project installations default to `.agents/skills`. Set `SKM_TARGET_DIR` to change that directory, using a path relative to the current project or an absolute path.
 
-For the bundled skills and Assist workflow, see [skills/README.md](skills/README.md).
+For the bundled skills and the dev workflow, see [skills/README.md](skills/README.md).

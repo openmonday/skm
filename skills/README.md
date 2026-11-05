@@ -1,77 +1,81 @@
-# Assist Skills
+# Skills
 
-Local engineering and productivity skills, including workflows adapted from Matt Pocock's skills. The upstream snapshot under `upstream/` is reference material; the editable skills in this directory define the Assist workflow.
+Local development, learning, and productivity skills, including workflows adapted from Matt Pocock's skills. The upstream snapshot under `upstream/` is reference material. The editable skills in this directory define the workflows.
 
-This directory is SKM's default skill root: `engineering/` contains 15 skills, `productivity/` contains 6, and `groups.json` defines the groups. See the [SKM README](../README.md) for discovery, group configuration, and command behavior.
+This directory is SKM's default skill root. `dev/` contains 18 skills, `teach/` contains 5, and `meta/` contains 4. `groups.json` defines the groups (`dev`, `teach`, `meta`). See the [SKM README](../README.md) for discovery, group configuration, and command behavior.
 
 ## Start a project
 
-Install the skills you need, including `setup-assist`:
+Install the skills you need, including `setup-desk`:
 
 ```sh
-skm add @engineering @productivity
+skm add @dev
 # Or select individual skills
-skm add setup-assist implement handoff
+skm add setup-desk implement handoff
 ```
 
-Then run `/setup-assist` once in the target project. Setup writes `.desk/AGENTS.md` and excludes `/.desk` through Git's shared `info/exclude`. Installed Assist skills explicitly read the local instructions when invoked; setup leaves project-level `AGENTS.md` and `CLAUDE.md` unchanged.
+Then run `/setup-desk` once in the target project. It writes `.desk/AGENTS.md` and excludes `/.desk` through Git's shared `info/exclude`. Installed dev skills read these local instructions when invoked. Setup leaves the project-level `AGENTS.md` and `CLAUDE.md` unchanged.
 
-Setup uses fixed local defaults and preserves existing content on reruns. It asks only when existing data creates a conflict. Domain docs and feature files are created when needed. A separate clone needs its own setup because Assist files are untracked.
+Setup uses fixed local defaults and preserves existing content on reruns. It asks only when existing data creates a conflict. Domain docs, research reports, and feature files are created when needed. Each clone needs its own setup, because `.desk` files are untracked.
 
-## Workflow
+## Dev workflow
 
 | Skill | Purpose | Local result |
 | --- | --- | --- |
+| `research` | Explain how reference projects implement a feature, then map it onto this project | `.desk/research/<topic>/report.md` |
 | `grill-me` | Clarify and stress-test decisions | Confirmed decisions in the conversation |
-| `grill-with-docs` | Combine the interview with domain modeling | Resolved terms and ADRs recorded during the conversation |
-| `domain-modeling` | Resolve domain terms and significant decisions | Glossary and ADRs |
-| `to-spec` | Synthesize the discussed requirements | A feature spec |
+| `grill-with-docs` | Combine the interview with domain modeling | Resolved terms in `.desk/CONTEXT.md` |
+| `domain-modeling` | Resolve domain terms and confirm rules | Glossary entries and one-line constraints |
+| `to-spec` | Synthesize the discussed requirements | A feature spec with Constraints and Supersedes |
 | `to-tickets` | Split a spec, plan, or conversation into verifiable slices | One file per ticket with dependencies |
 | `implement` | Complete a focused piece of work | Reviewed commit on the current branch |
 | `implement-spec` | Complete the ticket graph, optionally in parallel | Verified local integration branch |
 | `tdd` | Build one tested behavior at a time | Tests and implementation in project source directories |
 | `diagnosing-bugs` | Reproduce, isolate, diagnose, and fix a bug | Verified fix and appropriate regression coverage |
 | `code-review` | Check standards and requirements separately | Findings covering committed and working-tree changes |
+| `check-arch` / `update-arch` | Find stale arch records / record rules after commits | `.desk/arch/<slug>.md` |
 | `handoff` | Preserve enough context to resume | A local handoff |
-| `show-me` | Explain with a focused visual | Inline visual or local HTML report |
+| `show-me` | Explain with a focused visual | Inline visual or temporary HTML report |
 
-A common sequence is `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement-spec`. Use `/grill-me` for an interview without domain-document updates. For focused work, use `/implement`; for a difficult failure, use `diagnosing-bugs`. `to-tickets` can also start from a clear plan or conversation and records a concise source spec for later implementation and review.
+A common sequence is `/research` → `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement-spec` → `/update-arch`. Use `/grill-me` for an interview without domain-document updates. For focused work, use `/implement`. For a difficult failure, use `diagnosing-bugs`. See [dev/README.md](dev/README.md) for the full flow.
 
 Model-invoked skills such as `domain-modeling`, `tdd`, and `code-review` can support a larger workflow. User-invoked skills remain explicit entry points.
 
-## Productivity
+## Teach
 
-`extract-skills` reviews a conversation's corrections, failed attempts, and verified workflows, then creates or updates reusable skills with checks that prevent the observed rework. Invoke it explicitly at the end of a session or after a useful portion of work. For example: “Use extract-skills to review this session, especially my corrections, and save the reusable workflow.” It uses the available history, reports gaps, and follows the established skill source layout. Install it with `skm add extract-skills` or as part of `@productivity`.
+`teach` reconstructs a concept from a practical problem and writes lessons to `.lesson/<topic>/`. `wait-what` re-explains the last message that didn't land, `learn-by-doing` offers exercises after architectural work, `anatomy` draws technical ideas as isometric figures, and `show-me` (shared with `dev`) draws focused visuals. Install them with `skm add @teach`.
 
-`find-skills` helps discover and install skills from the open agent skills ecosystem. Install it with `skm add find-skills` or as part of `@productivity`.
+## Meta
 
-`skill-creator` creates, revises, and evaluates reusable agent skills with portable instructions and optional supporting resources. It follows the requested destination and target environment's conventions without assuming a particular agent platform. Install it with `skm add skill-creator` or as part of `@productivity`.
+`extract-skills` reviews a conversation's corrections, failed attempts, and verified workflows, then creates or updates reusable skills with checks that prevent the same rework. Invoke it explicitly at the end of a session or after a useful portion of work. For example: “Use extract-skills to review this session, especially my corrections, and save the reusable workflow.” It works from the available history, reports gaps, and follows the established skill source layout.
+
+`find-skills` helps discover and install skills from the open agent skills ecosystem. `skill-creator` creates, revises, and evaluates reusable agent skills with portable instructions and optional supporting resources. `writing-for-agents` guides writing skills and `AGENTS.md` files. Install them with `skm add @meta`.
 
 ## Local workspace
 
-The template [engineering/setup-assist/WORKSPACE.md](engineering/setup-assist/WORKSPACE.md) becomes the project's `.desk/AGENTS.md`. That generated file is the authoritative source for paths, ticket states, dependencies, language, and worktree sharing. Customize project conventions there.
+The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes the project's `.desk/AGENTS.md`. That generated file is the authoritative source for paths, ticket states, dependencies, language, worktree sharing, and how arch records are applied. Customize project conventions there.
 
 ```text
 .desk/
 ├── AGENTS.md
-├── GLOSSARY.md
-├── adr/
+├── CONTEXT.md
+├── arch/<slug>.md
+├── research/<topic>/report.md
 ├── features/<feature>/
 │   ├── spec.md
-│   └── issues/<NN>-<ticket>.md
+│   └── tickets/<NN>-<ticket>.md
 ├── handoffs/
-├── debug/<bug>/
 └── reports/
 ```
 
-Skill definitions and instruction/configuration files are English. Teaching workspaces managed by `teach` keep their separate structure and vocabulary.
+Debug captures go to `${TMPDIR:-/tmp}/desk-debug/`. Skill definitions and instruction or configuration files are in English. Teaching workspaces managed by `teach` keep their own structure and vocabulary.
 
 ## Parallel implementation
 
-Each ticket worker has its own branch and worktree. The coordinator creates a `.desk` symlink in that worktree to the owner workspace's actual directory, so all agents use the same project-relative paths. The shared Git exclusion ignores both the actual directory and these symlink entries. The coordinator alone changes shared records and advances task states after integration and verification.
+Each ticket worker has its own branch and worktree. The coordinator creates a `.desk` symlink in that worktree pointing to the owner workspace's actual directory, so all agents use the same project-relative paths. The shared Git exclusion ignores both the actual directory and these symlink entries. Only the coordinator changes shared records, and it advances ticket states after integration and verification.
 
-Only project source, permanent tests, and required fixtures enter implementation commits. Specs and other Assist material remain outside Git history. Assist does not provide version history or backup of its local documents. Platforms unable to create directory symlinks use sequential implementation.
+Only project source, permanent tests, and required fixtures enter implementation commits. Specs and other `.desk` material stay out of Git history. The workspace has no version history or backup of its own. Platforms that cannot create directory symlinks use sequential implementation.
 
 ## Validation boundary
 
-`setup-assist` and the other skills are instructions for agents, rather than deterministic installation scripts. Their completion criteria require checking actual paths, Git exclusion, dependencies, test results, and integration state during execution. Editing these skills does not initialize a project or run its implementation workflow.
+`setup-desk` and the other skills are instructions for agents, not deterministic installation scripts. Their completion criteria require checking actual paths, Git exclusion, dependencies, test results, and integration state during execution. Editing these skills does not initialize a project or run its implementation workflow.
