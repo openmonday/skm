@@ -1,0 +1,5 @@
+interface:
+  display_name: "Check Arch"
+  short_description: "Find arch records that drifted from code"
+policy:
+  allow_implicit_invocation: false

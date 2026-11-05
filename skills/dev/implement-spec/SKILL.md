@@ -8,11 +8,11 @@ disable-model-invocation: true
 
 Deliver the entire spec on one **integration branch**. Treat its tickets as a dependency graph, scheduling the **frontier** as prerequisites complete.
 
-Read `.desk/AGENTS.md` before starting. If it is missing, ask the user to run `/setup-assist`. It defines paths, ticket states, ownership, and the shared-worktree procedure. If the spec has no tickets, ask the user to run `/to-tickets` first; describe any missing input precisely.
+Read `.desk/AGENTS.md` before starting. If it is missing, ask the user to run `/setup-desk`. It defines paths, ticket states, ownership, and the shared-worktree procedure. If the spec has no tickets, ask the user to run `/to-tickets` first; describe any missing input precisely.
 
 ## 1. Validate the plan
 
-Read the complete spec and tickets. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following "Finding arch records" in `.desk/AGENTS.md`, and treat their Constraints as requirements alongside the spec's. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
+Read the complete spec and tickets. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following "Finding arch records" in `.desk/AGENTS.md`. Apply them under "Using arch records": their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. Pass both the records and the Supersedes list to every worker. A worker that would break any other Constraint stops and reports back instead of proceeding. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
 
 Record the starting worktree status. Pin the work's initial review-base commit before implementation, record it in the spec, and reuse it on resume so final review covers the entire effort. Choose the record name (`<YYYY-MM-DD>-<feature-slug>`) and note it in the spec too. If a resumed feature lacks that record, reconstruct and verify its original base from branch history before final review. Use a clean integration worktree so unrelated edits cannot enter merges or review. On resume, reconcile existing work and ticket ownership using the workspace rules.
 
@@ -59,7 +59,7 @@ Reopen tickets affected by review findings. Use one implementer subagent to fix 
 
 Finalize ticket states. Remove `.desk/features/<feature-slug>/` and tell the user. Report the integration branch, commits, checks, and limitations.
 
-If the feature qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the files modified in the integration branch to record the architectural decisions. The arch record should start from the spec's Constraints, adjusted for what was actually built, including changes made during review.
+If the feature qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the files modified in the integration branch to record the architectural decisions. The arch record should start from the spec's Constraints and Supersedes list, adjusted for what was actually built, including changes made during review.
 
 Completion ends at the local integration branch.
 

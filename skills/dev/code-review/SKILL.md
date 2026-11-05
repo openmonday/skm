@@ -36,7 +36,7 @@ Look for the originating requirements in this order:
 3. `.desk/features/<feature-slug>/spec.md` and its tickets matching the branch or feature.
 4. If nothing is found, ask the user where the spec is. If none exists, skip the Spec subagent and report "no spec available".
 
-Pass the full spec and applicable tickets to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following "Finding arch records" in `.desk/AGENTS.md`, and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec deliberately replaces it. Reviewers read shared Assist files and return findings to the coordinator.
+Pass the full spec and applicable tickets to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following "Finding arch records" in `.desk/AGENTS.md`, and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec's Supersedes list names that Constraint. If a record has drifted (commits after its `since:`), tell the reviewer to check its Constraints against the code rather than assume the record is current. Reviewers read shared `.desk` files and return findings to the coordinator.
 
 ### 3. Identify the standards sources
 

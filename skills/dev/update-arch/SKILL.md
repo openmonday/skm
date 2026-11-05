@@ -44,7 +44,7 @@ Skip this for typo fixes, formatting, dependency bumps, or changes with no arch 
 
 5. **Update each matched arch record's `since:` field** to this commit hash. If the record describes multiple files that were not all part of this commit, update `since:` only if all listed files are current. When in doubt, use the newest commit touching any listed file.
 
-6. **Check the arch record's content still matches reality.** If the commit changed behavior in a way that contradicts the arch record's Constraints or Architecture, update the content or write a new arch record that supersedes it.
+6. **Check the arch record's content still matches reality.** If the work came from a spec, apply its Supersedes list: replace or remove each named Constraint as it was actually built. Then check the rest of the record against the committed code. If the commit changed behavior in a way that contradicts the record's Constraints or Architecture, update the content, or write a new record that supersedes it. Never update a record for code that is not committed yet.
 
 7. **Validate the updated records** using `scripts/validate-arch.sh` to catch formatting errors:
    ```bash

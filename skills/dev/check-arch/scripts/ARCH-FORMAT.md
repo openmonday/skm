@@ -2,7 +2,7 @@
 
 Architecture records live at `.desk/arch/<descriptive-slug>.md`. Each record documents one finished change: what it built, the rules it set, and its shape.
 
-Follow the workspace rules in `.desk/AGENTS.md`. Check-arch and update-arch skills use this format.
+Follow the workspace rules in `.desk/AGENTS.md`. Check-arch and update-arch skills use this format. How agents weigh records against specs and code is defined under "Using arch records" in `.desk/AGENTS.md`.
 
 ## When to write
 
@@ -75,7 +75,8 @@ We chose composition over inheritance to allow runtime provider switching.
 - **Keep it under 60 lines.** Split unrelated topics into separate records.
 - **No line numbers or code snippets.** Git already links commits to files, and line numbers go stale. Describe structure and rules, not implementation.
 - **One constraint per line.** Make each independently understandable.
-- **Copy from spec Constraints.** Start with the spec's Constraints section and adjust for what was actually built. Don't write a second version from memory.
+- **Copy from spec Constraints.** Start with the spec's Constraints and Supersedes sections and adjust for what was actually built. Don't write a second version from memory.
+- **Write after commit.** A record describes committed code. Never write or edit one for planned work.
 - **Update files list when paths change.** If a file is renamed or moved, update its entry so lookup still works.
 
 ## Metadata fields
@@ -98,24 +99,26 @@ Updated by `/update-arch` after each commit that changes the described files.
 
 ## Superseding records
 
-When a new record changes rules from an earlier one, note which record it supersedes in the content:
+Planned rule changes are listed in the spec's Supersedes section, not in records. After the code is committed, carry them out in one of two ways:
+
+- **Same topic:** update the existing record. Replace or remove the superseded Constraint, adjust Architecture, and set the new `since:` hash.
+- **New topic that overrides an older record:** write a new record and note what it replaces, so readers of the old record find the change:
 
 ```markdown
 ## Constraints
 - Payments now support async webhooks (replaces sync-only rule in payment-gateway-integration.md)
-- ...
 ```
 
-Never edit an old record to match new behavior. Write a new record or update the existing one with the new `since:` hash.
+Also remove the replaced rule from the old record, so the two never disagree.
 
 ## Validation
 
-Use `validate-arch.sh` to check arch records for common mistakes:
+`validate-arch.sh` ships next to this file in the skill's `scripts/` directory. Run it from the project root, with the script path resolved against the skill directory:
 ```bash
-.desk/arch/validate-arch.sh payment-gateway-integration.md
+scripts/validate-arch.sh .desk/arch/payment-gateway-integration.md
 ```
 
-Or validate all records:
+With no arguments it validates every record in `.desk/arch/`:
 ```bash
-.desk/arch/validate-arch.sh .desk/arch/*.md
+scripts/validate-arch.sh
 ```

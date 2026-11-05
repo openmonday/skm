@@ -6,11 +6,11 @@ disable-model-invocation: true
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
-Read `.desk/AGENTS.md` for workspace conventions; if it is missing, ask the user to run `/setup-assist`. Use the existing work directory when continuing work; otherwise choose a descriptive work slug. Ask only when the work reference is ambiguous. In a shared-worktree run, return the draft to the coordinator to save.
+Read `.desk/AGENTS.md` for workspace conventions; if it is missing, ask the user to run `/setup-desk`. Use the existing work directory when continuing work; otherwise choose a descriptive work slug. Ask only when the work reference is ambiguous. In a shared-worktree run, return the draft to the coordinator to save.
 
 ## Process
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use `.desk/CONTEXT.md` vocabulary when present. Find the arch records for the areas the work will touch, following "Finding arch records" in `.desk/AGENTS.md`, and respect their Constraints.
+1. Explore the repo to understand the current state of the codebase, if you haven't already. Use `.desk/CONTEXT.md` vocabulary when present. If a research report for this work exists under `.desk/research/`, read it and reuse its findings rather than re-deriving them. Find the arch records for the areas the work will touch, following "Finding arch records" in `.desk/AGENTS.md`, and respect their Constraints. List every Constraint the work must change and confirm each one with the user. These become the spec's Supersedes list. Leave the records themselves untouched; `/update-arch` rewrites them after the code is committed.
 
 2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
 
@@ -59,6 +59,14 @@ Exception: if a prototype produced a snippet that encodes a decision more precis
 
 Rules the implementation must follow and later changes must keep, each with its reason. Include what must NOT be done, and rules for new modules that have no history yet. Architectural boundaries and hard-to-reverse choices belong here. The closing record is built from this section, so keep each rule to one line.
 
+### Supersedes
+
+Arch record Constraints this work deliberately changes, each confirmed by the user. One line each:
+
+- `<record>.md`: "<old rule>" → "<new rule or removed>": <reason>
+
+Write "None" when no record constraint changes. During implementation, these entries override only the rules they name; every other record Constraint stays binding.
+
 ## Testing Decisions
 
 A list of testing decisions that were made. Include:
@@ -73,6 +81,6 @@ A description of the things that are out of scope for this spec.
 
 ## Further Notes
 
-Any further notes about the feature.
+Any further notes about the feature, including paths to research reports used.
 
 </spec-template>

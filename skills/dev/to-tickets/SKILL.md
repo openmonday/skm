@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it.
 
-Read `.desk/AGENTS.md` for work paths, ticket states, and dependency rules. If it is missing, ask the user to run `/setup-assist`. In a shared-worktree run, return drafts to the coordinator to save.
+Read `.desk/AGENTS.md` for work paths, ticket states, and dependency rules. If it is missing, ask the user to run `/setup-desk`. In a shared-worktree run, return drafts to the coordinator to save.
 
 ## Process
 
@@ -78,7 +78,7 @@ The end-to-end behavior this ticket delivers, from the user's perspective.
 
 ## Constraints
 
-The spec's constraints that apply to this ticket, and the names of records found for the areas it touches. Omit when none apply.
+The spec's constraints that apply to this ticket, the names of records found for the areas it touches, and any spec Supersedes entries this ticket carries out. Omit when none apply.
 
 ## Verification
 

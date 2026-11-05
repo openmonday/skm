@@ -10,7 +10,7 @@ Implement the work described by the user's spec or tickets.
 
 ## 1. Establish scope
 
-Read `.desk/AGENTS.md`; if missing, ask the user to run `/setup-assist`. Resolve local references using its conventions and state the ticket title before starting. Read the full source spec and `.desk/CONTEXT.md`. Find the arch records for the files and directories you will change, following "Finding arch records" in `.desk/AGENTS.md`, and treat their Constraints as requirements alongside the spec's. Ask only when the reference or required behavior is ambiguous.
+Read `.desk/AGENTS.md`; if missing, ask the user to run `/setup-desk`. Resolve local references using its conventions and state the ticket title before starting. Read the full source spec and `.desk/CONTEXT.md`. Find the arch records for the files and directories you will change, following "Finding arch records" in `.desk/AGENTS.md`. Apply them under "Using arch records": their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. If the work would break any other Constraint, stop and ask. Ask only when the reference or required behavior is ambiguous.
 
 Record the current branch, starting commit, and existing working-tree changes. Keep unrelated user changes intact and outside the implementation commit. The starting commit is the fixed point passed to `code-review`.
 
