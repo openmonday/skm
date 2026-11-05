@@ -57,9 +57,11 @@ Reopen tickets affected by review findings. Use one implementer subagent to fix 
 
 ## 6. Close out locally
 
-Finalize ticket states. Remove `.desk/features/<feature-slug>/` and tell the user. Report the integration branch, commits, checks, and limitations.
+Finalize ticket states. Report the integration branch, commits, checks, and limitations.
 
-If the feature qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the files modified in the integration branch to record the architectural decisions. The arch record should start from the spec's Constraints and Supersedes list, adjusted for what was actually built, including changes made during review.
+If the feature qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the files modified in the integration branch and the spec path to record the architectural decisions. The arch record should start from the spec's Constraints and Supersedes list, adjusted for what was actually built, including changes made during review.
+
+Then close out the feature: if `/update-arch` was recommended, keep `.desk/features/<feature-slug>/`, because `/update-arch` needs the spec and removes the folder itself afterwards; otherwise remove the folder now. Tell the user which happened.
 
 Completion ends at the local integration branch.
 

@@ -12,13 +12,14 @@ Instructions for agents editing the dev workflow skills. Read [README.md](README
 
 Many skills depend on the same conventions. A change to any of these must be applied to every skill that uses it:
 
-- **Workspace root is `.desk/`, and the setup skill is `setup-desk`.** Its paths are `CONTEXT.md`, `arch/`, `research/<topic>/`, `features/<slug>/spec.md`, `features/<slug>/tickets/NN-<slug>.md`, `handoffs/`, and `reports/`. To find every place a path is used: `rg -n '\.desk/' skills/dev`.
-- **`.desk/AGENTS.md` is generated from `setup-desk/WORKSPACE.md`.** Skills cite sections of it by name: "Tickets", "Ownership", "Shared worktrees", "Finding arch records", "Using arch records", and "Project-wide rules". Keep those names stable. If you rename one, update every citation (`rg -n '"[A-Z][a-z]+ [a-z ]+" in .desk/AGENTS.md' skills/dev`).
+- **Workspace root is `.desk/`, and the setup skill is `setup-desk`.** Its paths are `CONTEXT.md`, `architecture/`, `features/<slug>/spec.md`, `features/<slug>/tickets/NN-<slug>.md`, `handoffs/`, `references/<project>/`, and `research/<topic>/`. Subdirectory names are full words, never abbreviations. To find every place a path is used: `rg -n '\.desk/' skills/dev`.
+- **`.desk/AGENTS.md` is generated from `setup-desk/WORKSPACE.md`.** Skills cite sections of it by name: "Files", "Tickets", "Ownership", "Shared worktrees", "Finding arch records", "Using arch records", and "Project-wide rules". Keep those names stable. If you rename one, update every citation (`rg -n '"[A-Z][a-z]+ [a-z ]+" in .desk/AGENTS.md' skills/dev`).
 - **Arch record lifecycle.** A record describes committed code, never a plan. Planned changes go in the spec's **Supersedes** section. Agents treat records as binding except for Supersedes entries, and `/update-arch` rewrites records after commit. The rules are spread across `WORKSPACE.md` ("Using arch records"), `guidelines`, `to-spec`, `to-tickets`, `implement`, `implement-spec`, `code-review`, `update-arch`, `research` §7, and `ARCH-FORMAT.md`. Change them together.
-- **Missing workspace.** Workflow skills (`research`, `to-spec`, `to-tickets`, `implement`, `implement-spec`, `handoff`) ask the user to run `/setup-desk`. Supporting skills (`tdd`, `diagnosing-bugs`, `domain-modeling`, `code-review`) continue silently.
+- **One owner skill per `.desk` file.** The "Files" table in `WORKSPACE.md` names the owner skill, format, and lifetime of every path. Only the owner creates a file or changes its structure, and its format lives in the owner skill. When you add a path or change an owner, update that table and the owner skill together.
+- **Missing workspace.** Workflow skills (`to-spec`, `to-tickets`, `implement`, `implement-spec`, `handoff`) ask the user to run `/setup-desk`. `research` names no other skill and only says the workspace is not initialized. Supporting skills (`tdd`, `diagnosing-bugs`, `domain-modeling`, `code-review`) continue silently.
 - **Coordinator ownership.** In shared-worktree runs, workers return proposed changes and only the coordinator writes shared `.desk` files. Keep this sentence in every skill that writes to `.desk/`.
 - **Arch record helpers are duplicated.** `find-arch.sh` exists in `check-arch/scripts/`, `guidelines/scripts/`, and `update-arch/scripts/`. `validate-arch.sh` and `ARCH-FORMAT.md` exist in `check-arch/scripts/` and `update-arch/scripts/`. Each skill must stay self-contained, so edit one copy, copy it over the others, and confirm they match with `diff`.
-- **Spec → ticket → record chain.** `research` feeds `grill-with-docs` and `to-spec`. `to-spec` collects Constraints and Supersedes. `to-tickets` copies the ones that apply into each ticket. `update-arch` builds records from them. Keep section names (`Constraints`, `Supersedes`, `Status`, `Blocked by`, `Verification`) consistent across these skills and `ARCH-FORMAT.md`.
+- **Spec → ticket → record chain.** `grill-with-docs` and `to-spec` read research reports; `research` itself does not name them. `to-spec` collects Constraints and Supersedes. `to-tickets` copies the ones that apply into each ticket. `update-arch` builds records from them, then removes the feature folder; `implement` and `implement-spec` keep the folder whenever they recommend `/update-arch`. Keep section names (`Constraints`, `Supersedes`, `Status`, `Blocked by`, `Verification`) consistent across these skills and `ARCH-FORMAT.md`.
 - **Temp output** goes under `${TMPDIR:-/tmp}/desk-debug/` and `${TMPDIR:-/tmp}/desk-reports/`, never into the project.
 
 ## Invocation metadata
@@ -38,7 +39,7 @@ Many skills depend on the same conventions. A change to any of these must be app
 After editing:
 
 1. Check that `SKILL.md` front matter parses and `name` matches the directory name.
-2. Grep for stale terms from earlier versions: `rg -n -i '\.assist|setup-assist|assist-|GLOSSARY|adr/|issues/|engineering/' skills/dev skills/README.md`.
+2. Grep for stale terms from earlier versions: `rg -n -i '\.assist|setup-assist|assist-|GLOSSARY|adr/|issues/|engineering/|desk/arch/|desk/reports|refs/' skills/dev skills/README.md`.
 3. Check that every `openai.yaml` invocation policy matches its `SKILL.md`, and `diff` the duplicated arch scripts and formats listed above.
 4. Run `bash -n` on changed shell scripts. Try `validate-arch.sh` on a sample record.
 5. Run the repository tests (`npm test`) when discovery or `groups.json` changed.

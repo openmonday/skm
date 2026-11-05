@@ -16,7 +16,7 @@ skm add setup-desk implement handoff
 
 Then run `/setup-desk` once in the target project. It writes `.desk/AGENTS.md` and excludes `/.desk` through Git's shared `info/exclude`. Installed dev skills read these local instructions when invoked. Setup leaves the project-level `AGENTS.md` and `CLAUDE.md` unchanged.
 
-Setup uses fixed local defaults and preserves existing content on reruns. It asks only when existing data creates a conflict. Domain docs, research reports, and feature files are created when needed. Each clone needs its own setup, because `.desk` files are untracked.
+Setup uses fixed local defaults and preserves existing content on reruns. It asks only when existing data creates a conflict. Every other `.desk` file is created when needed by the skill that owns it. Each clone needs its own setup, because `.desk` files are untracked.
 
 ## Dev workflow
 
@@ -33,7 +33,7 @@ Setup uses fixed local defaults and preserves existing content on reruns. It ask
 | `tdd` | Build one tested behavior at a time | Tests and implementation in project source directories |
 | `diagnosing-bugs` | Reproduce, isolate, diagnose, and fix a bug | Verified fix and appropriate regression coverage |
 | `code-review` | Check standards and requirements separately | Findings covering committed and working-tree changes |
-| `check-arch` / `update-arch` | Find stale arch records / record rules after commits | `.desk/arch/<slug>.md` |
+| `check-arch` / `update-arch` | Find stale arch records / record rules after commits | `.desk/architecture/<slug>.md` |
 | `handoff` | Preserve enough context to resume | A local handoff |
 | `show-me` | Explain with a focused visual | Inline visual or temporary HTML report |
 
@@ -59,13 +59,13 @@ The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes 
 .desk/
 ├── AGENTS.md
 ├── CONTEXT.md
-├── arch/<slug>.md
-├── research/<topic>/report.md
+├── architecture/<slug>.md
 ├── features/<feature>/
 │   ├── spec.md
 │   └── tickets/<NN>-<ticket>.md
-├── handoffs/
-└── reports/
+├── handoffs/<session>.md
+├── references/<project>/
+└── research/<topic>/report.md
 ```
 
 Debug captures go to `${TMPDIR:-/tmp}/desk-debug/`. Skill definitions and instruction or configuration files are in English. Teaching workspaces managed by `teach` keep their own structure and vocabulary.

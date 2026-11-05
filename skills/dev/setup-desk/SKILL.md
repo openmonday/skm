@@ -1,6 +1,6 @@
 ---
 name: setup-desk
-description: Initialize a local Desk workspace for specs, tickets, domain terms, change records, and handoffs.
+description: Initialize a local Desk workspace for specs, tickets, domain terms, architecture records, research, and handoffs.
 disable-model-invocation: true
 ---
 
@@ -8,78 +8,52 @@ disable-model-invocation: true
 
 Set up the current project with fixed local defaults. Keep Desk configuration in `.desk/` and Git's local `info/exclude`. Treat project-level `AGENTS.md` and `CLAUDE.md` as read-only guidance; leave their contents and existence unchanged. Run the steps directly; ask only when existing content creates a conflict that cannot be resolved without choosing what to keep.
 
-## 1. Inspect the workspace
+This skill owns one file, `.desk/AGENTS.md`. Every other `.desk` file is created later by the skill that owns it, as listed under "Files" in [WORKSPACE.md](WORKSPACE.md).
 
-Find the project root and read its `AGENTS.md`, `CLAUDE.md`, and existing `.desk/AGENTS.md`. In Git, use `git rev-parse --show-toplevel`; outside Git, use the current project directory.
+## 1. Inspect the project
 
-Check whether `.desk` is a directory, a working symlink, a broken link, or another file. Reuse a working shared directory. Preserve existing files; resolve a conflicting entry with the user before replacing it.
+Find the project root: in Git, `git rev-parse --show-toplevel`; outside Git, the current project directory. Read its `AGENTS.md`, `CLAUDE.md`, and any existing `.desk/AGENTS.md`.
 
-In Git, check `git ls-files -- .desk` before relying on ignore rules. If Desk files are already tracked, explain that local exclusion cannot remove them from history. Ask how to handle them before changing their tracking; keep existing content intact.
+Check whether `.desk` is a directory, a working symlink, a broken link, or another file. Reuse a working shared directory. Resolve a conflicting entry with the user before replacing it.
 
-**Done:** the workspace root, existing Desk content, and any conflicts are identified.
+In Git, run `git ls-files -- .desk`. If Desk files are already tracked, explain that local exclusion cannot remove them from history, and ask how to handle them before changing their tracking.
 
-## 2. Create the local workspace
+**Done:** the project root, existing Desk content, and any conflicts are identified.
 
-Create `.desk/` if absent. Use [WORKSPACE.md](WORKSPACE.md) as the seed for `.desk/AGENTS.md`, the single source of truth for project-local conventions. On reruns, fill missing conventions while preserving project-specific edits. Create `CONTEXT.md`, `arch/`, `research/`, and `features/` only when they have content. Debug captures go to the system temp directory; reports and handoffs stay in `.desk/` for manual cleanup.
+## 2. Write `.desk/AGENTS.md`
 
-**Bootstrap arch records for existing code:** When `.desk/arch/` is empty and the repository contains source code, automatically analyze the codebase and create initial arch records:
+Create `.desk/` if absent. Seed `.desk/AGENTS.md` from [WORKSPACE.md](WORKSPACE.md). On reruns, add missing conventions and keep project-specific edits. Do not create any other file or subdirectory.
 
-1. **Identify source directories.** Find main source code locations using common patterns:
-   ```bash
-   find . -type d \( -name src -o -name lib -o -name app -o -name pkg \) -not -path '*/node_modules/*' -not -path '*/vendor/*' | head -20
-   ```
-   Language-specific patterns: `src/main/java`, `lib/`, `app/models`, `pkg/`, etc.
+**Done:** `.desk/AGENTS.md` exists and matches the template, apart from preserved project edits.
 
-2. **Analyze by module.** For each significant module or closely related file group:
-   - Read the code to understand its purpose and patterns
-   - Identify key interfaces, data flows, and boundaries
-   - Extract observable constraints from the code (validation rules, interface contracts, data flow requirements)
-   - Note architectural patterns (layering, composition patterns, error handling approaches)
+## 3. Exclude the workspace from Git
 
-3. **Create arch records.** Write records following the arch record format in `WORKSPACE.md`:
-   - One record per cohesive module or closely related file group
-   - Use descriptive slugs: `<module-name>-<purpose>.md`
-   - Set `type: feat` for feature modules, `type: refactor` for pure structural code
-   - List all analyzed files in the `files:` array
-   - Get the latest commit for those files:
-     ```bash
-     git log -1 --format='%H' -- <file-or-directory>
-     ```
-   - Set `since:` to that commit hash
-   - Write **Feature** section describing what the module does (omit for pure refactors)
-   - Write **Constraints** section capturing rules observable in the code
-   - Write **Architecture** section describing structure and key relationships
-
-4. **Prioritize major modules.** Focus on:
-   - Core business logic and domain models
-   - API boundaries and controllers
-   - Data access layers and persistence
-   - Authentication and authorization
-   - Integration points with external services
-   
-   Skip generated code, vendored dependencies, configuration files, and trivial utilities unless they encode important rules.
-
-5. **Report what was created.** List the new arch records and note that they were inferred from code rather than confirmed by the user. Ask the user to review each record's Constraints. Until they do, agents follow "Using arch records" in `.desk/AGENTS.md` and check those constraints against the code before relying on them.
-
-Skip bootstrapping when:
-- `.desk/arch/` already contains records (preserve existing records)
-- No source code exists yet (nothing to analyze)
-- The repository is not a Git repository (cannot determine `since:` commit hashes)
-
-For a Git project:
+In a Git project:
 
 1. Resolve the shared exclude file with `git rev-parse --path-format=absolute --git-path info/exclude`. Run from the project root and keep paths quoted.
-2. Create its parent directory if needed. Append `/.desk` as its own line only when that exact line is absent; preserve all existing rules and ensure a newline separates the appended rule.
-3. Verify with `git check-ignore -v -- .desk/AGENTS.md` (or `.desk` when it is a symlink), and check `git status --short --untracked-files=all -- .desk` is empty.
+2. Create its parent directory if needed. Append `/.desk` as its own line only when that exact line is absent; keep all existing rules and make sure a newline separates the appended rule.
 
-The pattern matches the root directory and a root symlink. The rule is local Git metadata shared by linked worktrees. Desk material remains untracked. Use this exclusion instead of generating an inner ignore file.
+The pattern matches the root directory and a root symlink. The rule is local Git metadata shared by linked worktrees, so Desk material stays untracked. Use it instead of an inner ignore file.
 
-Outside Git, create the same workspace and report that Git exclusion is pending. Rerun setup after `git init` to add it; setup itself leaves repository creation to the user.
+Outside Git, skip this step; setup leaves repository creation to the user. Rerunning setup after `git init` adds the rule.
 
-**Done:** `.desk/AGENTS.md` exists, existing content is preserved, and Git exclusion is verified where Git is available.
+**Done:** the exclude file contains exactly one `/.desk` line, or the project is not a Git repository.
 
-## 3. Verify and report
+## 4. Verify
 
-Check that `.desk/AGENTS.md` is readable, no empty context, arch, or feature directories were scaffolded, and rerunning would preserve existing content and avoid duplicate exclude rules. Verify that project-level instruction files were neither created nor modified. Report the workspace and exclusion result. The installed `research`, `to-spec`, `to-tickets`, `implement`, `implement-spec`, `code-review`, and `domain-modeling` skills explicitly read `.desk/AGENTS.md` when invoked.
+- `.desk/AGENTS.md` is readable.
+- `.desk/` contains nothing that setup created besides `AGENTS.md`.
+- In Git, `git check-ignore -v -- .desk/AGENTS.md` (or `.desk` when it is a symlink) matches the rule, and `git status --short --untracked-files=all -- .desk` is empty.
+- Project-level `AGENTS.md` and `CLAUDE.md` were neither created nor modified.
+- A rerun would preserve existing content and add no duplicate exclude rule.
 
-Setup initializes the workspace. Later `implement-spec` runs create linked worktrees using the sharing procedure in `.desk/AGENTS.md`.
+**Done:** every check passes, or each failure is understood.
+
+## 5. Summarize
+
+Tell the user, in one short message:
+
+- The workspace path, and whether `.desk/AGENTS.md` was created or updated.
+- The Git exclusion result, or that it is pending because the project is not a Git repository.
+- Any conflicts left for the user to resolve.
+- When the repository already has source code and `.desk/architecture/` is empty: `/update-arch` can bootstrap architecture records from the existing code.

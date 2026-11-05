@@ -1,6 +1,6 @@
 # Arch Record Format
 
-Architecture records live at `.desk/arch/<descriptive-slug>.md`. Each record documents one finished change: what it built, the rules it set, and its shape.
+Architecture records live at `.desk/architecture/<descriptive-slug>.md`. Each record documents one finished change: what it built, the rules it set, and its shape.
 
 Follow the workspace rules in `.desk/AGENTS.md`. Check-arch and update-arch skills use this format. How agents weigh records against specs and code is defined under "Using arch records" in `.desk/AGENTS.md`.
 
@@ -87,7 +87,7 @@ One of: `feat`, `fix`, `refactor`
 ### files (required)
 List of file paths this record describes. Used for lookup:
 ```bash
-grep -l -e '- src/payments/stripe.ts' .desk/arch/*.md
+grep -l -e '- src/payments/stripe.ts' .desk/architecture/*.md
 ```
 
 Paths are relative to project root. Use exact paths; wildcards are not supported.
@@ -115,10 +115,10 @@ Also remove the replaced rule from the old record, so the two never disagree.
 
 `validate-arch.sh` ships next to this file in the skill's `scripts/` directory. Run it from the project root, with the script path resolved against the skill directory:
 ```bash
-scripts/validate-arch.sh .desk/arch/payment-gateway-integration.md
+scripts/validate-arch.sh .desk/architecture/payment-gateway-integration.md
 ```
 
-With no arguments it validates every record in `.desk/arch/`:
+With no arguments it validates every record in `.desk/architecture/`:
 ```bash
 scripts/validate-arch.sh
 ```

@@ -32,22 +32,22 @@ Other entry points:
 
 ### Stages
 
-1. **Set up.** `/setup-desk` creates `.desk/AGENTS.md` from `setup-desk/WORKSPACE.md` and adds `/.desk` to Git's `info/exclude`. When `.desk/arch/` is empty, it also bootstraps arch records for existing code. It never touches the project's own `AGENTS.md` or `CLAUDE.md`.
-2. **Research** (optional). `/research` takes a feature and reference projects (for example `refs/<project>`). It reconstructs the design from first principles, as `teach` does, and grounds every step in cited reference code: the feature's position, inputs, outputs, considerations, and the reasons for its shape. It ends with suggestions for this project. The report goes to `.desk/research/<topic>/report.md`.
+1. **Set up.** `/setup-desk` creates `.desk/AGENTS.md` from `setup-desk/WORKSPACE.md` and adds `/.desk` to Git's `info/exclude`. It creates nothing else; each other `.desk` file is created by the skill that owns it. It never touches the project's own `AGENTS.md` or `CLAUDE.md`.
+2. **Research** (optional). `/research` takes a feature and reference projects, which it checks out under `.desk/references/<project>/`. It reconstructs the design from first principles and grounds every step in cited reference code: the feature's position, inputs, outputs, considerations, and the reasons for its shape. It ends with suggestions for this project. The report goes to `.desk/research/<topic>/report.md`.
 3. **Clarify.** `grill-me` asks rounds of numbered questions with recommended answers until every branch of the design tree is settled. `/grill-with-docs` adds `domain-modeling`, which records resolved terms in `.desk/CONTEXT.md` as they come up. Given a research report, it starts from the report's open questions.
 4. **Specify.** `/to-spec` turns the conversation into `.desk/features/<slug>/spec.md` without interviewing again. It collects every stated rule into **Constraints**, and every arch rule the work deliberately changes into **Supersedes**.
 5. **Slice.** `/to-tickets` splits the work into tracer-bullet vertical slices. Each slice is a ticket file with `Status`, `Blocked by`, acceptance criteria, and constraints. The user approves the breakdown, and the dependency graph is checked for cycles.
 6. **Implement.**
    - `/implement` handles focused work: TDD, `code-review` against the starting commit, then one commit on the current branch.
    - `/implement-spec` delivers the whole ticket graph. It schedules the frontier into per-ticket worktrees, then a coordinator merges, verifies, and reviews against the pinned base. It ends on a local integration branch.
-7. **Record.** `/update-arch` rewrites `.desk/arch/<slug>.md` from what was actually committed, applying the spec's Supersedes list, and validates the record. `/check-arch` finds records that drifted after other people's commits.
+7. **Record.** `/update-arch` rewrites `.desk/architecture/<slug>.md` from what was actually committed, applying the spec's Supersedes list, and validates the record. `/check-arch` finds records that drifted after other people's commits.
 
 ## Skills
 
 | Skill | Invoked by | Purpose | Output |
 | --- | --- | --- | --- |
-| `setup-desk` | user | Initialize the `.desk/` workspace | `.desk/AGENTS.md`, Git exclusion, initial arch records |
-| `research` | user | Explain how reference projects implement a feature; suggest a fit | `.desk/research/<topic>/report.md` |
+| `setup-desk` | user | Initialize the `.desk/` workspace | `.desk/AGENTS.md`, Git exclusion |
+| `research` | user | Explain how reference projects implement a feature; suggest a fit | `.desk/research/<topic>/report.md`, `.desk/references/<project>/` |
 | `grill-me` | model/user | Interview until decisions are settled | Confirmed decisions in the conversation |
 | `grill-with-docs` | user | `grill-me` + `domain-modeling` | Decisions plus `.desk/CONTEXT.md` terms |
 | `domain-modeling` | model | Challenge and record domain language | `.desk/CONTEXT.md`, confirmed constraints |
@@ -61,7 +61,7 @@ Other entry points:
 | `diagnosing-bugs` | model | Six-phase diagnosis for hard bugs and perf regressions | Fix, regression test, clean tree |
 | `guidelines` | model | Stay in scope; follow arch record constraints | Behavioral guardrails |
 | `check-arch` | user | Find stale arch records | Staleness report and suggested actions |
-| `update-arch` | user | Write or refresh arch records after commits | Updated `.desk/arch/*.md` |
+| `update-arch` | user | Write or refresh arch records after commits; bootstrap them for existing code | Updated `.desk/architecture/*.md` |
 | `handoff` | user | Save context so another session can resume | `.desk/handoffs/<session>.md` |
 | `show-me` | user | Explain with the smallest visual that works | Inline diagram or HTML in `$TMPDIR/desk-reports/` |
 
@@ -73,16 +73,18 @@ Other entry points:
 .desk/                         # untracked; excluded via .git/info/exclude
 ├── AGENTS.md                  # project-local conventions (from WORKSPACE.md)
 ├── CONTEXT.md                 # domain glossary, lasting, no implementation detail
-├── arch/<slug>.md             # architecture records of committed code, lasting
-├── research/<topic>/          # research reports and diagrams, kept until deleted
+├── architecture/<slug>.md     # architecture records of committed code, lasting
 ├── features/<slug>/           # work in progress, removed at close-out
 │   ├── spec.md
 │   └── tickets/NN-<slug>.md
-├── handoffs/<session>.md      # manual cleanup
-└── reports/                   # manual cleanup
+├── handoffs/<session>.md      # kept until deleted
+├── references/<project>/      # unmodified reference checkouts, kept until deleted
+└── research/<topic>/          # research reports and diagrams, kept until deleted
 ```
 
-Temporary debug artifacts go to `${TMPDIR:-/tmp}/desk-debug/<bug>/`, and HTML visuals go to `${TMPDIR:-/tmp}/desk-reports/`. Permanent tests and fixtures always go in the project's normal source tree. Reference projects (for example `refs/`) are read-only. `/research` excludes them from Git if they sit inside the repository.
+Subdirectory names are unabbreviated. Each file type has one owner skill that creates it and defines its format; the table is under "Files" in `setup-desk/WORKSPACE.md`.
+
+Temporary debug artifacts go to `${TMPDIR:-/tmp}/desk-debug/<bug>/`, and HTML visuals go to `${TMPDIR:-/tmp}/desk-reports/`. Permanent tests and fixtures always go in the project's normal source tree. Reference projects live in `.desk/references/`, are read-only, and are excluded from Git with the rest of the workspace.
 
 ## Arch records
 

@@ -28,8 +28,10 @@ Use `tdd` where possible at pre-agreed seams, honoring any confirmation already 
 
 Invoke `code-review` with the starting commit and explicit spec/ticket paths. Include staged, unstaged, and relevant new files in the review. Fix findings within scope and rerun the affected checks.
 
-Commit only this work to the current branch after review and verification. Ensure the actual staged content matches the reviewed and tested implementation; reconcile partially staged edits before committing. Record the commit and verification evidence in the supplied spec or tickets, completing tickets according to `.desk/AGENTS.md`. In a worktree run, the coordinator completes them only after integration; return the branch, commit, check results, and proposed shared-document changes.
+Commit only this work to the current branch after review and verification. Ensure the actual staged content matches the reviewed and tested implementation; reconcile partially staged edits before committing. Record the commit and verification evidence in the ticket's `Verification` section, completing tickets according to `.desk/AGENTS.md`; when working from a spec without tickets, report the evidence instead of editing the spec. In a worktree run, the coordinator completes them only after integration; return the branch, commit, check results, and proposed shared-document changes.
 
-When this commit completes the feature's last ticket, remove the feature folder once everything is verified. If the change qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the committed files to record the architectural decisions.
+If the change qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the committed files and the spec path to record the architectural decisions.
+
+When this commit completes the feature's last ticket and everything is verified, close out the feature: if `/update-arch` was recommended, keep `.desk/features/<feature-slug>/`, because `/update-arch` needs the spec's Constraints and Supersedes list and removes the folder itself afterwards; otherwise remove the folder now and tell the user.
 
 **Done:** the scoped implementation is reviewed and committed, ticket state reflects the actual integration status, and remaining limitations are reported.

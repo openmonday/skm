@@ -1,59 +1,93 @@
 ---
 name: research
-description: Explain how well-known reference projects implement a feature, starting from first principles and pointing into their real code, then map the findings onto the current project. Use before building a feature or changing architecture when the user supplies reference projects (for example `refs/<project>`).
+description: Explain how well-known reference projects implement a feature, starting from first principles and pointing into their real code, then map the findings onto the current project. Use before building a feature or changing architecture when the user names reference projects.
 disable-model-invocation: true
-argument-hint: "Which feature or architecture change, and which reference projects (e.g. refs/redis)?"
+argument-hint: "Which feature or architecture change, and which reference projects (name with Git URL, or local path)?"
 ---
 
 # Research
 
-Produce a research report that explains how a feature works by reconstructing it from the problem up, then grounding every step in real reference code. It is `teach` applied to code: the user learns the design so they can make the decisions in `/grill-with-docs` and `/to-spec`.
-
-Read `.desk/AGENTS.md`; if it is missing, ask the user to run `/setup-desk`. Read `.desk/CONTEXT.md` when present. Use only the reference projects the user named, and read them; never modify a reference project or the user's code.
+Produce a research report that explains how a feature works by reconstructing it from the problem up, then grounding every step in real reference code. The goal is that the user understands the design well enough to make their own decisions about it.
 
 ## Reader
 
-By default the reader knows C, Java, and Git but is not a professional developer. Adjust if the user says otherwise.
+The reader has a solid computer foundation but no software development experience. They understand how computers work (files, processes, memory, networks, the command line) but have never built or maintained a software project. Adjust if the user says otherwise.
 
-- Introduce professional terms (dependency injection, event loop, back-pressure, idempotency) only when the story needs them, and define each in one sentence when it first appears.
-- Relate unfamiliar language constructs to C or Java equivalents (a Go interface is like a Java interface satisfied implicitly; a Rust `Result` is a return code the compiler forces you to check).
-- Use Git vocabulary freely.
+- Explain programming constructs (types, interfaces, callbacks, error values, async code) the first time the story needs them, in one or two plain sentences tied to the running example.
+- Explain how a software project is organized (modules, layers, tests, build and dependency tooling) only as far as the feature requires.
+- Introduce engineering terms (dependency injection, event loop, back-pressure, idempotency) only when the story needs them, and define each in one sentence when it first appears.
+- Prefer analogies to how the operating system, files, or networks behave over analogies to other programming languages.
+
+## Workspace
+
+Read `.desk/AGENTS.md`; if it is missing, stop and tell the user that the Desk workspace is not initialized. Read `.desk/CONTEXT.md` when present.
+
+This skill owns two locations in `.desk/`, following "Files" in `.desk/AGENTS.md`:
+
+| Path | Content |
+| --- | --- |
+| `.desk/references/<project-slug>/` | One unmodified Git checkout per reference project |
+| `.desk/research/<topic-slug>/` | `report.md` in the format below, and its diagrams named `<diagram-slug>.<svg\|png\|dot>` |
+
+Both are covered by the workspace's Git exclusion, so reference code never enters the project's commits. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
 
 ## 1. Pin the inputs
 
 - State the feature in one sentence, in the user's terms. Ask only if the feature is ambiguous.
-- For each reference project, record its path, its upstream URL if known, and its commit: `git -C <ref> rev-parse --short HEAD`. Every citation in the report refers to this commit.
-- If a reference path is inside the user's repository and `git check-ignore -q <ref>` fails, add `/<ref-path>` to the shared exclude file (`git rev-parse --path-format=absolute --git-path info/exclude`), only if that exact line is absent, and tell the user. Reference code must never enter the project's commits.
+- For each reference project the user named, choose a `<project-slug>` (the project's own name, lowercase) and make sure `.desk/references/<project-slug>/` exists:
+  - Already present: reuse it at its current commit. Do not pull or switch commits without asking, because existing reports cite that commit.
+  - Given as a Git URL or a local path: `git clone <url-or-path> .desk/references/<project-slug>`.
+  - Given by name only: ask the user for its Git URL; never guess one.
+- Record each reference's upstream URL (`git -C <ref> remote get-url origin`) and its commit (`git -C <ref> rev-parse --short HEAD`). Every citation in the report refers to this commit.
+- Use only the references the user named.
 
-**Done:** feature sentence, and each reference pinned to a commit.
+**Done:** a feature sentence, and every reference checked out under `.desk/references/` and pinned to a commit.
 
 ## 2. Locate the feature in each reference
 
-Find where the feature lives before reading deeply. Search by user-visible names (commands, config keys, error messages, flags), then follow callers and callees. Read the feature's **tests** early: they show the contract (inputs, outputs, edge cases) more reliably than comments. Read design docs, ADRs, or well-known talks and posts about the project when they exist, and cite them.
+Find where the feature lives before reading deeply. Search by user-visible names (commands, config keys, error messages, flags), then follow callers and callees. Read the feature's **tests** early: they show the contract (inputs, outputs, edge cases) more reliably than comments. Read design docs, decision records, or well-known talks and posts about the project when they exist, and cite them.
 
-For several or large references, run one exploration subagent per reference in parallel. Each returns entry points, the call tree, key types, and file:line citations, but no conclusions about the user's project.
+For several or large references, run one exploration subagent per reference in parallel. Each returns entry points, the call tree, key types, and `file:line` citations, but no conclusions about the user's project.
 
 Tag every claim internally as **verified** (you read the code or ran it) or **inferred** (from names, docs, or partial reading). Running a reference's existing tests to confirm behavior is fine. Do not install dependencies or change the reference to do it.
 
 **Done:** for each reference, the entry points, main call path, and tests that define the feature are identified with citations.
 
-## 3. Write the report
+## 3. Explain the references
 
-Save to `.desk/research/<topic-slug>/report.md`, and put diagrams in the same directory, linked by relative path. Reuse and update an existing report on the same topic instead of starting a second one. In a shared-worktree run, return the report to the coordinator to save.
+Write sections 1 to 6 of the report, following the format and writing rules below. Base them only on the references, before looking at the user's project, so the analysis is not bent toward the current code.
 
-Use this structure:
+**Done:** sections 1 to 6 are filled or marked not applicable, every code claim has a pinned citation, and diagrams render.
+
+## 4. Map onto this project
+
+Write sections 7 and 8. Read the relevant parts of the user's project, `.desk/CONTEXT.md`, and the arch records for the areas involved, following "Finding arch records" and "Using arch records" in `.desk/AGENTS.md`. If the project has no relevant code yet, say so and describe the minimal starting shape instead.
+
+Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or change code.
+
+**Done:** section 7 cites project files and arch records for every suggestion, and section 8 lists every decision left to the user.
+
+## 5. Save and summarize
+
+Save the report to `.desk/research/<topic-slug>/report.md` and its diagrams beside it, linked by relative path. Update an existing report on the same topic instead of starting a second one.
+
+Then tell the user the report path, the key design idea in three to five lines, and the open questions. Stop there. Answer follow-up questions inline, and update the report when an answer changes it.
+
+**Done:** the report is saved and the user has the summary.
+
+## Report format
 
 ```markdown
 # <Feature>: research
 
-References: `<ref>` @ <commit> (<url>), ...
+References: `.desk/references/<project-slug>` @ <commit> (<upstream URL>), ...
 Date: <YYYY-MM-DD>
 
 ## 1. The problem
 What the feature must accomplish, from a user's point of view, with one concrete running example used through the whole report.
 
 ## 2. Simplest workable version
-A minimal solution in pseudocode or small C/Java-style code, written by you, not taken from a reference.
+A minimal solution in short, commented pseudocode, written by you, not taken from a reference.
 
 ## 3. From simple to real
 Repeat for each pressure the references actually handle:
@@ -80,33 +114,21 @@ A table of the decisions that differ between references, and what drives each ch
 Suggestions, not decisions:
 - Where the feature would sit in this project, and what it would touch (cite files and arch records).
 - Which reference approach fits this project's scale and constraints, and what to leave out.
-- Arch record Constraints the feature would conflict with. These are candidates for the spec's Supersedes list.
+- Arch record Constraints the feature would conflict with, as candidates to supersede.
 - Risks, and the smallest first slice worth building.
 
 ## 8. Open questions
-Decisions the user must make, phrased for `/grill-with-docs`.
+Decisions the user must make, each with the options and a recommended answer.
 
 ## Glossary
-Terms introduced in the report, one line each, related to C/Java/Git where it helps.
+Terms introduced in the report, one line each, in plain language.
 ```
 
 Writing rules:
 
 - **Problem before mechanism.** Every mechanism answers a need already established in the running example. Never present a component before the reader knows why it exists.
 - **Explain code, not just paths.** For each excerpt, say what calls it, what it receives, what it returns or changes, and why it is shaped that way. A citation without an explanation is not enough.
-- **Quote sparingly.** Use the shortest excerpt that shows the idea, preserved exactly, with an ellipsis comment for skipped lines. Cite `file:line` at the pinned commit.
+- **Quote sparingly.** Use the shortest excerpt that shows the idea, preserved exactly, with an ellipsis comment for skipped lines. Cite `file:line` relative to the reference root at the pinned commit.
 - **Present it as reconstruction, not history.** Say "a simpler version would fail because...", not "the authors first tried...", unless commit history or docs show it.
 - **Stay honest.** Do not invent limitations, overstate a reference, or imply its design is the only correct one. Keep verified and inferred claims distinguishable.
-- **Visualize when structure matters.** Draw the module position (§4) and any flow with more than three hops or changing state. Default to Graphviz. Check `dot -V` first. If it is missing, use Mermaid in the Markdown and tell the user. Never install tools. Render, inspect, and fix overlaps or misleading layout before saving.
-
-## 4. Map to this project
-
-Write §7 after the reference analysis, so the analysis is not bent toward the current code. Read the relevant parts of the user's project, `.desk/CONTEXT.md`, and the arch records for the areas involved, following "Finding arch records" and "Using arch records" in `.desk/AGENTS.md`. If the project has no relevant code yet, say so and describe the minimal starting shape instead.
-
-Keep §7 to suggestions with trade-offs. Do not decide, write specs, or change code.
-
-**Done:** every section is filled or explicitly marked not applicable, every code claim has a pinned citation, and diagrams render.
-
-## 5. Report back
-
-Give the report path, a three-to-five line summary of the key design idea, the open questions, and the next step: `/grill-with-docs` with the report, then `/to-spec`. Stop when the report is saved; follow-up questions are answered inline and added to the report when they change it.
+- **Visualize when structure matters.** Draw the module position (section 4) and any flow with more than three hops or changing state. Default to Graphviz. Check `dot -V` first. If it is missing, use Mermaid in the Markdown and tell the user. Never install tools. Render, inspect, and fix overlaps or misleading layout before saving.
