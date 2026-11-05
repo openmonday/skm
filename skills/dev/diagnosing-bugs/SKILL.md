@@ -13,7 +13,7 @@ Follow the workspace's shared-file ownership rules. Workers return diagnostic ar
 
 ## Diagnostic artifacts
 
-Store temporary captures, repro inputs and scripts, and throwaway harnesses under `${TMPDIR:-/tmp}/assist-debug/<bug-slug>/`, outside the project and `.desk/`. Redact credentials before saving or sharing artifacts, following the rules below. Fixtures required by lasting regression tests belong in the project's normal test directories, outside ignored `.desk/`.
+Store temporary captures, repro inputs and scripts, and throwaway harnesses under `${TMPDIR:-/tmp}/desk-debug/<bug-slug>/`, outside the project and `.desk/`. Redact credentials before saving or sharing artifacts, following the rules below. Fixtures required by lasting regression tests belong in the project's normal test directories, outside ignored `.desk/`.
 
 ## Redact
 
@@ -140,7 +140,7 @@ Required before declaring done:
 - [ ] Original repro no longer reproduces (re-run the Phase 1 loop)
 - [ ] Regression test passes (or absence of seam is documented)
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
-- [ ] Disposable captures, repro scripts, and throwaway harnesses removed from the temp debug directory `assist-debug/<bug-slug>/`
+- [ ] Disposable captures, repro scripts, and throwaway harnesses removed from the temp debug directory `desk-debug/<bug-slug>/`
 - [ ] If the bug revealed a rule the code did not enforce, recommend calling `/update-arch` with the fixed files to record the rule; the fix commit should use a conventional commit message
 - [ ] Fixtures required by lasting regression tests are in the project's normal test directories
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns

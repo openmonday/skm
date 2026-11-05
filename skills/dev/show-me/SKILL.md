@@ -118,12 +118,12 @@ function expandSkill(command: string): string {
 - For a visual UI, layout, state comparison, or concept too dense for Mermaid, write one focused HTML file — a diagram, an infographic, or a short slide deck, whichever fits the point. Match the product's colors, type, spacing, and components; use real labels and data; support desktop and mobile. Then open it for the user:
 
 ```
-Bash(open ${TMPDIR:-/tmp}/assist-reports/show-me-{description}.html)
+Bash(open ${TMPDIR:-/tmp}/desk-reports/show-me-{description}.html)
 ```
 
 ### guidance
 
-For engineering HTML artifacts, save under `${TMPDIR:-/tmp}/assist-reports/` (create it if needed) unless the user names another location; they are disposable output for the developer and are not kept in `.desk/`. Workers return proposed artifacts to the coordinator to save. Teaching or non-engineering visuals use their own established workspace.
+For engineering HTML artifacts, save under `${TMPDIR:-/tmp}/desk-reports/` (create it if needed) unless the user names another location; they are disposable output for the developer and are not kept in `.desk/`. Workers return proposed artifacts to the coordinator to save. Teaching or non-engineering visuals use their own established workspace.
 
 Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question or the options to resolve the current discussion point.
 

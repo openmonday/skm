@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Desk"
+  short_description: "Initialize a local Desk workspace"
+policy:
+  allow_implicit_invocation: false

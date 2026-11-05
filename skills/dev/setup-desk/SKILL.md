@@ -1,12 +1,12 @@
 ---
-name: setup-assist
-description: Initialize a local Assist workspace for specs, tickets, domain terms, change records, and handoffs.
+name: setup-desk
+description: Initialize a local Desk workspace for specs, tickets, domain terms, change records, and handoffs.
 disable-model-invocation: true
 ---
 
-# Setup Assist
+# Setup Desk
 
-Set up the current project with fixed local defaults. Keep Assist configuration in `.desk/` and Git's local `info/exclude`. Treat project-level `AGENTS.md` and `CLAUDE.md` as read-only guidance; leave their contents and existence unchanged. Run the steps directly; ask only when existing content creates a conflict that cannot be resolved without choosing what to keep.
+Set up the current project with fixed local defaults. Keep Desk configuration in `.desk/` and Git's local `info/exclude`. Treat project-level `AGENTS.md` and `CLAUDE.md` as read-only guidance; leave their contents and existence unchanged. Run the steps directly; ask only when existing content creates a conflict that cannot be resolved without choosing what to keep.
 
 ## 1. Inspect the workspace
 
@@ -14,13 +14,13 @@ Find the project root and read its `AGENTS.md`, `CLAUDE.md`, and existing `.desk
 
 Check whether `.desk` is a directory, a working symlink, a broken link, or another file. Reuse a working shared directory. Preserve existing files; resolve a conflicting entry with the user before replacing it.
 
-In Git, check `git ls-files -- .desk` before relying on ignore rules. If Assist files are already tracked, explain that local exclusion cannot remove them from history. Ask how to handle them before changing their tracking; keep existing content intact.
+In Git, check `git ls-files -- .desk` before relying on ignore rules. If Desk files are already tracked, explain that local exclusion cannot remove them from history. Ask how to handle them before changing their tracking; keep existing content intact.
 
-**Done:** the workspace root, existing Assist content, and any conflicts are identified.
+**Done:** the workspace root, existing Desk content, and any conflicts are identified.
 
 ## 2. Create the local workspace
 
-Create `.desk/` if absent. Use [WORKSPACE.md](WORKSPACE.md) as the seed for `.desk/AGENTS.md`, the single source of truth for project-local conventions. On reruns, fill missing conventions while preserving project-specific edits. Create `CONTEXT.md`, `arch/`, and `features/` only when they have content. Debug captures go to the system temp directory; reports and handoffs stay in `.desk/` for manual cleanup.
+Create `.desk/` if absent. Use [WORKSPACE.md](WORKSPACE.md) as the seed for `.desk/AGENTS.md`, the single source of truth for project-local conventions. On reruns, fill missing conventions while preserving project-specific edits. Create `CONTEXT.md`, `arch/`, `research/`, and `features/` only when they have content. Debug captures go to the system temp directory; reports and handoffs stay in `.desk/` for manual cleanup.
 
 **Bootstrap arch records for existing code:** When `.desk/arch/` is empty and the repository contains source code, automatically analyze the codebase and create initial arch records:
 
@@ -59,7 +59,7 @@ Create `.desk/` if absent. Use [WORKSPACE.md](WORKSPACE.md) as the seed for `.de
    
    Skip generated code, vendored dependencies, configuration files, and trivial utilities unless they encode important rules.
 
-5. **Report what was created.** List the new arch records, note they capture the current state, and recommend reviewing them for accuracy before relying on them.
+5. **Report what was created.** List the new arch records and note that they were inferred from code rather than confirmed by the user. Ask the user to review each record's Constraints. Until they do, agents follow "Using arch records" in `.desk/AGENTS.md` and check those constraints against the code before relying on them.
 
 Skip bootstrapping when:
 - `.desk/arch/` already contains records (preserve existing records)
@@ -72,7 +72,7 @@ For a Git project:
 2. Create its parent directory if needed. Append `/.desk` as its own line only when that exact line is absent; preserve all existing rules and ensure a newline separates the appended rule.
 3. Verify with `git check-ignore -v -- .desk/AGENTS.md` (or `.desk` when it is a symlink), and check `git status --short --untracked-files=all -- .desk` is empty.
 
-The pattern matches the root directory and a root symlink. The rule is local Git metadata shared by linked worktrees. Assist material remains untracked. Use this exclusion instead of generating an inner ignore file.
+The pattern matches the root directory and a root symlink. The rule is local Git metadata shared by linked worktrees. Desk material remains untracked. Use this exclusion instead of generating an inner ignore file.
 
 Outside Git, create the same workspace and report that Git exclusion is pending. Rerun setup after `git init` to add it; setup itself leaves repository creation to the user.
 
@@ -80,6 +80,6 @@ Outside Git, create the same workspace and report that Git exclusion is pending.
 
 ## 3. Verify and report
 
-Check that `.desk/AGENTS.md` is readable, no empty context, arch, or feature directories were scaffolded, and rerunning would preserve existing content and avoid duplicate exclude rules. Verify that project-level instruction files were neither created nor modified. Report the workspace and exclusion result. The installed `to-spec`, `to-tickets`, `implement`, `implement-spec`, `code-review`, and `domain-modeling` skills explicitly read `.desk/AGENTS.md` when invoked.
+Check that `.desk/AGENTS.md` is readable, no empty context, arch, or feature directories were scaffolded, and rerunning would preserve existing content and avoid duplicate exclude rules. Verify that project-level instruction files were neither created nor modified. Report the workspace and exclusion result. The installed `research`, `to-spec`, `to-tickets`, `implement`, `implement-spec`, `code-review`, and `domain-modeling` skills explicitly read `.desk/AGENTS.md` when invoked.
 
 Setup initializes the workspace. Later `implement-spec` runs create linked worktrees using the sharing procedure in `.desk/AGENTS.md`.

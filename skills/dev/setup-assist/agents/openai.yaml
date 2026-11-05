@@ -1,5 +1,0 @@
-interface:
-  display_name: "Setup Assist"
-  short_description: "Initialize a local Assist workspace"
-policy:
-  allow_implicit_invocation: false

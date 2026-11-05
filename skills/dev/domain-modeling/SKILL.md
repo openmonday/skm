@@ -21,7 +21,7 @@ Use one project context file:
 └── src/
 ```
 
-Create `.desk/CONTEXT.md` lazily, when the first real term is resolved. Before saving, require an initialized `.desk/AGENTS.md`; if it is missing, keep the proposed content in the conversation and ask the user to run `/setup-assist`.
+Create `.desk/CONTEXT.md` lazily, when the first real term is resolved. Before saving, require an initialized `.desk/AGENTS.md`; if it is missing, keep the proposed content in the conversation and ask the user to run `/setup-desk`.
 
 For shared-worktree ownership, follow `.desk/AGENTS.md`: workers return proposed changes, and the coordinator applies the inline updates below.
 
