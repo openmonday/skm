@@ -12,20 +12,15 @@
       "handoff",
       "implement",
       "implement-spec",
-      "setup-assist",
+      "research",
+      "setup-desk",
       "show-me",
       "tdd",
       "to-spec",
       "to-tickets",
       "update-arch"
     ],
-    "teach": [
-      "anatomy",
-      "learn-by-doing",
-      "show-me",
-      "teach",
-      "wait-what"
-    ],
+    "teach": ["anatomy", "learn-by-doing", "show-me", "teach", "wait-what"],
     "meta": [
       "extract-skills",
       "find-skills",
