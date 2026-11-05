@@ -26,7 +26,7 @@ This skill owns two locations in `.desk/`, following "Files" in `.desk/AGENTS.md
 
 | Path | Content |
 | --- | --- |
-| `.desk/references/<project-slug>/` | One unmodified Git checkout per reference project |
+| `.desk/reference/<project-slug>/` | One unmodified Git checkout per reference project |
 | `.desk/research/<topic-slug>/` | `report.md` in the format below, and its diagrams named `<diagram-slug>.<svg\|png\|dot>` |
 
 Both are covered by the workspace's Git exclusion, so reference code never enters the project's commits. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
@@ -34,14 +34,14 @@ Both are covered by the workspace's Git exclusion, so reference code never enter
 ## 1. Pin the inputs
 
 - State the feature in one sentence, in the user's terms. Ask only if the feature is ambiguous.
-- For each reference project the user named, choose a `<project-slug>` (the project's own name, lowercase) and make sure `.desk/references/<project-slug>/` exists:
+- For each reference project the user named, choose a `<project-slug>` (the project's own name, lowercase) and make sure `.desk/reference/<project-slug>/` exists:
   - Already present: reuse it at its current commit. Do not pull or switch commits without asking, because existing reports cite that commit.
-  - Given as a Git URL or a local path: `git clone <url-or-path> .desk/references/<project-slug>`.
+  - Given as a Git URL or a local path: `git clone <url-or-path> .desk/reference/<project-slug>`.
   - Given by name only: ask the user for its Git URL; never guess one.
 - Record each reference's upstream URL (`git -C <ref> remote get-url origin`) and its commit (`git -C <ref> rev-parse --short HEAD`). Every citation in the report refers to this commit.
 - Use only the references the user named.
 
-**Done:** a feature sentence, and every reference checked out under `.desk/references/` and pinned to a commit.
+**Done:** a feature sentence, and every reference checked out under `.desk/reference/` and pinned to a commit.
 
 ## 2. Locate the feature in each reference
 
@@ -80,7 +80,7 @@ Then tell the user the report path, the key design idea in three to five lines, 
 ```markdown
 # <Feature>: research
 
-References: `.desk/references/<project-slug>` @ <commit> (<upstream URL>), ...
+References: `.desk/reference/<project-slug>` @ <commit> (<upstream URL>), ...
 Date: <YYYY-MM-DD>
 
 ## 1. The problem

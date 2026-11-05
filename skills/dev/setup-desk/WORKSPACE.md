@@ -19,7 +19,7 @@ Every subdirectory name is a full, plural or mass English noun; none is abbrevia
 │           └── <NN>-<ticket-slug>.md
 ├── handoffs/
 │   └── <session-slug>.md
-├── references/
+├── reference/
 │   └── <project-slug>/                # unmodified Git checkout of a reference project
 └── research/
     └── <topic-slug>/
@@ -37,7 +37,7 @@ Each file type has exactly one **owner skill**. The owner creates the file, defi
 | `features/<feature-slug>/spec.md` | `to-spec` | Spec template in that skill | Until close-out |
 | `features/<feature-slug>/tickets/<NN>-<ticket-slug>.md` | `to-tickets` | Ticket template in that skill and the Tickets section below | Until close-out |
 | `handoffs/<session-slug>.md` | `handoff` | Handoff template in that skill | Until the user deletes it |
-| `references/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
+| `reference/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
 | `research/<topic-slug>/report.md` and diagrams | `research` | Report template in that skill | Until the user deletes it |
 
 **Shared fields.** `implement` and `implement-spec` update a ticket's `Status:` line and `Verification` section as described under Tickets. **Close-out** removes `features/<feature-slug>/` once its last ticket is done. When the work needs an arch record, `update-arch` removes the folder after its records validate, because it reads the spec's Constraints and Supersedes list. Otherwise `implement` or `implement-spec` removes it when the work is verified. No other skill writes into a file it does not own.
@@ -71,7 +71,7 @@ The `Status:` line holds one of:
 
 ## Ownership
 
-One agent, the **coordinator**, writes every shared `.desk` file during a run: `CONTEXT.md`, `architecture/`, `features/`, `handoffs/`, `references/`, and `research/`. Subagents and ticket workers may read them, but they return proposed changes as text, and the coordinator applies them. In a single-agent session, that agent is the coordinator.
+One agent, the **coordinator**, writes every shared `.desk` file during a run: `CONTEXT.md`, `architecture/`, `features/`, `handoffs/`, `reference/`, and `research/`. Subagents and ticket workers may read them, but they return proposed changes as text, and the coordinator applies them. In a single-agent session, that agent is the coordinator.
 
 ## Shared worktrees
 

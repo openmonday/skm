@@ -64,7 +64,7 @@ The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes 
 │   ├── spec.md
 │   └── tickets/<NN>-<ticket>.md
 ├── handoffs/<session>.md
-├── references/<project>/
+├── reference/<project>/
 └── research/<topic>/report.md
 ```
 
