@@ -44,7 +44,19 @@ When the user is likely to revisit the material, create a concise reference in a
 
 ## Lesson Output
 
-Write the tutorial as Markdown to `.lesson/<topic>/<lesson-slug>.md`, creating directories when absent. Use a precise topic name such as `database` or `data-structure`. Keep generated diagrams and artifacts in the topic directory and link them with relative paths.
+Write each lesson as one self-contained directory under `.lesson/<topic>/<lesson-slug>/`, creating directories when absent:
+
+```
+.lesson/database/slotted-pages/
+  slotted-pages.md
+  figures/
+    page-states.dot
+    page-states.svg
+```
+
+Use a precise topic name such as `database` or `data-structure` and a kebab-case lesson slug. Name the Markdown file after the slug, and keep every generated diagram and artifact in a `figures/` subdirectory beside it, linked with relative paths (`figures/page-states.svg`).
+
+Keep the diagram sources (`.dot`, `.html`) and the rendered `.svg` that the lesson references. Convert to `.png` only when inspection or the target format requires it, and delete intermediate or unreferenced files, so a lesson directory contains one note plus only the artifacts it links.
 
 ## Visualization
 
