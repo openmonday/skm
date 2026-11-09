@@ -1,81 +1,81 @@
 ---
 name: teach
-description: Teaches concepts, skills, and practical workflows through concrete problem reconstruction, clear causal explanations, retrieval practice, and visual aids. Applies when the user wants to understand how or why something works, learn a new skill, or build understanding over one or more sessions.
+description: Explains a concept or workflow through a concrete problem and a coherent example, with diagrams where they clarify the mechanism.
 disable-model-invocation: true
 argument-hint: "What would you like to learn about?"
 ---
 
-## Teaching Workflow
+# Teach
 
-Every explanation opens with a scenario that places the reader in the role of the person who must solve the problem — `You are building the query engine for a course platform, and the enrollment report must pair every course with its students` — and states what that person needs to accomplish. The tables, sizes, and limits enter as facts of that situation. Name the person doing the work, not the machine.
+## Teaching approach
 
-For concept and "why" questions, reconstruct the design from a concrete practical problem, even if the question also asks for syntax or terminology. Start from what someone needs to accomplish, not from the target technology.
+Teach the subject through a concrete problem. Give the reader enough context to understand what must be accomplished and why the mechanism matters, then use the example to make its behavior visible.
 
-1. Describe the practical task, the input sizes and constraints that will bind, and what makes it hard. State the task before naming the target mechanism.
-2. Show the simplest workable solution and run it on a case small enough to inspect. List the actual steps, states, or values, and the result.
-3. Name the pressure: the requirement the solution fails. Show it on the same case as evidence the reader can check — a failing input, an unreachable state, a count that grows too fast, a resource exhausted, a property violated, an operation that cannot be expressed. Quantitative where the domain allows it; a counterexample where it does not.
-4. Change one thing. Show the change, re-run the same case, show the evidence that the pressure is relieved, and name the pressure that remains. Keep the case fixed; do not swap it to make the next mechanism fit.
-5. Repeat step 4 until the mechanism is understood. When two changes relieve the same pressure, present them as a fork and state the requirement that selects each branch. Then connect the terminology, syntax, or API to the derived design.
+Organize the explanation around the subject's causal structure: what problem exists, how the mechanism addresses it, and what consequences follow. A sequence of improving designs works well when each intermediate design reveals something essential. Other subjects are clearer through a direct comparison, a worked execution, or an explanation of how a small piece of code behaves.
 
-Establish the problem before the solution. Explain why each choice exists instead of listing definitions, features, or benefits. Distinguish inconvenience from inability; do not invent limitations or imply the target is the only solution. Present the derivation as reconstruction, not history, unless evidence supports it.
+Keep a coherent example throughout so the reader can connect each explanation to something already understood. Develop it only as far as needed to explain the requested subject; related mechanisms can be introduced briefly or left for further study.
 
-Done means the reader can re-derive each mechanism from the previous one's failure and reproduce the evidence on the example. A mechanism that is named, defined, and given a formula has been described, not derived.
+Write the lesson as a finished explanation, rather than a record of the teaching process. Let section headings identify the ideas being explained. Use concrete behavior, code, and diagrams to carry the explanation, with prose connecting causes to consequences.
 
-When the question names several mechanisms, do not explain each one in turn. Treat them as one naive solution plus a series of changes to it. When the question is not a chain of improvements, reconstruct the solution from the requirement it must satisfy and apply the same rule: one small case, one observable failure, one change at a time.
-
-Apply the full progression to the concept asked about; a question naming several mechanisms runs the progression once across all of them. For follow-ups, explain the missing link and the prerequisites it needs. When the user proposes an alternative, show when it works before showing where it falls short.
-
-Stop once each mechanism in the question has been derived; do not survey mechanisms the question did not ask for.
-
-## Explanation Guidelines
-
-- Assume basic familiarity unless the user indicates otherwise; introduce a prerequisite at the step that depends on it and make its relevant behavior explicit.
-- Cut words, not steps: compact prose, complete operations, the evidence shown on the page. Keep the tables, rows, values, or state fixed across the derivation; a requirement may change, the example may not.
-- Keep each paragraph to one idea. Separate easily confused operations and say what performs each action and what it acts on.
-- Explain through causal connections. Do not announce teaching steps, use stock transitions, add encouragement, or repeat conclusions.
-- Every mechanism must answer an established need and be explained through concrete actions. Do not let an unexplained term or analogy carry the explanation.
-- Preserve code, identifiers, formulas, commands, and quotations exactly. Briefly explain specialized terms when first used.
+Produce two complementary files: a lesson that builds understanding and a reference that supplies the details needed in practice. The lesson is complete when the reader understands the problem, the mechanism, and why it works—not when every related detail has been covered.
 
 ## Example
 
-User: Why use a dynamic array?
+The following excerpt illustrates the approach for the question: Why does a browser restrict cross-origin reads, and what is CORS for?
 
-Assistant: You are writing a parser that must store every token it reads, and you do not know how many will arrive before parsing finishes. A fixed array requires guessing a capacity: too small cannot hold all tokens; too large wastes space. First try: allocate 1,000 slots, and when the array fills, allocate 1,001 slots and copy the stored elements. Trace the appends: filling the second array copies 1,000 elements, the third copies 1,001, and so on. Storing 2,000 tokens copies 1,000 + 1,001 + … + 1,999 ≈ 1,500,000 elements — the copy work grows with the square of the input, while the parser still produces every token correctly.
+### Why the browser restricts cross-origin reads
 
-Change one thing: when full, allocate twice the current capacity. Trace again: capacity grows 1,000 → 2,000 → 4,000, copying 1,000 then 2,000 elements, so after 4,000 tokens the total copy work is 3,000, below twice the final size. Copy work is now linear, and the remaining price is spare capacity: up to half the slots can sit unused. A container such as C++ `std::vector` manages storage and resizing automatically; `push_back` expresses the original need to append another token.
+You are building a dashboard at `https://dashboard.example` that reads data from `https://api.example`. These URLs have different origins: an origin consists of a scheme, host, and port.
 
-## Sources and References
+The browser also runs scripts from sites you do not trust. If any script could read responses from any origin, a malicious page could read private data from another site whenever the browser sent credentials that authorized access. The same-origin policy restricts those reads, but it also prevents your dashboard from reading the API's responses by default.
 
-Use high-trust sources for claims that are specialized, current, or easy to misremember. Recommend a primary source for further reading.
+### How the API permits the dashboard to read a response
 
-When the user is likely to revisit the material, create a concise reference in a fitting format (glossary, checklist, flowchart, code example, formula sheet, procedure). Keep it to reusable knowledge, and keep the terminology and notation of any existing reference. A reference is a separate artifact for revisiting; it does not replace the derivation. The lesson file teaches, even when its final section is a reference.
+CORS lets the API tell the browser which origins may read its responses. For a request from the dashboard, this response header permits that origin:
 
-## Lesson Output
-
-Write each lesson as one self-contained directory under `.lesson/<topic>/<lesson-slug>/`, creating directories when absent:
-
-```
-.lesson/database/slotted-pages/
-  slotted-pages.md
-  figures/
-    page-states.dot
-    page-states.svg
+```http
+Access-Control-Allow-Origin: https://dashboard.example
 ```
 
-Use a precise topic name such as `database` or `data-structure` and a kebab-case lesson slug. Name the Markdown file after the slug, and keep every generated diagram and artifact in a `figures/` subdirectory beside it, linked with relative paths (`figures/page-states.svg`).
+The browser checks the header before exposing the response to the dashboard's script. The API has granted read access to that origin; it has not authenticated the user. Requests that include credentials require additional configuration.
 
-The lesson follows the Teaching Workflow: one task, one case, each mechanism reached by a change to the previous one. A summary table or comparison chart belongs at the end, after the derivation.
+### Why blocking a response does not prevent a request
 
-Keep the diagram sources (`.dot`, `.html`) and the rendered `.svg` that the lesson references. Convert to `.png` only when inspection or the target format requires it, and delete intermediate or unreferenced files, so a lesson directory contains one note plus only the artifacts it links.
+Some cross-origin requests can reach the server even when the browser will not let the script read the response. A server-side action is not undone by hiding its result, so CORS is not a substitute for protection against cross-site request forgery.
 
-## Visualization
+For methods and headers that require a preflight, the browser first sends an `OPTIONS` request to check permission. It sends the actual request only if that check succeeds. Whether a request needs preflight depends on its method, headers, and content type—not simply on whether it changes server state.
+
+## Diagrams
 
 Include a diagram, without being asked, when text alone would force the reader to mentally reconstruct a structure, track several relationships, or compare changing states. Skip it when prose, code, or a table is already clear.
 
-Place each diagram where the step it depicts is explained, not only at the end. Show the work the current solution wastes, then the changed execution. If a diagram names concrete rows, pages, states, or values, the prose must name the same ones.
+Place each diagram beside the explanation it supports. Use it to expose the relevant structure, execution, or change in state. If a diagram names concrete rows, pages, states, or values, the prose must name the same ones.
 
 Generate and show the visual; do not just suggest one. Default to Graphviz for static structures and flows. Use D3 with HTML/SVG for interaction or step-by-step state changes. Use ELK with SVG only when compound graphs or explicit ports need more layout control.
 
 Check that the required tools are installed before rendering (`dot -V` for Graphviz, `npx --version` for D3 or ELK). If a tool or package is missing, stop and ask the user to install it; do not create environments, install packages, or add dependencies to the user's project. Convert SVG to PNG only if inspection or the user's format requires it.
 
 Let the primary relationships determine the layout, and split crowded views or show successive states. Render and inspect the output, and fix misleading placement, overlaps, unreadable labels, and confusing connections before presenting it. If inspection is unavailable, say so. Do not substitute source code for the rendered visual unless asked.
+
+## Output
+
+Write two files for each lesson, both under `.lesson/<topic>/<lesson-slug>/`, creating directories when absent:
+
+```
+.lesson/database/b-plus-tree/
+  b-plus-tree.md
+  b-plus-tree-reference.md
+  figures/
+    tree-shape.dot
+    tree-shape.svg
+```
+
+`<lesson-slug>.md` is the lesson: a focused explanation of the central idea through a coherent example. Include the details needed to follow the reasoning and avoid a misleading conclusion; leave exhaustive cases, API options, implementation variations, and secondary pitfalls to the reference. Link to it where a reader may want to go deeper.
+
+`<lesson-slug>-reference.md` is the practical lookup: precise signatures, rules, formulas, cases, costs, limitations, and pitfalls relevant to the subject. It can go beyond the lesson's example without expanding the lesson itself. Organize it for consultation mid-task, using concise entries, tables, and short code examples in the lesson's terminology and notation. The two files complement each other rather than repeat the same coverage in different formats.
+
+Use a kebab-case slug, such as `b-plus-tree`. Keep the topic coarse and kebab-case too — one category such as `database` or `cpp` — and put a later lesson on the same subject under the same topic rather than a new one. Name both Markdown files after the directory, and keep every generated diagram and artifact in a `figures/` subdirectory beside it, linked with relative paths (`figures/tree-shape.svg`).
+
+## Sources
+
+Use high-trust sources for claims that are specialized, current, or easy to misremember. Name the primary source for further reading.
