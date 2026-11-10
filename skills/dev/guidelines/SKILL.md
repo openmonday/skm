@@ -17,7 +17,7 @@ Before editing a file, find its arch records (see Finding arch records below). A
 - **Precedence:** the user's explicit instruction, then the active spec's Supersedes list, then arch record Constraints, then what the code appears to do.
 - **Unplanned conflict:** when a change would break a constraint that the spec does not supersede, stop and surface it to the user instead of silently overriding it. A constraint can be changed, but not accidentally.
 - **Drift:** when the record's files have commits after `since:`, check the constraints you rely on against the code. Report disagreements; don't silently follow either side.
-- **Timing:** never edit `.desk/architecture/` to describe planned work. Records change after the code is committed, through `/update-arch`.
+- **Timing:** never edit `.desk/arch/` to describe planned work. Records change after the code is committed, through `/update-arch`.
 
 `.desk/AGENTS.md` ("Using arch records") is the full version of these rules.
 

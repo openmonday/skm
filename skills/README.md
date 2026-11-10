@@ -33,7 +33,7 @@ Setup uses fixed local defaults and preserves existing content on reruns. It ask
 | `tdd` | Build one tested behavior at a time | Tests and implementation in project source directories |
 | `diagnosing-bugs` | Reproduce, isolate, diagnose, and fix a bug | Verified fix and appropriate regression coverage |
 | `code-review` | Check standards and requirements separately | Findings covering committed and working-tree changes |
-| `check-arch` / `update-arch` | Find stale arch records / record rules after commits | `.desk/architecture/<slug>.md` |
+| `check-arch` / `update-arch` | Find stale arch records / record rules after commits | `.desk/arch/<slug>.md` |
 | `handoff` | Preserve enough context to resume | A local handoff |
 | `show-me` | Explain with a focused visual | Inline visual or temporary HTML report |
 
@@ -59,12 +59,12 @@ The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes 
 .desk/
 ├── AGENTS.md
 ├── CONTEXT.md
-├── architecture/<slug>.md
-├── features/<feature>/
+├── arch/<slug>.md
+├── specs/<feature>/
 │   ├── spec.md
-│   └── tickets/<ticket>.md
+│   └── tasks/<ticket>.md
 ├── handoffs/<session>.md
-├── reference/<project>/
+├── refs/<project>/
 └── research/<topic>/report.md
 ```
 

@@ -4,22 +4,22 @@ Project-local conventions for the dev skills. Installed Desk skills load this fi
 
 ## Files
 
-Every subdirectory name is a full, plural or mass English noun; none is abbreviated. Create a file or directory only when there is content to record:
+Use concise, conventional names. Use plural nouns for collections and mass nouns for subject areas; widely understood abbreviations are allowed. Create a file or directory only when there is content to record:
 
 ```text
 .desk/
 ├── AGENTS.md                          # these conventions and the project-wide rules
 ├── CONTEXT.md                         # domain glossary
-├── architecture/
+├── arch/
 │   └── <record-slug>.md               # one architecture record
-├── features/
+├── specs/
 │   └── <feature-slug>/
 │       ├── spec.md
-│       └── tickets/
+│       └── tasks/
 │           └── <ticket-slug>.md
 ├── handoffs/
 │   └── <session-slug>.md
-├── reference/
+├── refs/
 │   └── <project-slug>/                # unmodified Git checkout of a reference project
 └── research/
     └── <topic-slug>/
@@ -33,14 +33,14 @@ Each file type has exactly one **owner skill**. The owner creates the file, defi
 | --- | --- | --- | --- |
 | `AGENTS.md` | `setup-desk` | This document | Lasting; project edits are preserved on reruns |
 | `CONTEXT.md` | `domain-modeling` | `CONTEXT-FORMAT.md` in that skill | Lasting |
-| `architecture/<record-slug>.md` | `update-arch` | `ARCH-FORMAT.md` in that skill, checked by `validate-arch.sh` | Lasting; rewritten after commits |
-| `features/<feature-slug>/spec.md` | `to-spec` | Spec template in that skill | Until close-out |
-| `features/<feature-slug>/tickets/<ticket-slug>.md` | `to-tickets` | Ticket template in that skill and the Tickets section below | Until close-out |
+| `arch/<record-slug>.md` | `update-arch` | `ARCH-FORMAT.md` in that skill, checked by `validate-arch.sh` | Lasting; rewritten after commits |
+| `specs/<feature-slug>/spec.md` | `to-spec` | Spec template in that skill | Until close-out |
+| `specs/<feature-slug>/tasks/<ticket-slug>.md` | `to-tickets` | Ticket template in that skill and the Tickets section below | Until close-out |
 | `handoffs/<session-slug>.md` | `handoff` | Handoff template in that skill | Until the user deletes it |
-| `reference/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
+| `refs/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
 | `research/<topic-slug>/report.md` and diagrams | `research` | Report template in that skill | Until the user deletes it |
 
-**Shared fields.** `implement` and `implement-spec` update a ticket's `Status:` line and `Verification` section as described under Tickets. **Close-out** removes `features/<feature-slug>/` once its last ticket is done. When the work needs an arch record, `update-arch` removes the folder after its records validate, because it reads the spec's Constraints and Supersedes list. Otherwise `implement` or `implement-spec` removes it when the work is verified. No other skill writes into a file it does not own.
+**Shared fields.** `implement` and `implement-spec` update a ticket's `Status:` line and `Verification` section as described under Tickets. **Close-out** removes `specs/<feature-slug>/` once its last ticket is done. When the work needs an arch record, `update-arch` removes the folder after its records validate, because it reads the spec's Constraints and Supersedes list. Otherwise `implement` or `implement-spec` removes it when the work is verified. No other skill writes into a file it does not own.
 
 Nothing else belongs in `.desk/`. Temporary debug artifacts go to `${TMPDIR:-/tmp}/desk-debug/<bug-slug>/` and disposable HTML visuals go to `${TMPDIR:-/tmp}/desk-reports/`. Permanent tests and fixtures go in the project's normal source tree.
 
@@ -52,7 +52,7 @@ Write `.desk` documents in English unless the project-wide rules below say other
 
 ## Tickets
 
-Each ticket is one file, `features/<feature-slug>/tickets/<ticket-slug>.md`. The ticket's `# <NN>: <title>` heading carries its number: two digits in creation order within the feature. Never reuse or renumber a number, even after a ticket is dropped.
+Each ticket is one file, `specs/<feature-slug>/tasks/<ticket-slug>.md`. The ticket's `# <NN>: <title>` heading carries its number: two digits in creation order within the feature. Never reuse or renumber a number, even after a ticket is dropped.
 
 The `Status:` line holds one of:
 
@@ -71,7 +71,7 @@ The `Status:` line holds one of:
 
 ## Ownership
 
-One agent, the **coordinator**, writes every shared `.desk` file during a run: `CONTEXT.md`, `architecture/`, `features/`, `handoffs/`, `reference/`, and `research/`. Subagents and ticket workers may read them, but they return proposed changes as text, and the coordinator applies them. In a single-agent session, that agent is the coordinator.
+One agent, the **coordinator**, writes every shared `.desk` file during a run: `CONTEXT.md`, `arch/`, `specs/`, `handoffs/`, `refs/`, and `research/`. Subagents and ticket workers may read them, but they return proposed changes as text, and the coordinator applies them. In a single-agent session, that agent is the coordinator.
 
 ## Shared worktrees
 
@@ -98,10 +98,10 @@ Before editing, planning, or reviewing files, find the arch records that list th
 
 ```bash
 scripts/find-arch.sh path/to/file path/to/dir/ [...]   # ships with check-arch, update-arch, guidelines
-grep -l -e '- path/to/file' .desk/architecture/*.md             # fallback without the helper
+grep -l -e '- path/to/file' .desk/arch/*.md             # fallback without the helper
 ```
 
-A directory argument matches records that list files inside it. If nothing matches or `.desk/architecture/` is absent, continue silently. A renamed file may be listed under its old path, so use `git log --follow` to trace it.
+A directory argument matches records that list files inside it. If nothing matches or `.desk/arch/` is absent, continue silently. A renamed file may be listed under its old path, so use `git log --follow` to trace it.
 
 ## Using arch records
 
@@ -118,7 +118,7 @@ An arch record describes the **committed code as of its `since:` commit**: what 
 
 **Check drift before relying on a record.** Run `git log --oneline <since>..HEAD -- <listed files>`. If any commits appear, the record may be stale: check each Constraint you depend on against the current code. When code and record disagree, report it to the user and don't silently follow either one. `/check-arch` reports drift across the project.
 
-**Change records only after the code lands.** Never edit `architecture/` to describe planned work. If the plan is abandoned, a record written in advance would describe code that doesn't exist. Planned changes live in the spec's Supersedes list. During implementation they replace only the rules they name, and every other Constraint stays binding. After the commit, `/update-arch` rewrites the record from what was actually built.
+**Change records only after the code lands.** Never edit `arch/` to describe planned work. If the plan is abandoned, a record written in advance would describe code that doesn't exist. Planned changes live in the spec's Supersedes list. During implementation they replace only the rules they name, and every other Constraint stays binding. After the commit, `/update-arch` rewrites the record from what was actually built.
 
 ## Project-wide rules
 

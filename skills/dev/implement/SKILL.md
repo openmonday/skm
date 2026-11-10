@@ -32,6 +32,6 @@ Commit only this work to the current branch after review and verification. Ensur
 
 If the change qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the committed files and the spec path to record the architectural decisions.
 
-When this commit completes the feature's last ticket and everything is verified, close out the feature: if `/update-arch` was recommended, keep `.desk/features/<feature-slug>/`, because `/update-arch` needs the spec's Constraints and Supersedes list and removes the folder itself afterwards; otherwise remove the folder now and tell the user.
+When this commit completes the feature's last ticket and everything is verified, close out the feature: if `/update-arch` was recommended, keep `.desk/specs/<feature-slug>/`, because `/update-arch` needs the spec's Constraints and Supersedes list and removes the folder itself afterwards; otherwise remove the folder now and tell the user.
 
 **Done:** the scoped implementation is reviewed and committed, ticket state reflects the actual integration status, and remaining limitations are reported.

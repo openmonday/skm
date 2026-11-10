@@ -57,7 +57,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Save and validate local tickets
 
-Save the approved tickets, one file per ticket, as `tickets/<ticket-slug>.md` inside the feature directory. Put the two-digit number in the ticket's `# <NN>: <title>` heading, in creation order within the feature. Leave `spec.md` to `/to-spec`: when working from a plan or conversation without a spec, put each ticket's confirmed requirements in its own sections, and suggest `/to-spec` when the user wants a durable feature-level source.
+Save the approved tickets, one file per ticket, as `tasks/<ticket-slug>.md` inside the feature directory. Put the two-digit number in the ticket's `# <NN>: <title>` heading, in creation order within the feature. Leave `spec.md` to `/to-spec`: when working from a plan or conversation without a spec, put each ticket's confirmed requirements in its own sections, and suggest `/to-spec` when the user wants a durable feature-level source.
 
 Use the ticket template below. Preserve existing task IDs, implementation evidence, and completion states when extending a plan. Change an existing ticket's scope or dependencies only as part of the approved breakdown; if completed work needs correction, reopen it explicitly.
 

@@ -16,7 +16,7 @@ Read `.desk/AGENTS.md` for workspace conventions; if it is missing, ask the user
 
 Check with the user that these seams match their expectations, honoring an agreement already reached in this conversation.
 
-3. Write the spec using the template below and save it to `.desk/features/<feature-slug>/spec.md`. Collect every rule the user stated in the conversation, including during `grill-me` sessions, into the Constraints section; the spec is the only copy an implementing agent will see. Preserve existing confirmed decisions when updating a spec. Report its path and any unresolved assumptions. The spec is ready when its requirements, scope, and testing decisions are explicit enough to guide implementation.
+3. Write the spec using the template below and save it to `.desk/specs/<feature-slug>/spec.md`. Collect every rule the user stated in the conversation, including during `grill-me` sessions, into the Constraints section; the spec is the only copy an implementing agent will see. Preserve existing confirmed decisions when updating a spec. Report its path and any unresolved assumptions. The spec is ready when its requirements, scope, and testing decisions are explicit enough to guide implementation.
 
 <spec-template>
 

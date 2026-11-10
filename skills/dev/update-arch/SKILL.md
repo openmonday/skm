@@ -26,15 +26,15 @@ Skip this for typo fixes, formatting, dependency bumps, or changes with no arch 
 
 1. **Identify the committed files.** Use `git diff --name-only <before>..HEAD` or get them from the user. These are the files you just committed.
 
-2. **Ensure `.desk/architecture/` exists.** If creating a new arch record or updating existing ones:
+2. **Ensure `.desk/arch/` exists.** If creating a new arch record or updating existing ones:
    ```bash
-   mkdir -p .desk/architecture
+   mkdir -p .desk/arch
    ```
    This is safe to run even if the directory already exists.
 
 3. **Find matching arch records.** Use `scripts/find-arch.sh <file>...` or search manually:
    ```bash
-   grep -l -e '- src/payments/stripe.ts' .desk/architecture/*.md
+   grep -l -e '- src/payments/stripe.ts' .desk/arch/*.md
    ```
 
 4. **Get the latest commit hash** for the files just committed:
@@ -48,10 +48,10 @@ Skip this for typo fixes, formatting, dependency bumps, or changes with no arch 
 
 7. **Validate the updated records** using `scripts/validate-arch.sh` to catch formatting errors:
    ```bash
-   scripts/validate-arch.sh .desk/architecture/payment-gateway-integration.md
+   scripts/validate-arch.sh .desk/arch/payment-gateway-integration.md
    ```
 
-8. **Close out the feature.** If the work came from a spec in `.desk/features/<feature-slug>/`, every ticket there is `done` or `dropped`, and all records from step 7 pass validation, remove `.desk/features/<feature-slug>/`. Keep it when any ticket is still open or validation failed.
+8. **Close out the feature.** If the work came from a spec in `.desk/specs/<feature-slug>/`, every ticket there is `done` or `dropped`, and all records from step 7 pass validation, remove `.desk/specs/<feature-slug>/`. Keep it when any ticket is still open or validation failed.
 
 9. **Report which arch records were updated**, the new commit hash, and whether the feature folder was removed.
 
@@ -59,7 +59,7 @@ Workers in a shared-worktree run return proposed updates to the coordinator rath
 
 ## Bootstrapping existing code
 
-When the user asks to record existing code and `.desk/architecture/` has no records, infer initial records from the codebase instead of from a commit. Skip this when records already exist, when there is no source code yet, or outside Git (there is no commit for `since:`).
+When the user asks to record existing code and `.desk/arch/` has no records, infer initial records from the codebase instead of from a commit. Skip this when records already exist, when there is no source code yet, or outside Git (there is no commit for `since:`).
 
 1. **Identify source directories.** Find the main source locations:
    ```bash
@@ -82,7 +82,7 @@ $ git log -1 --format='%H' -- src/payments
 abc123f456...
 
 $ scripts/find-arch.sh src/payments
-.desk/architecture/payment-gateway-integration.md
+.desk/arch/payment-gateway-integration.md
 
 # Edit payment-gateway-integration.md front matter:
 # since: abc123f456...
@@ -92,9 +92,9 @@ $ scripts/find-arch.sh src/payments
 
 ```bash
 # After committing a new feature with architectural constraints
-$ mkdir -p .desk/architecture
+$ mkdir -p .desk/arch
 
-# Create .desk/architecture/payment-gateway-integration.md with:
+# Create .desk/arch/payment-gateway-integration.md with:
 ---
 type: feat
 files:

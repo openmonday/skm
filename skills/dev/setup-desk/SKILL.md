@@ -56,4 +56,4 @@ Tell the user, in one short message:
 - The workspace path, and whether `.desk/AGENTS.md` was created or updated.
 - The Git exclusion result, or that it is pending because the project is not a Git repository.
 - Any conflicts left for the user to resolve.
-- When the repository already has source code and `.desk/architecture/` is empty: `/update-arch` can bootstrap architecture records from the existing code.
+- When the repository already has source code and `.desk/arch/` is empty: `/update-arch` can bootstrap architecture records from the existing code.

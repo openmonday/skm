@@ -40,7 +40,7 @@ Run this skill:
    scripts/find-arch.sh <changed-file>...
    
    # Or search manually
-   grep -l -e '- src/payments/stripe.ts' .desk/architecture/*.md
+   grep -l -e '- src/payments/stripe.ts' .desk/arch/*.md
    ```
 
 4. **Check each arch record's staleness.** For each found record:
@@ -87,10 +87,10 @@ src/payments/types.ts
 
 # Find arch records for those files
 $ scripts/find-arch.sh src/payments/stripe.ts src/payments/webhook.ts src/payments/types.ts
-.desk/architecture/payment-gateway-integration.md
+.desk/arch/payment-gateway-integration.md
 
 # Read the record and check its 'since:' field
-$ head -10 .desk/architecture/payment-gateway-integration.md
+$ head -10 .desk/arch/payment-gateway-integration.md
 ---
 type: feat
 files:

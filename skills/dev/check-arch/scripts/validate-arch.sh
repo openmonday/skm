@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Validate arch records against the format in ARCH-FORMAT.md
-# Usage: validate-arch.sh [<file.md>...]   (default: .desk/architecture/*.md from the project root)
+# Usage: validate-arch.sh [<file.md>...]   (default: .desk/arch/*.md from the project root)
 
 set -euo pipefail
 
 if [ $# -eq 0 ]; then
-    set -- .desk/architecture/*.md
+    set -- .desk/arch/*.md
     if [ ! -f "$1" ]; then
-        echo "No arch records found in .desk/architecture/" >&2
+        echo "No arch records found in .desk/arch/" >&2
         exit 0
     fi
 fi
