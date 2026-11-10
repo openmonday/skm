@@ -62,7 +62,7 @@ The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes 
 ├── architecture/<slug>.md
 ├── features/<feature>/
 │   ├── spec.md
-│   └── tickets/<NN>-<ticket>.md
+│   └── tickets/<ticket>.md
 ├── handoffs/<session>.md
 ├── reference/<project>/
 └── research/<topic>/report.md

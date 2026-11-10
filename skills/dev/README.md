@@ -11,7 +11,7 @@ Install the whole group with `skm add @dev`, or pick individual skills by name.
                               │
                               ▼
  /check-arch ─► /research ─► grill-me / /grill-with-docs ─► /to-spec ─► /to-tickets
- (stale?)       report.md     (+ domain-modeling)            spec.md     tickets/NN-*.md
+ (stale?)       report.md     (+ domain-modeling)            spec.md     tickets/*.md
                                                              +Supersedes      │
                      ┌────────────────────────────────────────────────────────┤
                      ▼                                                        ▼
@@ -52,7 +52,7 @@ Other entry points:
 | `grill-with-docs` | user | `grill-me` + `domain-modeling` | Decisions plus `.desk/CONTEXT.md` terms |
 | `domain-modeling` | model | Challenge and record domain language | `.desk/CONTEXT.md`, confirmed constraints |
 | `to-spec` | user | Turn the conversation into a spec | `.desk/features/<slug>/spec.md` |
-| `to-tickets` | user | Split work into dependent vertical slices | `.desk/features/<slug>/tickets/NN-*.md` |
+| `to-tickets` | user | Split work into dependent vertical slices | `.desk/features/<slug>/tickets/*.md` |
 | `implement` | user | Implement, review, and commit focused work | One reviewed commit on the current branch |
 | `implement-spec` | user | Deliver the full ticket graph in parallel | Verified local integration branch |
 | `tdd` | model | Red → green loop at agreed seams | Tests and code in project directories |
@@ -76,7 +76,7 @@ Other entry points:
 ├── architecture/<slug>.md     # architecture records of committed code, lasting
 ├── features/<slug>/           # work in progress, removed at close-out
 │   ├── spec.md
-│   └── tickets/NN-<slug>.md
+│   └── tickets/<slug>.md
 ├── handoffs/<session>.md      # kept until deleted
 ├── reference/<project>/      # unmodified reference checkouts, kept until deleted
 └── research/<topic>/          # research reports and diagrams, kept until deleted

@@ -16,7 +16,7 @@ Every subdirectory name is a full, plural or mass English noun; none is abbrevia
 │   └── <feature-slug>/
 │       ├── spec.md
 │       └── tickets/
-│           └── <NN>-<ticket-slug>.md
+│           └── <ticket-slug>.md
 ├── handoffs/
 │   └── <session-slug>.md
 ├── reference/
@@ -35,7 +35,7 @@ Each file type has exactly one **owner skill**. The owner creates the file, defi
 | `CONTEXT.md` | `domain-modeling` | `CONTEXT-FORMAT.md` in that skill | Lasting |
 | `architecture/<record-slug>.md` | `update-arch` | `ARCH-FORMAT.md` in that skill, checked by `validate-arch.sh` | Lasting; rewritten after commits |
 | `features/<feature-slug>/spec.md` | `to-spec` | Spec template in that skill | Until close-out |
-| `features/<feature-slug>/tickets/<NN>-<ticket-slug>.md` | `to-tickets` | Ticket template in that skill and the Tickets section below | Until close-out |
+| `features/<feature-slug>/tickets/<ticket-slug>.md` | `to-tickets` | Ticket template in that skill and the Tickets section below | Until close-out |
 | `handoffs/<session-slug>.md` | `handoff` | Handoff template in that skill | Until the user deletes it |
 | `reference/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
 | `research/<topic-slug>/report.md` and diagrams | `research` | Report template in that skill | Until the user deletes it |
@@ -52,7 +52,7 @@ Write `.desk` documents in English unless the project-wide rules below say other
 
 ## Tickets
 
-Each ticket is one file, `features/<feature-slug>/tickets/<NN>-<ticket-slug>.md`. Number tickets with two digits in creation order within the feature. Never reuse or renumber a number, even after a ticket is dropped.
+Each ticket is one file, `features/<feature-slug>/tickets/<ticket-slug>.md`. The ticket's `# <NN>: <title>` heading carries its number: two digits in creation order within the feature. Never reuse or renumber a number, even after a ticket is dropped.
 
 The `Status:` line holds one of:
 
