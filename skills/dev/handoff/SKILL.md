@@ -31,9 +31,9 @@ Unresolved questions, or "None".
 Concrete numbered steps, with the suggested skill for each.
 
 ## Sources
-Project-relative paths to specs, tickets, records, research, commits, and diffs.
+Project-relative paths to specs, tasks, records, research, commits, and diffs.
 ```
 
-Reference existing specs, tickets, records, research, commits, and diffs by path in Sources instead of duplicating them. Use project-relative `.desk/...` pointers where possible. Redact secrets before saving.
+Reference existing specs, tasks, records, research, commits, and diffs by path in Sources instead of duplicating them. Use project-relative `.desk/...` pointers where possible. Redact secrets before saving.
 
 If the user supplied a next-session focus, tailor the handoff to it. In a shared-worktree run, return handoff content to the coordinator to save. Finish by reporting the saved path.

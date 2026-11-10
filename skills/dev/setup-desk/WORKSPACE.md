@@ -16,7 +16,7 @@ Use concise, conventional names. Use plural nouns for collections and mass nouns
 │   └── <feature-slug>/
 │       ├── spec.md
 │       └── tasks/
-│           └── <ticket-slug>.md
+│           └── <task-slug>.md
 ├── handoffs/
 │   └── <session-slug>.md
 ├── refs/
@@ -35,12 +35,12 @@ Each file type has exactly one **owner skill**. The owner creates the file, defi
 | `CONTEXT.md` | `domain-modeling` | `CONTEXT-FORMAT.md` in that skill | Lasting |
 | `arch/<record-slug>.md` | `update-arch` | `ARCH-FORMAT.md` in that skill, checked by `validate-arch.sh` | Lasting; rewritten after commits |
 | `specs/<feature-slug>/spec.md` | `to-spec` | Spec template in that skill | Until close-out |
-| `specs/<feature-slug>/tasks/<ticket-slug>.md` | `to-tickets` | Ticket template in that skill and the Tickets section below | Until close-out |
+| `specs/<feature-slug>/tasks/<task-slug>.md` | `to-tasks` | Task template in that skill and the Tasks section below | Until close-out |
 | `handoffs/<session-slug>.md` | `handoff` | Handoff template in that skill | Until the user deletes it |
 | `refs/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
 | `research/<topic-slug>/report.md` and diagrams | `research` | Report template in that skill | Until the user deletes it |
 
-**Shared fields.** `implement` and `implement-spec` update a ticket's `Status:` line and `Verification` section as described under Tickets. **Close-out** removes `specs/<feature-slug>/` once its last ticket is done. When the work needs an arch record, `update-arch` removes the folder after its records validate, because it reads the spec's Constraints and Supersedes list. Otherwise `implement` or `implement-spec` removes it when the work is verified. No other skill writes into a file it does not own.
+**Shared fields.** `implement` and `implement-spec` update a task's `Status:` line and `Verification` section as described under Tasks. **Close-out** removes `specs/<feature-slug>/` once its last task is done. When the work needs an arch record, `update-arch` removes the folder after its records validate, because it reads the spec's Constraints and Supersedes list. Otherwise `implement` or `implement-spec` removes it when the work is verified. No other skill writes into a file it does not own.
 
 Nothing else belongs in `.desk/`. Temporary debug artifacts go to `${TMPDIR:-/tmp}/desk-debug/<bug-slug>/` and disposable HTML visuals go to `${TMPDIR:-/tmp}/desk-reports/`. Permanent tests and fixtures go in the project's normal source tree.
 
@@ -50,47 +50,47 @@ Slugs are lowercase, hyphen-separated, and describe the topic (`payment-retry`, 
 
 Write `.desk` documents in English unless the project-wide rules below say otherwise. Keep identifiers, paths, commands, and quoted code exact.
 
-## Tickets
+## Tasks
 
-Each ticket is one file, `specs/<feature-slug>/tasks/<ticket-slug>.md`. The ticket's `# <NN>: <title>` heading carries its number: two digits in creation order within the feature. Never reuse or renumber a number, even after a ticket is dropped.
+Each task is one file, `specs/<feature-slug>/tasks/<task-slug>.md`. The task's `# <NN>: <title>` heading carries its number: two digits in creation order within the feature. Never reuse or renumber a number, even after a task is dropped.
 
 The `Status:` line holds one of:
 
 | Status | Meaning |
 | --- | --- |
 | `pending` | Not started, or reopened |
-| `in-progress (<owner>)` | Claimed. `<owner>` is the ticket branch, or `main` for work in the owner workspace |
+| `in-progress (<owner>)` | Claimed. `<owner>` is the task branch, or `main` for work in the owner workspace |
 | `done` | Acceptance criteria verified and the commit is on the target branch (the integration branch in `/implement-spec`) |
 | `dropped` | Removed from the plan with the user's approval; give the reason under Verification |
 
-- **Claim before work.** Set `in-progress (<owner>)` before editing code. Never take a ticket that someone else has claimed.
-- **Reopen explicitly.** Set a `done` ticket back to `pending` and note why under Verification. Never edit completed evidence away.
+- **Claim before work.** Set `in-progress (<owner>)` before editing code. Never take a task that someone else has claimed.
+- **Reopen explicitly.** Set a `done` task back to `pending` and note why under Verification. Never edit completed evidence away.
 - **Verification** lists the commits and the checks actually run, with their results.
 
-`Blocked by:` is `None` or a comma-separated list of ticket numbers in the same feature (`01, 03`). A ticket is ready when every blocker is `done`. The set of ready tickets is the **frontier**. The graph must have no cycles and no references to missing tickets.
+`Blocked by:` is `None` or a comma-separated list of task numbers in the same feature (`01, 03`). A task is ready when every blocker is `done`. The set of ready tasks is the **frontier**. The graph must have no cycles and no references to missing tasks.
 
 ## Ownership
 
-One agent, the **coordinator**, writes every shared `.desk` file during a run: `CONTEXT.md`, `arch/`, `specs/`, `handoffs/`, `refs/`, and `research/`. Subagents and ticket workers may read them, but they return proposed changes as text, and the coordinator applies them. In a single-agent session, that agent is the coordinator.
+One agent, the **coordinator**, writes every shared `.desk` file during a run: `CONTEXT.md`, `arch/`, `specs/`, `handoffs/`, `refs/`, and `research/`. Subagents and task workers may read them, but they return proposed changes as text, and the coordinator applies them. In a single-agent session, that agent is the coordinator.
 
 ## Shared worktrees
 
-`/implement-spec` gives each ticket its own branch and worktree. The coordinator prepares each one:
+`/implement-spec` gives each task its own branch and worktree. The coordinator prepares each one:
 
 1. Create it from the current integration tip, outside the project directory:
    ```bash
-   git worktree add "../<repo>.worktrees/<feature-slug>-<NN>" -b "<feature-slug>-<NN>-<ticket-slug>" <integration-tip>
+   git worktree add "../<repo>.worktrees/<feature-slug>-<task-slug>" -b "<feature-slug>-<task-slug>" <integration-tip>
    ```
-   Name the integration branch `<feature-slug>`. Ticket branches use hyphens, not `/`, because Git cannot hold both `<feature-slug>` and `<feature-slug>/...` as branch names.
+   Name the integration branch `<feature-slug>`. Task branches use hyphens, not `/`, because Git cannot hold both `<feature-slug>` and `<feature-slug>/...` as branch names.
 2. Link the owner's real workspace, resolving any existing symlink first:
    ```bash
    DESK="$(cd .desk && pwd -P)"
-   ln -s "$DESK" "../<repo>.worktrees/<feature-slug>-<NN>/.desk"
+   ln -s "$DESK" "../<repo>.worktrees/<feature-slug>-<task-slug>/.desk"
    ```
 3. Verify: `.desk/AGENTS.md` is readable from the worktree, `git -C <worktree> check-ignore -q .desk` succeeds, and `git -C <worktree> status --short` is empty.
-4. To clean up after the ticket is integrated, remove the link first (`rm <worktree>/.desk`, with no trailing slash and never `-r`), then run `git worktree remove <worktree>` and `git branch -d <ticket-branch>`.
+4. To clean up after the task is integrated, remove the link first (`rm <worktree>/.desk`, with no trailing slash and never `-r`), then run `git worktree remove <worktree>` and `git branch -d <task-branch>`.
 
-If directory symlinks or worktrees are unavailable, work through the tickets sequentially in the owner workspace.
+If directory symlinks or worktrees are unavailable, work through the tasks sequentially in the owner workspace.
 
 ## Finding arch records
 

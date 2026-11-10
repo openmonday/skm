@@ -17,7 +17,7 @@
       "show-me",
       "tdd",
       "to-spec",
-      "to-tickets",
+      "to-tasks",
       "update-arch"
     ],
     "teach": ["anatomy", "learn-by-doing", "show-me", "teach", "wait-what"],

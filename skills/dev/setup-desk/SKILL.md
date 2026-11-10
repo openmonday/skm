@@ -1,6 +1,6 @@
 ---
 name: setup-desk
-description: Initialize a local Desk workspace for specs, tickets, domain terms, architecture records, research, and handoffs.
+description: Initialize a local Desk workspace for specs, tasks, domain terms, architecture records, research, and handoffs.
 disable-model-invocation: true
 ---
 

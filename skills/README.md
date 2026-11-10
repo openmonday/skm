@@ -27,9 +27,9 @@ Setup uses fixed local defaults and preserves existing content on reruns. It ask
 | `grill-with-docs` | Combine the interview with domain modeling | Resolved terms in `.desk/CONTEXT.md` |
 | `domain-modeling` | Resolve domain terms and confirm rules | Glossary entries and one-line constraints |
 | `to-spec` | Synthesize the discussed requirements | A feature spec with Constraints and Supersedes |
-| `to-tickets` | Split a spec, plan, or conversation into verifiable slices | One file per ticket with dependencies |
+| `to-tasks` | Split a spec, plan, or conversation into verifiable slices | One file per task with dependencies |
 | `implement` | Complete a focused piece of work | Reviewed commit on the current branch |
-| `implement-spec` | Complete the ticket graph, optionally in parallel | Verified local integration branch |
+| `implement-spec` | Complete the task graph, optionally in parallel | Verified local integration branch |
 | `tdd` | Build one tested behavior at a time | Tests and implementation in project source directories |
 | `diagnosing-bugs` | Reproduce, isolate, diagnose, and fix a bug | Verified fix and appropriate regression coverage |
 | `code-review` | Check standards and requirements separately | Findings covering committed and working-tree changes |
@@ -37,7 +37,7 @@ Setup uses fixed local defaults and preserves existing content on reruns. It ask
 | `handoff` | Preserve enough context to resume | A local handoff |
 | `show-me` | Explain with a focused visual | Inline visual or temporary HTML report |
 
-A common sequence is `/research` → `/grill-with-docs` → `/to-spec` → `/to-tickets` → `/implement-spec` → `/update-arch`. Use `/grill-me` for an interview without domain-document updates. For focused work, use `/implement`. For a difficult failure, use `diagnosing-bugs`. See [dev/README.md](dev/README.md) for the full flow.
+A common sequence is `/research` → `/grill-with-docs` → `/to-spec` → `/to-tasks` → `/implement-spec` → `/update-arch`. Use `/grill-me` for an interview without domain-document updates. For focused work, use `/implement`. For a difficult failure, use `diagnosing-bugs`. See [dev/README.md](dev/README.md) for the full flow.
 
 Model-invoked skills such as `domain-modeling`, `tdd`, and `code-review` can support a larger workflow. User-invoked skills remain explicit entry points.
 
@@ -53,7 +53,7 @@ Model-invoked skills such as `domain-modeling`, `tdd`, and `code-review` can sup
 
 ## Local workspace
 
-The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes the project's `.desk/AGENTS.md`. That generated file is the authoritative source for paths, ticket states, dependencies, language, worktree sharing, and how arch records are applied. Customize project conventions there.
+The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes the project's `.desk/AGENTS.md`. That generated file is the authoritative source for paths, task states, dependencies, language, worktree sharing, and how arch records are applied. Customize project conventions there.
 
 ```text
 .desk/
@@ -62,7 +62,7 @@ The template [dev/setup-desk/WORKSPACE.md](dev/setup-desk/WORKSPACE.md) becomes 
 ├── arch/<slug>.md
 ├── specs/<feature>/
 │   ├── spec.md
-│   └── tasks/<ticket>.md
+│   └── tasks/<task>.md
 ├── handoffs/<session>.md
 ├── refs/<project>/
 └── research/<topic>/report.md
@@ -72,7 +72,7 @@ Debug captures go to `${TMPDIR:-/tmp}/desk-debug/`. Skill definitions and instru
 
 ## Parallel implementation
 
-Each ticket worker has its own branch and worktree. The coordinator creates a `.desk` symlink in that worktree pointing to the owner workspace's actual directory, so all agents use the same project-relative paths. The shared Git exclusion ignores both the actual directory and these symlink entries. Only the coordinator changes shared records, and it advances ticket states after integration and verification.
+Each task worker has its own branch and worktree. The coordinator creates a `.desk` symlink in that worktree pointing to the owner workspace's actual directory, so all agents use the same project-relative paths. The shared Git exclusion ignores both the actual directory and these symlink entries. Only the coordinator changes shared records, and it advances task states after integration and verification.
 
 Only project source, permanent tests, and required fixtures enter implementation commits. Specs and other `.desk` material stay out of Git history. The workspace has no version history or backup of its own. Platforms that cannot create directory symlinks use sequential implementation.
 

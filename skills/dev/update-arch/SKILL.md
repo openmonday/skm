@@ -51,7 +51,7 @@ Skip this for typo fixes, formatting, dependency bumps, or changes with no arch 
    scripts/validate-arch.sh .desk/arch/payment-gateway-integration.md
    ```
 
-8. **Close out the feature.** If the work came from a spec in `.desk/specs/<feature-slug>/`, every ticket there is `done` or `dropped`, and all records from step 7 pass validation, remove `.desk/specs/<feature-slug>/`. Keep it when any ticket is still open or validation failed.
+8. **Close out the feature.** If the work came from a spec in `.desk/specs/<feature-slug>/`, every task there is `done` or `dropped`, and all records from step 7 pass validation, remove `.desk/specs/<feature-slug>/`. Keep it when any task is still open or validation failed.
 
 9. **Report which arch records were updated**, the new commit hash, and whether the feature folder was removed.
 

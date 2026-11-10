@@ -6,7 +6,7 @@ description: "Review committed and working-tree changes against a fixed point on
 Two-axis review of committed and working-tree changes since a fixed point:
 
 - **Standards**: does the code conform to this repo's documented coding standards?
-- **Spec**: does the code faithfully implement the local spec and tickets?
+- **Spec**: does the code faithfully implement the local spec and tasks?
 
 Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings.
 
@@ -31,12 +31,12 @@ Scope the review to the requested work and account for every changed file in tha
 
 Look for the originating requirements in this order:
 
-1. Spec and ticket paths supplied by the user or calling implementation workflow.
+1. Spec and task paths supplied by the user or calling implementation workflow.
 2. Local `.desk/...` source pointers in the relevant commit messages or task context.
-3. `.desk/specs/<feature-slug>/spec.md` and its tickets matching the branch or feature.
+3. `.desk/specs/<feature-slug>/spec.md` and its tasks matching the branch or feature.
 4. If nothing is found, ask the user where the spec is. If none exists, skip the Spec subagent and report "no spec available".
 
-Pass the full spec and applicable tickets to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following "Finding arch records" in `.desk/AGENTS.md`, and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec's Supersedes list names that Constraint. If a record has drifted (commits after its `since:`), tell the reviewer to check its Constraints against the code rather than assume the record is current. Reviewers read shared `.desk` files and return findings to the coordinator.
+Pass the full spec and applicable tasks to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following "Finding arch records" in `.desk/AGENTS.md`, and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec's Supersedes list names that Constraint. If a record has drifted (commits after its `since:`), tell the reviewer to check its Constraints against the code rather than assume the record is current. Reviewers read shared `.desk` files and return findings to the coordinator.
 
 ### 3. Identify the standards sources
 
@@ -75,7 +75,7 @@ Issue both subagent calls concurrently and aggregate their completed reports. If
 **Spec sub-agent prompt** should include:
 
 - The pinned base, all applicable diff commands, commit list, and relevant untracked file paths.
-- The full local spec and applicable tickets, or their readable paths.
+- The full local spec and applicable tasks, or their readable paths.
 - The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.
