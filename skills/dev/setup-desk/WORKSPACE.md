@@ -24,7 +24,8 @@ Use concise, conventional names. Use plural nouns for collections and mass nouns
 └── research/
     └── <topic-slug>/
         ├── report.md
-        └── <diagram-slug>.<svg|png|dot>
+        └── diagrams/
+            └── <diagram-slug>.<svg|png|dot>
 ```
 
 Each file type has exactly one **owner skill**. The owner creates the file, defines its format, and is the only skill that changes its structure. Other skills read it and change only the fields listed under Shared fields.
@@ -38,7 +39,7 @@ Each file type has exactly one **owner skill**. The owner creates the file, defi
 | `specs/<feature-slug>/tasks/<task-slug>.md` | `to-tasks` | Task template in that skill and the Tasks section below | Until close-out |
 | `handoffs/<session-slug>.md` | `handoff` | Handoff template in that skill | Until the user deletes it |
 | `refs/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
-| `research/<topic-slug>/report.md` and diagrams | `research` | Report template in that skill | Until the user deletes it |
+| `research/<topic-slug>/report.md` and `diagrams/` | `research` | Report template in that skill | Until the user deletes it |
 
 **Shared fields.** `implement` and `implement-spec` update a task's `Status:` line and `Verification` section as described under Tasks. **Close-out** removes `specs/<feature-slug>/` once its last task is done. When the work needs an arch record, `update-arch` removes the folder after its records validate, because it reads the spec's Constraints and Supersedes list. Otherwise `implement` or `implement-spec` removes it when the work is verified. No other skill writes into a file it does not own.
 

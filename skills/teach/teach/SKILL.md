@@ -65,7 +65,7 @@ Write two files for each lesson, both under `.lesson/<topic>/<lesson-slug>/`, cr
 .lesson/database/b-plus-tree/
   b-plus-tree.md
   b-plus-tree-reference.md
-  figures/
+  diagrams/
     tree-shape.dot
     tree-shape.svg
 ```
@@ -74,7 +74,7 @@ Write two files for each lesson, both under `.lesson/<topic>/<lesson-slug>/`, cr
 
 `<lesson-slug>-reference.md` is the practical lookup: precise signatures, rules, formulas, cases, costs, limitations, and pitfalls relevant to the subject. It can go beyond the lesson's example without expanding the lesson itself. Organize it for consultation mid-task, using concise entries, tables, and short code examples in the lesson's terminology and notation. The two files complement each other rather than repeat the same coverage in different formats.
 
-Use a kebab-case slug, such as `b-plus-tree`. Keep the topic coarse and kebab-case too — one category such as `database` or `cpp` — and put a later lesson on the same subject under the same topic rather than a new one. Name both Markdown files after the directory, and keep every generated diagram and artifact in a `figures/` subdirectory beside it, linked with relative paths (`figures/tree-shape.svg`).
+Use a kebab-case slug, such as `b-plus-tree`. Keep the topic coarse and kebab-case too — one category such as `database` or `cpp` — and put a later lesson on the same subject under the same topic rather than a new one. Name both Markdown files after the directory, and keep every generated diagram and artifact in a `diagrams/` subdirectory beside them, linked with relative paths (`diagrams/tree-shape.svg`). Create the subdirectory only when needed.
 
 ## Sources
 

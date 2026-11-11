@@ -27,7 +27,7 @@ This skill owns two locations in `.desk/`, following "Files" in `.desk/AGENTS.md
 | Path | Content |
 | --- | --- |
 | `.desk/refs/<project-slug>/` | One unmodified Git checkout per reference project |
-| `.desk/research/<topic-slug>/` | `report.md` in the format below, and its diagrams named `<diagram-slug>.<svg\|png\|dot>` |
+| `.desk/research/<topic-slug>/` | `report.md` in the format below, and diagrams in `diagrams/<diagram-slug>.<svg\|png\|dot>` |
 
 Both are covered by the workspace's Git exclusion, so reference code never enters the project's commits. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
 
@@ -69,7 +69,7 @@ Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or ch
 
 ## 5. Save and summarize
 
-Save the report to `.desk/research/<topic-slug>/report.md` and its diagrams beside it, linked by relative path. Update an existing report on the same topic instead of starting a second one.
+Save the report to `.desk/research/<topic-slug>/report.md` and its diagrams in a `diagrams/` subdirectory, created only when needed and linked by relative path. Update an existing report on the same topic instead of starting a second one.
 
 Then tell the user the report path, the key design idea in three to five lines, and the open questions. Stop there. Answer follow-up questions inline, and update the report when an answer changes it.
 
