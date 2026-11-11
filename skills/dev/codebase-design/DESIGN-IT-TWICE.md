@@ -4,7 +4,7 @@ When the user wants to explore alternative interfaces for a chosen deepening can
 
 Uses the vocabulary in [SKILL.md](SKILL.md): **module**, **interface**, **seam**, **adapter**, **leverage**.
 
-Read `.desk/AGENTS.md` when present for workspace conventions and shared-file ownership, `.desk/CONTEXT.md` for domain language, and the arch records for the area, found by following "Finding arch records" in `.desk/AGENTS.md`. Continue silently if they are absent.
+Read `.desk/CONTEXT.md` for domain language and the arch records for the area, found by following the arch-record discovery procedure in `guidelines`. Continue silently if they are absent.
 
 ## Process
 
@@ -29,7 +29,7 @@ Prompt each sub-agent with a separate technical brief (file paths, coupling deta
 - Agent 3: "Optimise for the most common caller: make the default case trivial."
 - Agent 4 (if applicable): "Design around ports & adapters for cross-seam dependencies."
 
-Include both [SKILL.md](SKILL.md) vocabulary and `.desk/CONTEXT.md` vocabulary, when present, in the brief so each sub-agent names things consistently with the architecture language and the project's domain language. Direct each sub-agent to read `.desk/AGENTS.md` when present and the relevant arch records, and to return any proposed glossary or other shared `.desk` updates to the coordinator rather than writing shared files.
+Include both [SKILL.md](SKILL.md) vocabulary and `.desk/CONTEXT.md` vocabulary, when present, in the brief so each sub-agent names things consistently with the architecture language and the project's domain language. Direct each sub-agent to apply `guidelines` and read the relevant arch records, and to return any proposed glossary or other shared `.desk` updates to the coordinator rather than writing shared files.
 
 Each sub-agent outputs:
 

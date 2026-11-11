@@ -2,7 +2,7 @@
 
 Architecture records live at `.desk/arch/<descriptive-slug>.md`. Each record documents one finished change: what it built, the rules it set, and its shape.
 
-Follow the workspace rules in `.desk/AGENTS.md`. Check-arch and update-arch skills use this format. How agents weigh records against specs and code is defined under "Using arch records" in `.desk/AGENTS.md`.
+Check-arch and update-arch skills use this format. Apply the arch-record compliance rules in `guidelines`.
 
 ## When to write
 

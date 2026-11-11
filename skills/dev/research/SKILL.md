@@ -20,9 +20,9 @@ The reader has a solid computer foundation but no software development experienc
 
 ## Workspace
 
-Read `.desk/AGENTS.md`; if it is missing, stop and tell the user that the Desk workspace is not initialized. Read `.desk/CONTEXT.md` when present.
+If `.desk/AGENTS.md` is missing, stop and tell the user that the Desk workspace is not initialized. Read `.desk/CONTEXT.md` when present.
 
-This skill owns the reference checkouts and research reports described under "Files" in `.desk/AGENTS.md`. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
+This skill owns `.desk/refs/` reference checkouts and `.desk/research/` reports. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
 
 ## 1. Pin the inputs
 
@@ -55,7 +55,7 @@ Write sections 1 to 6 of the report, following the format and writing rules belo
 
 ## 4. Map onto this project
 
-Write sections 7 and 8. Read the relevant parts of the user's project, `.desk/CONTEXT.md`, and the arch records for the areas involved, following "Finding arch records" and "Using arch records" in `.desk/AGENTS.md`. If the project has no relevant code yet, say so and describe the minimal starting shape instead.
+Write sections 7 and 8. Read the relevant parts of the user's project, `.desk/CONTEXT.md`, and the arch records for the areas involved, following arch-record discovery and compliance in `guidelines`. If the project has no relevant code yet, say so and describe the minimal starting shape instead.
 
 Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or change code.
 

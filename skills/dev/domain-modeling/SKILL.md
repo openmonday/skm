@@ -9,7 +9,7 @@ Actively build and sharpen the project's domain model as you design. This is the
 
 ## File structure
 
-Read `.desk/AGENTS.md` when present for canonical runtime conventions and `.desk/CONTEXT.md` if it exists. Find the arch records for the areas under discussion, following "Finding arch records" in `.desk/AGENTS.md`. If these are missing, continue silently.
+Read `.desk/CONTEXT.md` if it exists. Find the arch records for the areas under discussion, following the arch-record discovery procedure in `guidelines`. If these are missing, continue silently.
 
 Use one project context file:
 
@@ -21,9 +21,9 @@ Use one project context file:
 └── src/
 ```
 
-Create `.desk/CONTEXT.md` lazily, when the first real term is resolved. Before saving, require an initialized `.desk/AGENTS.md`; if it is missing, keep the proposed content in the conversation and ask the user to run `/setup-desk`.
+Populate the empty `.desk/CONTEXT.md` when the first real term is resolved. Before saving, require an initialized `.desk/AGENTS.md`; if it is missing, keep the proposed content in the conversation and ask the user to run `/setup-desk`.
 
-For shared-worktree ownership, follow `.desk/AGENTS.md`: workers return proposed changes, and the coordinator applies the inline updates below.
+In shared-worktree runs, workers return proposed changes and the coordinator applies the inline updates below.
 
 ## During the session
 

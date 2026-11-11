@@ -5,7 +5,7 @@ argument-hint: "What will the next session be used for?"
 disable-model-invocation: true
 ---
 
-Write a handoff that lets a fresh agent resume the work. For engineering work, read `.desk/AGENTS.md` and save to `.desk/handoffs/<session-slug>.md`, using a distinct name for each handoff; overwrite when continuing a known session. If the workspace is missing, ask the user to run `/setup-desk`. For an independent teaching or non-engineering workspace, save in the workspace location the user chose; use an OS temporary directory when no persistent location is established.
+Write a handoff that lets a fresh agent resume the work. For engineering work, save to `.desk/handoffs/<session-slug>.md`, using a distinct name for each handoff; overwrite when continuing a known session. If the workspace is missing, ask the user to run `/setup-desk`. For an independent teaching or non-engineering workspace, save in the workspace location the user chose; use an OS temporary directory when no persistent location is established.
 
 Use this format:
 

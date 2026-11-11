@@ -1,10 +1,12 @@
 ---
 name: guidelines
-description: Behavioral guidelines to reduce common LLM coding mistakes. Use when writing, reviewing, or refactoring code to avoid overcomplication, make surgical changes, surface assumptions, and define verifiable success criteria.
+description: Project rules and coding guidelines. Use for development work, including research, design, planning, implementation, review, and handoffs; read workspace rules and apply relevant coding and architecture guidance.
 license: MIT
 ---
 
 # Guidelines
+
+Read `.desk/AGENTS.md` for project rules when present; continue silently if absent.
 
 Keep changes focused and avoid speculative complexity.
 
@@ -19,7 +21,7 @@ Before editing a file, find its arch records (see Finding arch records below). A
 - **Drift:** when the record's files have commits after `since:`, check the constraints you rely on against the code. Report disagreements; don't silently follow either side.
 - **Timing:** never edit `.desk/arch/` to describe planned work. Records change after the code is committed, through `/update-arch`.
 
-`.desk/AGENTS.md` ("Using arch records") is the full version of these rules.
+
 
 ## Finding arch records
 
@@ -35,4 +37,4 @@ scripts/find-arch.sh path/to/file [...]
 - Silently continue when nothing is found or an arch record file is missing.
 - A renamed file may be listed under its old path; `git log --follow` traces the rename if a direct match fails.
 
-Arch records cover rules tied to code. Rules that apply to the whole project belong in the project-wide rules section of `.desk/AGENTS.md`.
+Arch records cover rules tied to code. Rules that apply to the whole project belong in the `.desk/AGENTS.md`.

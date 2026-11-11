@@ -1,6 +1,6 @@
 # Context Format
 
-Use one project context file at `.desk/CONTEXT.md`. Create it only when a real domain term is resolved. Follow the workspace and ownership rules in [SKILL.md](SKILL.md).
+Use one project context file at `.desk/CONTEXT.md`. Populate it when a real domain term is resolved. Follow the workspace and ownership rules in [SKILL.md](SKILL.md).
 
 ## Structure
 

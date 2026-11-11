@@ -5,7 +5,7 @@ argument-hint: "Which files or arch records to update?"
 disable-model-invocation: true
 ---
 
-Update arch records after committing code. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.desk/AGENTS.md` for workspace conventions.
+Update arch records after committing code. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format.
 
 This is the final step in the arch record workflow:
 1. `/check-arch` before work (find existing records)
@@ -70,7 +70,7 @@ When the user asks to record existing code and `.desk/arch/` has no records, inf
 3. **Analyze each module.** Read the code for its purpose, key interfaces, data flows, boundaries, and the rules it observably enforces (validation, interface contracts, error handling, layering).
 4. **Write one record per cohesive module** following [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md): a `<module-name>-<purpose>` slug, `type: feat` (or `refactor` for pure structural code), every analyzed file under `files:`, and `since:` set to `git log -1 --format='%H' -- <files>`.
 5. **Validate** with `scripts/validate-arch.sh`.
-6. **Tell the user** which records were created, that they were inferred from code rather than confirmed, and ask them to review each record's Constraints. Until they do, agents check those Constraints against the code before relying on them, as "Using arch records" in `.desk/AGENTS.md` requires.
+6. **Tell the user** which records were created, that they were inferred from code rather than confirmed, and ask them to review each record's Constraints. Until they do, agents check those Constraints against the code before relying on them, as the arch-record compliance rules in `guidelines` require.
 
 ## Example
 

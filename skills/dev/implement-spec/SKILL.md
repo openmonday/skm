@@ -8,11 +8,11 @@ disable-model-invocation: true
 
 Deliver the entire spec on one **integration branch**. Treat its tasks as a dependency graph, scheduling the **frontier** as prerequisites complete.
 
-Read `.desk/AGENTS.md` before starting. If it is missing, ask the user to run `/setup-desk`. It defines paths, task states, ownership, and the shared-worktree procedure. If the spec has no tasks, ask the user to run `/to-tasks` first; describe any missing input precisely.
+If `.desk/AGENTS.md` is missing, ask the user to run `/setup-desk`. Read [task conventions](../to-tasks/TASKS.md) for task states and [WORKTREES.md](WORKTREES.md) for ownership and worktrees. If the spec has no tasks, ask the user to run `/to-tasks` first; describe any missing input precisely.
 
 ## 1. Validate the plan
 
-Read the complete spec and tasks. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following "Finding arch records" in `.desk/AGENTS.md`. Apply them under "Using arch records": their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. Pass both the records and the Supersedes list to every worker. A worker that would break any other Constraint stops and reports back instead of proceeding. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
+Read the complete spec and tasks. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following the arch-record discovery procedure in `guidelines`. Apply them under the arch-record compliance rules in `guidelines`: their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. Pass both the records and the Supersedes list to every worker. A worker that would break any other Constraint stops and reports back instead of proceeding. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
 
 Record the starting worktree status. Pin the work's initial review-base commit before implementation, record it in the spec, and reuse it on resume so final review covers the entire effort. Choose the record name (`<YYYY-MM-DD>-<feature-slug>`) and note it in the spec too. If a resumed feature lacks that record, reconstruct and verify its original base from branch history before final review. Use a clean integration worktree so unrelated edits cannot enter merges or review. On resume, reconcile existing work and task ownership using the workspace rules.
 
@@ -22,7 +22,7 @@ An optional exploration subagent may inspect code or external docs and return fi
 
 ## 2. Prepare integration and workers
 
-Create the integration branch from the agreed base, or resume the existing integration branch for this feature. If the owner worktree has unrelated edits, use a separate clean integration worktree and prepare its shared `.desk` link too. Record the integration branch and owner workspace in the spec. For each ready task, the coordinator claims it and prepares a dedicated branch and worktree from the current integration tip, following the sharing procedure in `.desk/AGENTS.md`.
+Create the integration branch from the agreed base, or resume the existing integration branch for this feature. If the owner worktree has unrelated edits, use a separate clean integration worktree and prepare its shared `.desk` link too. Record the integration branch and owner workspace in the spec. For each ready task, the coordinator claims it and prepares a dedicated branch and worktree from the current integration tip, following [WORKTREES.md](WORKTREES.md).
 
 Workers read ordinary `.desk/...` paths and leave shared files to the coordinator. If parallel worktrees are unavailable, work sequentially in the owner workspace with the same task graph, verification, and review requirements.
 

@@ -5,7 +5,7 @@ argument-hint: "Optional: commit range or recent commit count (default: last 20 
 disable-model-invocation: true
 ---
 
-Check whether arch records are outdated after others have committed. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format and `.desk/AGENTS.md` for workspace conventions.
+Check whether arch records are outdated after others have committed. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format.
 
 ## When to check
 

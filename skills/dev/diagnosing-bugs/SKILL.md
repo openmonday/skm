@@ -7,7 +7,7 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
-When exploring the codebase, follow `.desk/AGENTS.md` when present, read `.desk/CONTEXT.md` to understand the relevant modules, and find the arch records for the files involved, following "Finding arch records" in `.desk/AGENTS.md`. Continue silently if they are absent.
+When exploring the codebase, read `.desk/CONTEXT.md` to understand the relevant modules, and find the arch records for the files involved, following the arch-record discovery procedure in `guidelines`. Continue silently if they are absent.
 
 Follow the workspace's shared-file ownership rules. Workers return diagnostic artifact content and proposed document updates to the coordinator.
 

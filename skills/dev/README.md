@@ -32,7 +32,7 @@ Other entry points:
 
 ### Stages
 
-1. **Set up.** `/setup-desk` creates `.desk/AGENTS.md` from `setup-desk/WORKSPACE.md` and adds `/.desk` to Git's `info/exclude`. It creates nothing else; each other `.desk` file is created by the skill that owns it. It never touches the project's own `AGENTS.md` or `CLAUDE.md`.
+1. **Set up.** `/setup-desk` creates the workspace directories, `.desk/AGENTS.md`, and an empty `.desk/CONTEXT.md`, and adds `/.desk` to Git's `info/exclude`. Existing content is preserved. It never touches the project's own `AGENTS.md` or `CLAUDE.md`.
 2. **Research** (optional). `/research` takes a feature and reference projects, which it checks out under `.desk/refs/<project>/`. It reconstructs the design from first principles and grounds every step in cited reference code: the feature's position, inputs, outputs, considerations, and the reasons for its shape. It ends with suggestions for this project. The report goes to `.desk/research/<topic>/report.md`.
 3. **Clarify.** `grill-me` asks rounds of numbered questions with recommended answers until every branch of the design tree is settled. `/grill-with-docs` adds `domain-modeling`, which records resolved terms in `.desk/CONTEXT.md` as they come up. Given a research report, it starts from the report's open questions.
 4. **Specify.** `/to-spec` turns the conversation into `.desk/specs/<slug>/spec.md` without interviewing again. It collects every stated rule into **Constraints**, and every arch rule the work deliberately changes into **Supersedes**.
@@ -46,7 +46,7 @@ Other entry points:
 
 | Skill | Invoked by | Purpose | Output |
 | --- | --- | --- | --- |
-| `setup-desk` | user | Initialize the `.desk/` workspace | `.desk/AGENTS.md`, Git exclusion |
+| `setup-desk` | user | Initialize the `.desk/` workspace | workspace skeleton, Git exclusion |
 | `research` | user | Explain how reference projects implement a feature; suggest a fit | `.desk/research/<topic>/report.md`, `.desk/refs/<project>/` |
 | `grill-me` | model/user | Interview until decisions are settled | Confirmed decisions in the conversation |
 | `grill-with-docs` | user | `grill-me` + `domain-modeling` | Decisions plus `.desk/CONTEXT.md` terms |
@@ -71,7 +71,7 @@ Other entry points:
 
 ```text
 .desk/                         # untracked; excluded via .git/info/exclude
-├── AGENTS.md                  # project-local conventions (from WORKSPACE.md)
+├── AGENTS.md                  # project-wide rules
 ├── CONTEXT.md                 # domain glossary, lasting, no implementation detail
 ├── arch/<slug>.md             # architecture records of committed code, lasting
 ├── specs/<slug>/              # work in progress, removed at close-out
@@ -82,7 +82,7 @@ Other entry points:
 └── research/<topic>/          # research reports and diagrams, kept until deleted
 ```
 
-Use concise, conventional names. Use plural nouns for collections and mass nouns for subject areas; widely understood abbreviations are allowed. Each file type has one owner skill that creates it and defines its format; the table is under "Files" in `setup-desk/WORKSPACE.md`.
+Use concise, conventional names. Use plural nouns for collections and mass nouns for subject areas; widely understood abbreviations are allowed. Each file type has one owner skill that defines its format; other skills change only shared task fields and perform close-out.
 
 Temporary debug artifacts go to `${TMPDIR:-/tmp}/desk-debug/<bug>/`, and HTML visuals go to `${TMPDIR:-/tmp}/desk-reports/`. Permanent tests and fixtures always go in the project's normal source tree. Reference projects live in `.desk/refs/`, are read-only, and are excluded from Git with the rest of the workspace.
 
@@ -96,11 +96,11 @@ A record describes **committed code as of `since:`**, never a plan. Records are 
 2. **Build.** Agents follow every record Constraint except those named in Supersedes. An unplanned conflict stops the work and goes to the user.
 3. **Record.** After the commit, `/update-arch` rewrites the records from what was actually built.
 
-So records never describe code that doesn't exist yet. During the in-between period, the spec states exactly which rules no longer apply. Drift caused by other commits is caught by comparing `since:` with `git log`. Full rules, including precedence, are under "Using arch records" in `setup-desk/WORKSPACE.md`.
+So records never describe code that doesn't exist yet. During the in-between period, the spec states exactly which rules no longer apply. Drift caused by other commits is caught by comparing `since:` with `git log`. Full rules, including precedence, are in `guidelines`.
 
 ## Parallel runs
 
-In `/implement-spec`, each task worker gets its own branch and worktree, with a `.desk` symlink back to the owner workspace. Workers read shared files but only return proposed changes. The coordinator alone writes shared records, merges into the integration branch one at a time, and advances task states after verification. The procedure is under "Shared worktrees" in `setup-desk/WORKSPACE.md`.
+In `/implement-spec`, each task worker gets its own branch and worktree, with a `.desk` symlink back to the owner workspace. Workers read shared files but only return proposed changes. The coordinator alone writes shared records, merges into the integration branch one at a time, and advances task states after verification. The procedure is in `implement-spec/WORKTREES.md`.
 
 ## Origin
 

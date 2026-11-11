@@ -10,7 +10,7 @@ Two-axis review of committed and working-tree changes since a fixed point:
 
 Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings.
 
-Read `.desk/AGENTS.md` when present for local source paths, domain docs, and shared-workspace rules. An explicit user-supplied spec remains valid without setup; if there is no initialized workspace, continue the Standards review and report any unavailable spec context.
+An explicit user-supplied spec remains valid without setup; if there is no initialized workspace, continue the Standards review and report any unavailable spec context.
 
 ## Process
 
@@ -36,7 +36,7 @@ Look for the originating requirements in this order:
 3. `.desk/specs/<feature-slug>/spec.md` and its tasks matching the branch or feature.
 4. If nothing is found, ask the user where the spec is. If none exists, skip the Spec subagent and report "no spec available".
 
-Pass the full spec and applicable tasks to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following "Finding arch records" in `.desk/AGENTS.md`, and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec's Supersedes list names that Constraint. If a record has drifted (commits after its `since:`), tell the reviewer to check its Constraints against the code rather than assume the record is current. Reviewers read shared `.desk` files and return findings to the coordinator.
+Pass the full spec and applicable tasks to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following the arch-record discovery procedure in `guidelines`, and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec's Supersedes list names that Constraint. If a record has drifted (commits after its `since:`), tell the reviewer to check its Constraints against the code rather than assume the record is current. Reviewers read shared `.desk` files and return findings to the coordinator.
 
 ### 3. Identify the standards sources
 
