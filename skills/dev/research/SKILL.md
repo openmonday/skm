@@ -20,22 +20,22 @@ The reader has a solid computer foundation but no software development experienc
 
 ## Workspace
 
-If `.desk/AGENTS.md` is missing, stop and tell the user that the Desk workspace is not initialized. Read `.desk/CONTEXT.md` when present.
+Use `.context/GLOSSARY.md` for domain vocabulary when present. If `.context/` is missing, ask the user to initialize it with `setup-context` or approve creating the workspace.
 
-This skill owns `.desk/refs/` reference checkouts and `.desk/research/` reports. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
+Keep reference checkouts under `.context/reference/` and reports under `.context/issues/<issue-slug>/research.md`, with diagrams alongside the report. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
 
 ## 1. Pin the inputs
 
 - State the feature in one sentence, in the user's terms. Ask only if the feature is ambiguous.
-- For each reference project the user named, choose a `<project-slug>` (the project's own name, lowercase) and make sure `.desk/refs/<project-slug>/` is a checkout of that project:
+- For each reference project the user named, choose a `<project-slug>` (the project's own name, lowercase) and make sure `.context/reference/<project-slug>/` is a checkout of that project:
   - Already present: verify it is a Git repository and that its source matches the requested project. If its identity is unclear or it is the wrong project, ask the user before proceeding. Reuse it at its current commit; ask before pulling or switching commits, because existing reports cite that commit.
-  - Given as a Git URL: `git clone <url> .desk/refs/<project-slug>`.
-  - Given as a local Git repository: create a symbolic link at `.desk/refs/<project-slug>` to its absolute path. Keep the linked repository unmodified, including its branch and commit.
+  - Given as a Git URL: `git clone <url> .context/reference/<project-slug>`.
+  - Given as a local Git repository: create a symbolic link at `.context/reference/<project-slug>` to its absolute path. Keep the linked repository unmodified, including its branch and commit.
   - Given as a local path that is not a Git repository, or by name only: ask the user for a Git repository URL or path; never guess one.
 - Record each reference's source and full commit SHA (`git -C <ref> rev-parse HEAD`). Use `git -C <ref> remote get-url origin` when available; otherwise record the supplied source or state that it is unavailable. A local origin is a local source, not necessarily an upstream URL. Every code citation in the report identifies the reference and refers to its pinned commit.
 - Use only the references the user named.
 
-**Done:** a feature sentence, and every reference checked out under `.desk/refs/` and pinned to a commit.
+**Done:** a feature sentence, and every reference checked out under `.context/reference/` and pinned to a commit.
 
 ## 2. Locate the feature in each reference
 
@@ -55,15 +55,15 @@ Write sections 1 to 6 of the report, following the format and writing rules belo
 
 ## 4. Map onto this project
 
-Write sections 7 and 8. Read the relevant parts of the user's project, `.desk/CONTEXT.md`, and the arch records for the areas involved, following [arch record discovery and compliance](ARCH-RECORDS.md). If the project has no relevant code yet, say so and describe the minimal starting shape instead.
+Write sections 7 and 8. Read the relevant parts of the user's project and applicable map records under `.context/map/`. For each relevant project file, run `python3 /path/to/research/scripts/query-map.py <project-root-relative-file> [more-files ...]` from the target Git project, resolving the script path relative to this skill. Read all matching records, including their Constraints; continue if none exist. The query exits 1 if records were skipped and results may be incomplete, or 2 for invalid input or environment; investigate errors. As scope becomes clearer, inspect additional code and records. Check relevant records' `since` commits and covered paths against Git history and code, and report stale records, disagreements with code, or conflicting records rather than silently choosing between them. Identify constraints a suggestion would change; leave map records untouched. If the project has no relevant code yet, say so and describe the minimal starting shape instead.
 
 Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or change code.
 
-**Done:** section 7 cites relevant project files and arch records for each suggestion where they exist; otherwise it says what was checked and what is missing. Section 8 lists every decision left to the user.
+**Done:** section 7 cites relevant project files and map records for each suggestion where they exist; otherwise it says what was checked and what is missing. Section 8 lists every decision left to the user.
 
 ## 5. Save and summarize
 
-Save the report and diagrams in the workspace locations, with relative links to diagrams. Update an existing report on the same topic instead of starting a second one.
+Save the report as `.context/issues/<issue-slug>/research.md` and diagrams alongside it, with relative links to diagrams. Use the relevant issue directory or choose a descriptive slug; ask if the intended issue is ambiguous. Update an existing report on the same topic instead of starting a second one.
 
 Then tell the user the report path, the key design idea in three to five lines, and the open questions. Stop there. Answer follow-up questions inline, and update the report when an answer changes it.
 
@@ -74,7 +74,7 @@ Then tell the user the report path, the key design idea in three to five lines, 
 ```markdown
 # <Feature>: research
 
-References: `.desk/refs/<project-slug>` @ <full commit SHA> (source: <URL or path, or unavailable>), ...
+References: `.context/reference/<project-slug>` @ <full commit SHA> (source: <URL or path, or unavailable>), ...
 Date: <YYYY-MM-DD>
 
 ## 1. The problem
@@ -106,9 +106,9 @@ A table of the decisions that differ between references, and what drives each ch
 
 ## 7. Fit with this project
 Suggestions, not decisions:
-- Where the feature would sit in this project, and what it would touch (cite files and arch records).
+- Where the feature would sit in this project, and what it would touch (cite files and map records).
 - Which reference approach fits this project's scale and constraints, and what to leave out.
-- Arch record Constraints the feature would conflict with, as candidates to supersede.
+- Map record Constraints the feature would conflict with, as candidates to supersede.
 - Risks, and the smallest first slice worth building.
 
 ## 8. Open questions

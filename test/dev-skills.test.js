@@ -46,16 +46,13 @@ test('each dev skill copied alone has self-contained Markdown links', () => {
   }
 });
 
-test('shared dev skill references match their canonical copies', () => {
-  const canonicals = {
-    'ARCH-RECORDS.md': 'guidelines/ARCH-RECORDS.md',
-    'VOCABULARY.md': 'codebase-design/VOCABULARY.md',
-    'TASKS.md': 'to-tasks/TASKS.md',
-  };
-  for (const [name, canonical] of Object.entries(canonicals)) {
-    const expected = readFileSync(join(dev, canonical), 'utf8');
-    for (const file of files(dev).filter(path => path.endsWith(`${sep}${name}`))) {
-      assert.equal(readFileSync(file, 'utf8'), expected, `${file} differs from ${canonical}`);
-    }
+test('bundled groups resolve to discovered unique skills', () => {
+  const root = resolve('skills');
+  const groups = JSON.parse(readFileSync(join(root, 'groups.json'), 'utf8')).groups;
+  const discovered = files(root).filter(path => path.endsWith(`${sep}SKILL.md`)).map(path => dirname(path).split(sep).at(-1));
+  assert.equal(new Set(discovered).size, discovered.length, 'duplicate skill names');
+  for (const [group, members] of Object.entries(groups)) {
+    assert.equal(new Set(members).size, members.length, `duplicate in ${group}`);
+    for (const member of members) assert.ok(discovered.includes(member), `${group}: missing ${member}`);
   }
 });

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Optimizing CLI Output"
+  short_description: "Improve command-line output clarity"
+policy:
+  allow_implicit_invocation: false

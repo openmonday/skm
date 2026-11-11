@@ -1,0 +1,5 @@
+interface:
+  display_name: "Setup Context"
+  short_description: "Initialize a local project context workspace"
+policy:
+  allow_implicit_invocation: false

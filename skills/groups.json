@@ -1,31 +1,31 @@
 {
   "groups": {
     "dev": [
-      "check-arch",
-      "code-review",
-      "codebase-design",
-      "diagnosing-bugs",
-      "domain-modeling",
+      "draw-map",
       "grill-me",
-      "grill-with-docs",
-      "guidelines",
-      "handoff",
       "implement",
-      "implement-spec",
+      "implement-tasks",
       "research",
-      "setup-desk",
+      "setup-context",
       "show-me",
-      "tdd",
       "to-spec",
       "to-tasks",
-      "update-arch"
+      "wait-what"
     ],
-    "teach": ["anatomy", "learn-by-doing", "show-me", "teach", "wait-what"],
+    "teach": [
+      "anatomy",
+      "learn-by-doing",
+      "show-me",
+      "teach"
+    ],
     "meta": [
       "extract-skills",
       "find-skills",
       "skill-creator",
       "writing-for-agents"
+    ],
+    "misc": [
+      "optimizing-cli"
     ]
   }
 }

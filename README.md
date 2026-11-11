@@ -22,7 +22,7 @@ The skill root is the directory containing the categories and `groups.json` dire
 skills/
 ├── groups.json
 ├── dev/
-│   ├── code-review/
+│   ├── draw-map/
 │   │   └── SKILL.md
 │   └── ...
 └── teach/
@@ -31,7 +31,7 @@ skills/
     └── ...
 ```
 
-Set `SKM_HOME` to override this root. Skills are discovered recursively at directories containing `SKILL.md`; each directory's basename is its short skill name. Duplicate physical skill directories with the same basename are an error. Project symlinks use flat names, such as `.agents/skills/code-review`, regardless of category depth.
+Set `SKM_HOME` to override this root. Skills are discovered recursively at directories containing `SKILL.md`; each directory's basename is its short skill name. Duplicate physical skill directories with the same basename are an error. Project symlinks use flat names, such as `.agents/skills/draw-map`, regardless of category depth.
 
 `skm init` creates the root when needed. If `groups.json` is absent, it creates groups from the top-level category directories and their discovered skills. Rerunning it preserves an existing `groups.json`.
 
@@ -40,13 +40,13 @@ Set `SKM_HOME` to override this root. Skills are discovered recursively at direc
 ```json
 {
   "groups": {
-    "engineering": ["code-review", "tdd"],
-    "productivity": ["teach", "wait-what"]
+    "dev": ["draw-map", "show-me", "wait-what"],
+    "teach": ["show-me", "teach"]
   }
 }
 ```
 
-This example shows a subset of the bundled skills. The category groups currently have disjoint membership; custom groups may share skills across categories. Edit `groups.json` to maintain group membership.
+This example shows a subset of the bundled skills. Groups may share skills across categories; `show-me` belongs to both `dev` and `teach`. Edit `groups.json` to maintain group membership.
 
 ## Commands
 
@@ -55,18 +55,18 @@ This example shows a subset of the bundled skills. The category groups currently
 skm init
 
 # Install explicit skill names
-skm add code-review tdd
+skm add grill-me implement
 
 # Copy complete skill directories when symlinks are unavailable
-skm add --copy code-review tdd
-skm add @engineering --copy
+skm add --copy grill-me implement
+skm add @dev --copy
 
 # Install groups by shorthand or --group
-skm add @engineering @productivity
-skm add --group engineering --group productivity
+skm add @dev @teach
+skm add --group dev --group teach
 
 # Mix explicit names and groups
-skm add @engineering teach
+skm add @dev teach
 
 # List local skills, groups, and project installation status
 skm list

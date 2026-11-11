@@ -1,5 +1,0 @@
-interface:
-  display_name: "Guidelines"
-  short_description: "Stay in scope and honor arch records"
-policy:
-  allow_implicit_invocation: false

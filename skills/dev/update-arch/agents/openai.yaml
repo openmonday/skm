@@ -1,5 +1,0 @@
-interface:
-  display_name: "Update Arch"
-  short_description: "Record committed rules in arch records"
-policy:
-  allow_implicit_invocation: false

@@ -1,5 +1,0 @@
-interface:
-  display_name: "TDD"
-  short_description: "Test-driven red-green implementation"
-policy:
-  allow_implicit_invocation: false
