@@ -7,22 +7,18 @@ Install the whole group with `skm add @dev`, or pick individual skills by name.
 ## Workflow
 
 ```text
-                       /setup-desk  (once per clone)
-                              │
-                              ▼
- /check-arch ─► /research ─► grill-me / /grill-with-docs ─► /to-spec ─► /to-tasks
- (stale?)       report.md     (+ domain-modeling)            spec.md     tasks/*.md
-                                                             +Supersedes      │
-                     ┌────────────────────────────────────────────────────────┤
-                     ▼                                                        ▼
-                /implement                                             /implement-spec
-          (current branch, one commit)                       (integration branch, parallel worktrees)
-                     │           uses tdd · code-review · guidelines          │
-                     └──────────────────────────┬─────────────────────────────┘
-                                                ▼
-                                          /update-arch
-                              (rewrite records from committed code)
+/setup-desk → /check-arch → /research → grill-me / /grill-with-docs → /to-spec
+                                                                          │
+                                     ┌────────────────────────────────────┴──────────────┐
+                                     ▼                                                   ▼
+                                /implement                                   /to-tasks → /implement-spec
+                         (current branch, one commit)                    (integration branch, worktrees)
+                                     └────────────────────────┬──────────────────────────┘
+                                                              ▼
+                                                        /update-arch
 ```
+
+Invoke `guidelines` manually before work to apply project rules and architecture guidance.
 
 Other entry points:
 
@@ -36,10 +32,10 @@ Other entry points:
 2. **Research** (optional). `/research` takes a feature and reference projects, which it checks out under `.desk/refs/<project>/`. It reconstructs the design from first principles and grounds every step in cited reference code: the feature's position, inputs, outputs, considerations, and the reasons for its shape. It ends with suggestions for this project. The report goes to `.desk/research/<topic>/report.md`.
 3. **Clarify.** `grill-me` asks rounds of numbered questions with recommended answers until every branch of the design tree is settled. `/grill-with-docs` adds `domain-modeling`, which records resolved terms in `.desk/CONTEXT.md` as they come up. Given a research report, it starts from the report's open questions.
 4. **Specify.** `/to-spec` turns the conversation into `.desk/specs/<slug>/spec.md` without interviewing again. It collects every stated rule into **Constraints**, and every arch rule the work deliberately changes into **Supersedes**.
-5. **Slice.** `/to-tasks` splits the work into tracer-bullet vertical slices. Each slice is a task file with `Status`, `Blocked by`, acceptance criteria, and constraints. The user approves the breakdown, and the dependency graph is checked for cycles.
+5. **Slice.** `/to-tasks` splits the spec into tracer-bullet vertical slices. Each slice is a task file with `Status`, `Blocked by`, acceptance criteria, and constraints. The user approves the breakdown, and the dependency graph is checked for cycles.
 6. **Implement.**
-   - `/implement` handles focused work: TDD, `code-review` against the starting commit, then one commit on the current branch.
-   - `/implement-spec` delivers the whole task graph. It schedules the frontier into per-task worktrees, then a coordinator merges, verifies, and reviews against the pinned base. It ends on a local integration branch.
+   - `/implement` handles a spec directly: TDD, `code-review` against the starting commit, then one commit on the current branch.
+   - `/implement-spec` delivers the spec and its `/to-tasks` graph. It schedules the frontier into per-task worktrees, then a coordinator merges, verifies, and reviews against the pinned base. It ends on a local integration branch.
 7. **Record.** `/update-arch` rewrites `.desk/arch/<slug>.md` from what was actually committed, applying the spec's Supersedes list, and validates the record. `/check-arch` finds records that drifted after other people's commits.
 
 ## Skills
@@ -63,7 +59,7 @@ Other entry points:
 | `check-arch` | user | Find stale arch records | Staleness report and suggested actions |
 | `update-arch` | user | Write or refresh arch records after commits; bootstrap them for existing code | Updated `.desk/arch/*.md` |
 | `handoff` | user | Save context so another session can resume | `.desk/handoffs/<session>.md` |
-| `show-me` | user | Explain with the smallest visual that works | Inline diagram or HTML in `$TMPDIR/desk-reports/` |
+| `show-me` | user | Explain with the smallest visual that works | Inline diagram or visual artifacts in `.show-me/` |
 
 "user" means `disable-model-invocation: true`: the skill runs only when the user calls it explicitly (`/name`).
 
@@ -84,7 +80,7 @@ Other entry points:
 
 Use concise, conventional names. Use plural nouns for collections and mass nouns for subject areas; widely understood abbreviations are allowed. Each file type has one owner skill that defines its format; other skills change only shared task fields and perform close-out.
 
-Temporary debug artifacts go to `${TMPDIR:-/tmp}/desk-debug/<bug>/`, and HTML visuals go to `${TMPDIR:-/tmp}/desk-reports/`. Permanent tests and fixtures always go in the project's normal source tree. Reference projects live in `.desk/refs/`, are read-only, and are excluded from Git with the rest of the workspace.
+Temporary debug artifacts go to `${TMPDIR:-/tmp}/desk-debug/<bug>/`, and generated visuals go to `.show-me/` in the project or workspace unless the user chooses another location. Permanent tests and fixtures always go in the project's normal source tree. Reference projects live in `.desk/refs/`, are read-only, and are excluded from Git with the rest of the workspace.
 
 ## Arch records
 

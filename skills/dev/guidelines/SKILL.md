@@ -25,7 +25,7 @@ Before editing a file, find its arch records (see Finding arch records below). A
 
 ## Finding arch records
 
-Use the bundled helper to find the arch records that describe the files you will edit:
+Use the bundled helper from the project directory to find the arch records that describe the files you will edit:
 
 ```bash
 scripts/find-arch.sh path/to/file [...]

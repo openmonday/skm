@@ -1,22 +1,20 @@
 ---
 name: implement
-description: Implement a spec or local tasks, review the changes, and commit to the current branch.
+description: Implement a spec, review the changes, and commit to the current branch.
 disable-model-invocation: true
 ---
 
 # Implement
 
-Implement the work described by the user's spec or tasks.
+Implement the work described by the user's spec from `/to-spec`.
 
 ## 1. Establish scope
 
-If `.desk/AGENTS.md` is missing, ask the user to run `/setup-desk`. Resolve local references using workspace conventions and state the task title before starting. Read the full source spec and `.desk/CONTEXT.md`. Find the arch records for the files and directories you will change, following the arch-record discovery procedure in `guidelines`. Apply them under the arch-record compliance rules in `guidelines`: their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. If the work would break any other Constraint, stop and ask. Ask only when the reference or required behavior is ambiguous.
+If `.desk/AGENTS.md` is missing, ask the user to run `/setup-desk`. Resolve the spec using workspace conventions and state its title before starting. If the spec is missing, ask the user to run `/to-spec` first. Read the full spec and `.desk/CONTEXT.md`. Find the arch records for the files and directories you will change, following the arch-record discovery procedure in `guidelines`. Apply them under the arch-record compliance rules in `guidelines`: their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. If the work would break any other Constraint, stop and ask. Ask only when the reference or required behavior is ambiguous.
 
 Record the current branch, starting commit, and existing working-tree changes. Keep unrelated user changes intact and outside the implementation commit. The starting commit is the fixed point passed to `code-review`.
 
-When implementing tasks, claim each one before starting it and respect its blockers. In a shared-worktree run, return state updates to the coordinator instead of writing shared files.
-
-**Done:** the scope, acceptance criteria, test seams, baseline, and task ownership are known.
+**Done:** the scope, acceptance criteria, test seams, and baseline are known.
 
 ## 2. Implement and verify
 
@@ -26,12 +24,12 @@ Use `tdd` where possible at pre-agreed seams, honoring any confirmation already 
 
 ## 3. Review and commit
 
-Invoke `code-review` with the starting commit and explicit spec/task paths. Include staged, unstaged, and relevant new files in the review. Fix findings within scope and rerun the affected checks.
+Invoke `code-review` with the starting commit and the explicit spec path. Include staged, unstaged, and relevant new files in the review. Fix findings within scope and rerun the affected checks.
 
-Commit only this work to the current branch after review and verification. Ensure the actual staged content matches the reviewed and tested implementation; reconcile partially staged edits before committing. Record the commit and verification evidence in the task's `Verification` section, completing tasks according to [task conventions](../to-tasks/TASKS.md); when working from a spec without tasks, report the evidence instead of editing the spec. In a worktree run, the coordinator completes them only after integration; return the branch, commit, check results, and proposed shared-document changes.
+Commit only this work to the current branch after review and verification. Ensure the actual staged content matches the reviewed and tested implementation; reconcile partially staged edits before committing. Report the commit and verification evidence instead of editing the spec.
 
 If the change qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the committed files and the spec path to record the architectural decisions.
 
-When this commit completes the feature's last task and everything is verified, close out the feature: if `/update-arch` was recommended, keep `.desk/specs/<feature-slug>/`, because `/update-arch` needs the spec's Constraints and Supersedes list and removes the folder itself afterwards; otherwise remove the folder now and tell the user.
+When the spec is complete and everything is verified, close out the feature: if `/update-arch` was recommended, keep `.desk/specs/<feature-slug>/`, because `/update-arch` needs the spec's Constraints and Supersedes list and removes the folder itself afterwards; otherwise remove the folder now and tell the user.
 
-**Done:** the scoped implementation is reviewed and committed, task state reflects the actual integration status, and remaining limitations are reported.
+**Done:** the scoped implementation is reviewed and committed, and remaining limitations are reported.

@@ -15,6 +15,8 @@ Run this skill:
 - Before starting a development sprint to ensure documentation is current
 - When you suspect arch records may be stale
 
+Run bundled scripts from the project directory.
+
 ## Procedure
 
 1. **Identify recent commits.** Use a commit range or recent commit count:

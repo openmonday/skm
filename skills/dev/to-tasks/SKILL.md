@@ -1,12 +1,12 @@
 ---
 name: to-tasks
-description: Break a plan, spec, or conversation into local tracer-bullet tasks with explicit dependencies.
+description: Break a local spec into tracer-bullet tasks for implement-spec.
 disable-model-invocation: true
 ---
 
 # To Tasks
 
-Break a plan, spec, or conversation into a set of **tasks**: tracer-bullet vertical slices, each declaring the tasks that **block** it.
+Break a local spec into a set of **tasks**: tracer-bullet vertical slices, each declaring the tasks that **block** it.
 
 Follow [TASKS.md](TASKS.md) for task states and dependencies. If `.desk/AGENTS.md` is missing, ask the user to run `/setup-desk`. In a shared-worktree run, return drafts to the coordinator to save.
 
@@ -14,7 +14,7 @@ Follow [TASKS.md](TASKS.md) for task states and dependencies. If `.desk/AGENTS.m
 
 ### 1. Gather context
 
-Work from whatever is already in the conversation context. Read any spec or local task paths the user provides. Resolve task numbers within the identified feature; ask when the feature is ambiguous. Read the feature's existing spec and tasks before extending its plan.
+Identify the feature and read its complete spec and any existing tasks. If the spec is missing, ask the user to run `/to-spec` first. Resolve task numbers within the feature; ask when the feature is ambiguous. Use conversation context to clarify the spec.
 
 ### 2. Explore the codebase (optional)
 
@@ -57,7 +57,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Save and validate local tasks
 
-Save the approved tasks, one file per task, as `tasks/<task-slug>.md` inside the feature directory. Put the two-digit number in the task's `# <NN>: <title>` heading, in creation order within the feature. Leave `spec.md` to `/to-spec`: when working from a plan or conversation without a spec, put each task's confirmed requirements in its own sections, and suggest `/to-spec` when the user wants a durable feature-level source.
+Save the approved tasks, one file per task, as `tasks/<task-slug>.md` inside the feature directory. Put the two-digit number in the task's `# <NN>: <title>` heading, in creation order within the feature. Leave `spec.md` to `/to-spec`.
 
 Use the task template below. Preserve existing task IDs, implementation evidence, and completion states when extending a plan. Change an existing task's scope or dependencies only as part of the approved breakdown; if completed work needs correction, reopen it explicitly.
 

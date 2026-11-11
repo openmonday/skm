@@ -19,7 +19,7 @@ Many skills depend on the same conventions. A change to any of these must be app
 - **Coordinator ownership.** In shared-worktree runs, workers return proposed changes and only the coordinator writes shared `.desk` files. Keep this sentence in every skill that writes to `.desk/`.
 - **Arch record helpers are duplicated.** `find-arch.sh` exists in `check-arch/scripts/`, `guidelines/scripts/`, and `update-arch/scripts/`. `validate-arch.sh` and `ARCH-FORMAT.md` exist in `check-arch/scripts/` and `update-arch/scripts/`. Each skill must stay self-contained, so edit one copy, copy it over the others, and confirm they match with `diff`.
 - **Spec → task → record chain.** `grill-with-docs` and `to-spec` read research reports; `research` itself does not name them. `to-spec` collects Constraints and Supersedes. `to-tasks` copies the ones that apply into each task. `update-arch` builds records from them, then removes the feature folder; `implement` and `implement-spec` keep the folder whenever they recommend `/update-arch`. Keep section names (`Constraints`, `Supersedes`, `Status`, `Blocked by`, `Verification`) consistent across these skills and `ARCH-FORMAT.md`.
-- **Temp output** goes under `${TMPDIR:-/tmp}/desk-debug/` and `${TMPDIR:-/tmp}/desk-reports/`, never into the project.
+- **Output locations.** Temporary debug artifacts go under `${TMPDIR:-/tmp}/desk-debug/`; `show-me` visuals go under `.show-me/` in the project or workspace unless the user chooses another location.
 
 ## Invocation metadata
 

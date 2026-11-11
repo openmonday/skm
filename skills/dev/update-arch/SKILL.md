@@ -22,6 +22,8 @@ Run this skill after:
 
 Skip this for typo fixes, formatting, dependency bumps, or changes with no arch record.
 
+Run bundled scripts from the project directory.
+
 ## Procedure
 
 1. **Identify the committed files.** Use `git diff --name-only <before>..HEAD` or get them from the user. These are the files you just committed.
