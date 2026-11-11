@@ -20,7 +20,7 @@ Use concise, conventional names. Use plural nouns for collections and mass nouns
 ├── handoffs/
 │   └── <session-slug>.md
 ├── refs/
-│   └── <project-slug>/                # unmodified Git checkout of a reference project
+│   └── <project-slug>/                # unmodified Git checkout or link to a local checkout
 └── research/
     └── <topic-slug>/
         ├── report.md
@@ -38,7 +38,7 @@ Each file type has exactly one **owner skill**. The owner creates the file, defi
 | `specs/<feature-slug>/spec.md` | `to-spec` | Spec template in that skill | Until close-out |
 | `specs/<feature-slug>/tasks/<task-slug>.md` | `to-tasks` | Task template in that skill and the Tasks section below | Until close-out |
 | `handoffs/<session-slug>.md` | `handoff` | Handoff template in that skill | Until the user deletes it |
-| `refs/<project-slug>/` | `research` | Unmodified Git checkout; never edited | Until the user deletes it |
+| `refs/<project-slug>/` | `research` | Unmodified Git checkout or symlink to a local checkout; never edited | Until the user deletes it |
 | `research/<topic-slug>/report.md` and `diagrams/` | `research` | Report template in that skill | Until the user deletes it |
 
 **Shared fields.** `implement` and `implement-spec` update a task's `Status:` line and `Verification` section as described under Tasks. **Close-out** removes `specs/<feature-slug>/` once its last task is done. When the work needs an arch record, `update-arch` removes the folder after its records validate, because it reads the spec's Constraints and Supersedes list. Otherwise `implement` or `implement-spec` removes it when the work is verified. No other skill writes into a file it does not own.

@@ -78,7 +78,7 @@ Other entry points:
 │   ├── spec.md
 │   └── tasks/<slug>.md
 ├── handoffs/<session>.md      # kept until deleted
-├── refs/<project>/            # unmodified reference checkouts, kept until deleted
+├── refs/<project>/            # unmodified reference checkouts or links to local checkouts, kept until deleted
 └── research/<topic>/          # research reports and diagrams, kept until deleted
 ```
 
