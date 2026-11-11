@@ -37,6 +37,14 @@ if git rev-parse --git-dir >/dev/null 2>&1; then
 else
   echo 'Git exclusion pending: not a Git repository.'
 fi
+# .desk/
+# ├── AGENTS.md   Project-wide rules
+# ├── CONTEXT.md  Domain glossary
+# ├── arch/       Architecture records for committed code
+# ├── specs/      Feature specs and their tasks
+# ├── handoffs/   Session handoffs
+# ├── refs/       Read-only reference checkouts
+# └── research/   Research reports and diagrams
 mkdir -p .desk .desk/arch .desk/specs .desk/handoffs .desk/refs .desk/research
 if [ ! -e .desk/AGENTS.md ] && [ ! -L .desk/AGENTS.md ]; then
   printf '# Desk project rules\n\nAdd project-wide rules here, one per line with the reason.\n' > .desk/AGENTS.md
