@@ -8,11 +8,11 @@ disable-model-invocation: true
 
 Deliver the entire spec on one **integration branch**. Treat its tasks as a dependency graph, scheduling the **frontier** as prerequisites complete.
 
-If `.desk/AGENTS.md` is missing, ask the user to run `/setup-desk`. Read [task conventions](../to-tasks/TASKS.md) for task states and [WORKTREES.md](WORKTREES.md) for ownership and worktrees. If the spec has no tasks, ask the user to run `/to-tasks` first; describe any missing input precisely.
+If `.desk/AGENTS.md` is missing, stop and tell the user the Desk workspace is not initialized. If the spec is missing, stop and ask the user for a spec; if it has no tasks, stop and ask the user for a task graph. Read [task conventions](TASKS.md) for task states and [WORKTREES.md](WORKTREES.md) for ownership and worktrees.
 
 ## 1. Validate the plan
 
-Read the complete spec and tasks. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following the arch-record discovery procedure in `guidelines`. Apply them under the arch-record compliance rules in `guidelines`: their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. Pass both the records and the Supersedes list to every worker. A worker that would break any other Constraint stops and reports back instead of proceeding. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
+Read the complete spec and tasks. Resolve every dependency and check the graph for missing references and cycles. Read the glossary. Find the arch records for the files and directories the spec will change, following [arch record discovery](ARCH-RECORDS.md). Apply them under the [arch record compliance rules](ARCH-RECORDS.md): their Constraints are requirements alongside the spec's, except where the spec's Supersedes list replaces them. Pass both the records and the Supersedes list to every worker. A worker that would break any other Constraint stops and reports back instead of proceeding. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
 
 Record the starting worktree status. Pin the work's initial review-base commit before implementation, record it in the spec, and reuse it on resume so final review covers the entire effort. Choose the record name (`<YYYY-MM-DD>-<feature-slug>`) and note it in the spec too. If a resumed feature lacks that record, reconstruct and verify its original base from branch history before final review. Use a clean integration worktree so unrelated edits cannot enter merges or review. On resume, reconcile existing work and task ownership using the workspace rules.
 
@@ -33,7 +33,7 @@ Workers read ordinary `.desk/...` paths and leave shared files to the coordinato
 Run implementer subagents in the background when available. Each receives the spec/task paths, agreed test seams, branch, worktree, and any relevant notes. Each worker:
 
 1. Confirms its branch descends from the assigned integration commit before editing. Reports a mismatch so the coordinator can reconcile it while preserving existing work.
-2. Uses `tdd` to implement the task and verifies its acceptance criteria.
+2. Uses test-driven development to implement the task and verifies its acceptance criteria.
 3. Commits its scoped changes with conventional commit messages, merges the current integration tip into its task branch, resolves conflicts, and reruns affected checks.
 4. Returns its branch/commit, check results, unresolved findings, and proposed shared-document updates.
 
@@ -43,13 +43,13 @@ Use context pointers and concise results for communication. A worker report is r
 
 Serialize integration merges. A merger subagent may perform each merge, but the coordinator owns scheduling and shared-document updates. If integration advanced after a worker synchronized, merge against the latest tip and resolve and verify any conflicts before accepting the task.
 
-Verify the merged acceptance behavior on the integration branch before recording completion. Recompute the frontier and launch newly ready tasks while independent workers continue. Apply agreed glossary updates centrally so later workers read current terms.
+Verify the merged acceptance behavior on the integration branch before marking a task `done` and recording its commit references and checks under `Verification`. Recompute the frontier and launch newly ready tasks while independent workers continue. Apply agreed glossary updates centrally so later workers read current terms.
 
 **Done:** all task implementations are integrated and verified, with recorded commit references and no outstanding worker failures.
 
 ## 5. Review the whole spec
 
-Run the full applicable test suite and typechecking on the integration branch. Invoke `code-review` against the work's original review-base commit, passing the spec and all task paths.
+Run the full applicable test suite and typechecking on the integration branch. Review the changes against the work's original review-base commit, the spec, all tasks, and project standards.
 
 Reopen tasks affected by review findings. Use one implementer subagent to fix the findings, with a shared workspace prepared as above; integrate its corrections and rerun affected checks. If subagents are unavailable, the coordinator performs the same work sequentially.
 
@@ -59,9 +59,9 @@ Reopen tasks affected by review findings. Use one implementer subagent to fix th
 
 Finalize task states. Report the integration branch, commits, checks, and limitations.
 
-If the feature qualifies for an arch record (it added behavior with rules attached, set a boundary, reshaped modules, or revealed a rule the code did not enforce), recommend calling `/update-arch` with the files modified in the integration branch and the spec path to record the architectural decisions. The arch record should start from the spec's Constraints and Supersedes list, adjusted for what was actually built, including changes made during review.
+If the feature added behavior with rules, set a boundary, reshaped modules, or revealed an unenforced rule, report the architectural decisions and modified files. Keep the spec and its Constraints and Supersedes as a source for recording those decisions.
 
-Then close out the feature: if `/update-arch` was recommended, keep `.desk/specs/<feature-slug>/`, because `/update-arch` needs the spec and removes the folder itself afterwards; otherwise remove the folder now. Tell the user which happened.
+Once the spec is satisfied and every task is `done` or `dropped`, remove the feature folder if no architectural decisions need recording; otherwise retain it. Keep it if work remains incomplete. Tell the user which happened.
 
 Completion ends at the local integration branch.
 

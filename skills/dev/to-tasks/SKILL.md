@@ -8,17 +8,17 @@ disable-model-invocation: true
 
 Break a local spec into a set of **tasks**: tracer-bullet vertical slices, each declaring the tasks that **block** it.
 
-Follow [TASKS.md](TASKS.md) for task states and dependencies. If `.desk/AGENTS.md` is missing, ask the user to run `/setup-desk`. In a shared-worktree run, return drafts to the coordinator to save.
+Follow [TASKS.md](TASKS.md) for task states and dependencies. If `.desk/AGENTS.md` is missing, stop and tell the user the Desk workspace is not initialized. In a shared-worktree run, return drafts to the coordinator to save.
 
 ## Process
 
 ### 1. Gather context
 
-Identify the feature and read its complete spec and any existing tasks. If the spec is missing, ask the user to run `/to-spec` first. Resolve task numbers within the feature; ask when the feature is ambiguous. Use conversation context to clarify the spec.
+Identify the feature and read its complete spec and any existing tasks. If the spec is missing, stop and ask the user for a spec. Resolve task numbers within the feature; ask when the feature is ambiguous. Use conversation context to clarify the spec.
 
 ### 2. Explore the codebase (optional)
 
-If you have not already explored the codebase, do so to understand the current state of the code. Use `.desk/CONTEXT.md` vocabulary when present. Once you know which areas each task will touch, find their records following the arch-record discovery procedure in `guidelines`, and respect their Constraints.
+If you have not already explored the codebase, do so to understand the current state of the code. Use `.desk/CONTEXT.md` vocabulary when present. Once you know which areas each task will touch, find their records following [arch record discovery](ARCH-RECORDS.md), and respect their Constraints.
 
 Look for opportunities to prefactor the code to make the implementation easier. "Make the change easy, then make the easy change."
 
@@ -57,7 +57,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Save and validate local tasks
 
-Save the approved tasks, one file per task, as `tasks/<task-slug>.md` inside the feature directory. Put the two-digit number in the task's `# <NN>: <title>` heading, in creation order within the feature. Leave `spec.md` to `/to-spec`.
+Save the approved tasks, one file per task, as `tasks/<task-slug>.md` inside the feature directory. Put the two-digit number in the task's `# <NN>: <title>` heading, in creation order within the feature. Leave `spec.md` unchanged.
 
 Use the task template below. Preserve existing task IDs, implementation evidence, and completion states when extending a plan. Change an existing task's scope or dependencies only as part of the approved breakdown; if completed work needs correction, reopen it explicitly.
 

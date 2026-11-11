@@ -7,11 +7,6 @@ disable-model-invocation: true
 
 Update arch records after committing code. Read [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md) for the record format.
 
-This is the final step in the arch record workflow:
-1. `/check-arch` before work (find existing records)
-2. Develop (grill-me, to-spec, implement, etc.)
-3. `/update-arch` after work (record the new state)
-
 ## When to update
 
 Run this skill after:
@@ -53,7 +48,7 @@ Run bundled scripts from the project directory.
    scripts/validate-arch.sh .desk/arch/payment-gateway-integration.md
    ```
 
-8. **Close out the feature.** If the work came from a spec in `.desk/specs/<feature-slug>/`, every task there is `done` or `dropped`, and all records from step 7 pass validation, remove `.desk/specs/<feature-slug>/`. Keep it when any task is still open or validation failed.
+8. **Close out the feature.** If the work came from a completed spec in `.desk/specs/<feature-slug>/`, all records from step 7 pass validation, and any tasks there are `done` or `dropped`, remove `.desk/specs/<feature-slug>/`. A small-work spec may have no tasks. Keep the folder when the spec is incomplete, any task is still open, or validation failed.
 
 9. **Report which arch records were updated**, the new commit hash, and whether the feature folder was removed.
 
@@ -72,7 +67,7 @@ When the user asks to record existing code and `.desk/arch/` has no records, inf
 3. **Analyze each module.** Read the code for its purpose, key interfaces, data flows, boundaries, and the rules it observably enforces (validation, interface contracts, error handling, layering).
 4. **Write one record per cohesive module** following [ARCH-FORMAT.md](scripts/ARCH-FORMAT.md): a `<module-name>-<purpose>` slug, `type: feat` (or `refactor` for pure structural code), every analyzed file under `files:`, and `since:` set to `git log -1 --format='%H' -- <files>`.
 5. **Validate** with `scripts/validate-arch.sh`.
-6. **Tell the user** which records were created, that they were inferred from code rather than confirmed, and ask them to review each record's Constraints. Until they do, agents check those Constraints against the code before relying on them, as the arch-record compliance rules in `guidelines` require.
+6. **Tell the user** which records were created, that they were inferred from code rather than confirmed, and ask them to review each record's Constraints. Until they do, agents check those Constraints against the code before relying on them, following [arch record compliance](ARCH-RECORDS.md).
 
 ## Example
 

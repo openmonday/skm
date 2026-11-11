@@ -5,7 +5,7 @@ argument-hint: "What will the next session be used for?"
 disable-model-invocation: true
 ---
 
-Write a handoff that lets a fresh agent resume the work. For engineering work, save to `.desk/handoffs/<session-slug>.md`, using a distinct name for each handoff; overwrite when continuing a known session. If the workspace is missing, ask the user to run `/setup-desk`. For an independent teaching or non-engineering workspace, save in the workspace location the user chose; use an OS temporary directory when no persistent location is established.
+Write a handoff that lets a fresh agent resume the work. For engineering work, save to `.desk/handoffs/<session-slug>.md`, using a distinct name for each handoff; overwrite when continuing a known session. If the workspace is missing, stop and tell the user the Desk workspace is not initialized. For an independent teaching or non-engineering workspace, save in the workspace location the user chose; use an OS temporary directory when no persistent location is established.
 
 Use this format:
 
@@ -28,7 +28,7 @@ What is done and verified, with commits.
 Unresolved questions, or "None".
 
 ## Next actions
-Concrete numbered steps, with the suggested skill for each.
+Concrete numbered steps, without prescribing skills.
 
 ## Sources
 Project-relative paths to specs, tasks, records, research, commits, and diffs.

@@ -1,6 +1,7 @@
 ---
 name: code-review
 description: "Review committed and working-tree changes against a fixed point on standards and local spec requirements. Use for branch reviews, work in progress, or requests to review since a commit, branch, or tag."
+disable-model-invocation: true
 ---
 
 Two-axis review of committed and working-tree changes since a fixed point:
@@ -36,7 +37,7 @@ Look for the originating requirements in this order:
 3. `.desk/specs/<feature-slug>/spec.md` and its tasks matching the branch or feature.
 4. If nothing is found, ask the user where the spec is. If none exists, skip the Spec subagent and report "no spec available".
 
-Pass the full spec and applicable tasks to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following the arch-record discovery procedure in `guidelines`, and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec's Supersedes list names that Constraint. If a record has drifted (commits after its `since:`), tell the reviewer to check its Constraints against the code rather than assume the record is current. Reviewers read shared `.desk` files and return findings to the coordinator.
+Pass the full spec and applicable tasks to the Spec reviewer. Read `.desk/CONTEXT.md` when present. Find the arch records for the changed files and their directories, following [arch record discovery](ARCH-RECORDS.md), and pass them to the Spec reviewer; a change that breaks a record's Constraint is a Spec finding unless the spec's Supersedes list names that Constraint. If a record has drifted (commits after its `since:`), tell the reviewer to check its Constraints against the code rather than assume the record is current. Reviewers read shared `.desk` files and return findings to the coordinator.
 
 ### 3. Identify the standards sources
 

@@ -2,7 +2,7 @@
 
 Architecture records live at `.desk/arch/<descriptive-slug>.md`. Each record documents one finished change: what it built, the rules it set, and its shape.
 
-Check-arch and update-arch skills use this format. Apply the arch-record compliance rules in `guidelines`.
+Check-arch and update-arch skills use this format. Follow the arch-record compliance rules in [ARCH-RECORDS.md](../ARCH-RECORDS.md).
 
 ## When to write
 
@@ -95,7 +95,7 @@ Paths are relative to project root. Use exact paths; wildcards are not supported
 ### since (required)
 Commit hash where this record was last confirmed accurate. Use the full hash or short form (7+ chars).
 
-Updated by `/update-arch` after each commit that changes the described files.
+Updated after commits that change the described files.
 
 ## Superseding records
 

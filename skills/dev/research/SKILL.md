@@ -55,7 +55,7 @@ Write sections 1 to 6 of the report, following the format and writing rules belo
 
 ## 4. Map onto this project
 
-Write sections 7 and 8. Read the relevant parts of the user's project, `.desk/CONTEXT.md`, and the arch records for the areas involved, following arch-record discovery and compliance in `guidelines`. If the project has no relevant code yet, say so and describe the minimal starting shape instead.
+Write sections 7 and 8. Read the relevant parts of the user's project, `.desk/CONTEXT.md`, and the arch records for the areas involved, following [arch record discovery and compliance](ARCH-RECORDS.md). If the project has no relevant code yet, say so and describe the minimal starting shape instead.
 
 Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or change code.
 

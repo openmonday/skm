@@ -1,13 +1,14 @@
 ---
 name: diagnosing-bugs
 description: Diagnosis loop for hard bugs and performance regressions. Use when the user says "diagnose"/"debug this", or reports something broken/throwing/failing/slow.
+disable-model-invocation: true
 ---
 
 # Diagnosing Bugs
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
-When exploring the codebase, read `.desk/CONTEXT.md` to understand the relevant modules, and find the arch records for the files involved, following the arch-record discovery procedure in `guidelines`. Continue silently if they are absent.
+When exploring the codebase, read `.desk/CONTEXT.md` to understand the relevant modules, and find the arch records for the files involved, following [arch record discovery](ARCH-RECORDS.md). Continue silently if they are absent.
 
 Follow the workspace's shared-file ownership rules. Workers return diagnostic artifact content and proposed document updates to the coordinator.
 
@@ -141,6 +142,6 @@ Required before declaring done:
 - [ ] Regression test passes (or absence of seam is documented)
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
 - [ ] Disposable captures, repro scripts, and throwaway harnesses removed from the temp debug directory `desk-debug/<bug-slug>/`
-- [ ] If the bug revealed a rule the code did not enforce, recommend calling `/update-arch` with the fixed files to record the rule; the fix commit should use a conventional commit message
+- [ ] If the bug revealed a rule the code did not enforce, report the rule and fixed files; the fix commit should use a conventional commit message
 - [ ] Fixtures required by lasting regression tests are in the project's normal test directories
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns

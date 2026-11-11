@@ -6,17 +6,17 @@ disable-model-invocation: true
 
 This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
 
-If `.desk/AGENTS.md` is missing, ask the user to run `/setup-desk`. Use the existing work directory when continuing work; otherwise choose a descriptive work slug. Ask only when the work reference is ambiguous. In a shared-worktree run, return the draft to the coordinator to save.
+If `.desk/AGENTS.md` is missing, stop and tell the user the Desk workspace is not initialized. Use the existing work directory when continuing work; otherwise choose a descriptive work slug. Ask only when the work reference is ambiguous. In a shared-worktree run, return the draft to the coordinator to save.
 
 ## Process
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use `.desk/CONTEXT.md` vocabulary when present. If a research report for this work exists under `.desk/research/`, read it and reuse its findings rather than re-deriving them. Find the arch records for the areas the work will touch, following the arch-record discovery procedure in `guidelines`, and respect their Constraints. List every Constraint the work must change and confirm each one with the user. These become the spec's Supersedes list. Leave the records themselves untouched; `/update-arch` rewrites them after the code is committed.
+1. Explore the repo to understand the current state of the codebase, if you haven't already. Use `.desk/CONTEXT.md` vocabulary when present. If a research report for this work exists under `.desk/research/`, read it and reuse its findings rather than re-deriving them. Find the arch records for the areas the work will touch, following [arch record discovery](ARCH-RECORDS.md), and respect their Constraints. List every Constraint the work must change and confirm each one with the user. These become the spec's Supersedes list. Leave the records themselves untouched until the code is committed.
 
 2. Sketch out the seams at which you're going to test the feature. Existing seams should be preferred to new ones. Use the highest seam possible. If new seams are needed, propose them at the highest point you can. The fewer seams across the codebase, the better - the ideal number is one.
 
 Check with the user that these seams match their expectations, honoring an agreement already reached in this conversation.
 
-3. Write the spec using the template below and save it to `.desk/specs/<feature-slug>/spec.md`. Collect every rule the user stated in the conversation, including during `grill-me` sessions, into the Constraints section; the spec is the only copy an implementing agent will see. Preserve existing confirmed decisions when updating a spec. Report its path and any unresolved assumptions. The spec is ready when its requirements, scope, and testing decisions are explicit enough to guide implementation.
+3. Write the spec using the template below and save it to `.desk/specs/<feature-slug>/spec.md`. Collect every rule the user stated in the conversation,  into the Constraints section; the spec is the only copy an implementing agent will see. Preserve existing confirmed decisions when updating a spec. Report its path and any unresolved assumptions. The spec is ready when its requirements, scope, and testing decisions are explicit enough to guide implementation.
 
 <spec-template>
 

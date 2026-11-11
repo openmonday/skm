@@ -1,13 +1,14 @@
 ---
 name: tdd
 description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor", or wants integration tests.
+disable-model-invocation: true
 ---
 
 # Test-Driven Development
 
 TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle: consult them before and during the loop, not after.
 
-When exploring the codebase, read `.desk/CONTEXT.md` for test names and interface vocabulary, and find the arch records for the files under test, following the arch-record discovery procedure in `guidelines`. Continue silently if they are absent.
+When exploring the codebase, read `.desk/CONTEXT.md` for test names and interface vocabulary, and find the arch records for the files under test, following [arch record discovery](ARCH-RECORDS.md). Continue silently if they are absent.
 
 Follow the workspace's shared-file ownership rules. Fixtures required by lasting regression tests belong in the project's normal test directories, outside ignored `.desk/`.
 
@@ -25,7 +26,7 @@ A **seam** is the public boundary you test at: the interface where you observe b
 
 Ask: "What's the public interface, and which seams should we test?" Give each proposed seam a one-line note on what it catches and what it misses.
 
-When the shape of that interface is itself in question (how deep the module is, where the seam belongs, what the interface should expose), call the Skill tool with "codebase-design" for the vocabulary. It is the shared source of the module, interface, depth, seam, adapter, leverage and locality terms, and it is a reference to consult, not a session to run.
+When the interface shape is in question, use the [deep-module vocabulary](VOCABULARY.md).
 
 ## Anti-patterns
 
@@ -37,4 +38,4 @@ When the shape of that interface is itself in question (how deep the module is, 
 
 - **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
 - **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Refactoring is not part of the loop.** It belongs to the review stage (see the `code-review` skill), not the red → green implementation cycle.
+- **Refactoring is not part of the loop.** It belongs to the review stage, not the red → green implementation cycle.
