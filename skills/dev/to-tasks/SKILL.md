@@ -1,90 +1,40 @@
 ---
 name: to-tasks
-description: Break a local spec into tracer-bullet tasks for implement-tasks.
+description: Split a local spec into tracer-bullet task files with blocking edges.
 disable-model-invocation: true
 ---
 
-# To Tasks
+# To tasks
 
-Break a local spec into a set of **tasks**: tracer-bullet vertical slices, each declaring the tasks that **block** it.
+Split the spec at `.context/issues/<issue-slug>/spec.md` into task files that follow [the task format](references/TASKS.md). Ask which issue is meant if it is unclear.
 
-Follow [TASKS.md](TASKS.md) for task states and dependencies. If `.context/` is missing, stop and ask the user to initialize it with `setup-context`. In a shared-worktree run, return drafts to the coordinator to save.
+## 1. Gather context
 
-## Process
+Read the spec, any existing tasks, and `.context/GLOSSARY.md`. Explore the code the work will touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every record it lists. Each task must keep their Constraints and Architecture, except those the spec lists under Supersedes. If the spec would break any other one, stop and ask the user.
 
-### 1. Gather context
+Look for prefactoring that makes the change easy: "make the change easy, then make the easy change."
 
-Identify the issue under `.context/issues/<issue-slug>/`, and read its complete `spec.md` and any existing tasks. If the spec is missing, stop and ask the user for a spec. Resolve task numbers within the feature; ask when the feature is ambiguous. Use conversation context to clarify the spec.
+## 2. Draft vertical slices
 
-### 2. Explore the codebase (optional)
+Make each task a **tracer bullet**:
 
-If you have not already explored the codebase, do so to understand the current state of the code. Use `.context/GLOSSARY.md` vocabulary when present. Once you know which files each task will touch, run `scripts/query-map.py <file>...` from the project root and read the matching `.context/map/` records. Continue if none exist; report stale records or disagreements with code. Respect their Constraints except where the spec explicitly supersedes them, and raise any other conflict with the user.
+- It cuts a narrow but complete path through every layer (schema, API, UI, tests).
+- It is demoable or verifiable on its own.
+- It fits in one fresh context window.
+- Prefactoring tasks come first.
 
-Look for opportunities to prefactor the code to make the implementation easier. "Make the change easy, then make the easy change."
+Give each task its **blocking edges**: the tasks that must finish before it can start.
 
-### 3. Draft vertical slices
+A **wide refactor** is the exception: one mechanical change, such as renaming a column, that spreads across the codebase. Use **expand–contract**. Add the new form beside the old, migrate callers in batches that each pass checks, then delete the old form. Each migration depends on the expansion, and the contraction depends on every migration. If batches cannot pass checks separately, make one task with internal checkpoints.
 
-Break the work into **tracer bullet** tasks.
+## 3. Review with the user
 
-<vertical-slice-rules>
+Present the breakdown as a numbered list. For each task, give its title, its blockers, and the behavior it delivers. Ask whether the granularity is right, whether each blocker really gates its task, and whether any task should be merged or split. Iterate until the user approves.
 
-- Each slice cuts a narrow but COMPLETE path through every layer (schema, API, UI, tests): vertical, NOT a horizontal slice of one layer
-- A completed slice is demoable or verifiable on its own
-- Each slice is sized to fit in a single fresh context window
-- Any prefactoring should be done first
+## 4. Save
 
-</vertical-slice-rules>
+Write one file per approved task under the issue's `tasks/` folder. When extending a plan, keep existing numbers, evidence, and states. Change an existing task only as part of the approved breakdown, and reopen a `done` task explicitly. Leave `spec.md` unchanged.
 
-Give each task its **blocking edges**: the other tasks that must complete before it can start. A task with no blockers can start immediately.
+Keep file paths and code out of requirements, because they go stale. The exception is a prototype snippet that pins a decision better than prose (a state machine, schema, or type shape). Inline the decision-rich part and note that it came from a prototype.
 
-**Wide refactors are the exception to vertical slicing.** A **wide refactor** is one mechanical change (rename a column, retype a shared symbol) whose **blast radius** fans across the codebase. Prefer **expand–contract**: first add the new form beside the old, then migrate callers in independently verifiable batches, and finally delete the old form. Each migration task depends on the expansion; the contraction depends on every migration. If the batches cannot pass checks independently, group the coupled edits into one verifiable task with internal checkpoints and final integration checks. Use a handoff to resume a long task. Dependency edges still unlock only after a task's acceptance checks pass.
-
-### 4. Quiz the user
-
-Present the proposed breakdown as a numbered list. For each task, show:
-
-- **Title**: short descriptive name
-- **Blocked by**: which other tasks (if any) must complete first
-- **What it delivers**: the end-to-end behaviour this task makes work
-
-Ask the user:
-
-- Does the granularity feel right? (too coarse / too fine)
-- Are the blocking edges correct: does each task only depend on tasks that genuinely gate it?
-- Should any tasks be merged or split further?
-
-Iterate until the user approves the breakdown.
-
-### 5. Save and validate local tasks
-
-Save the approved tasks, one file per task, as `tasks/<task-slug>.md` inside the feature directory. Put the two-digit number in the task's `# <NN>: <title>` heading, in creation order within the feature. Leave `spec.md` unchanged.
-
-Use the task template below. Preserve existing task IDs, implementation evidence, and completion states when extending a plan. Change an existing task's scope or dependencies only as part of the approved breakdown; if completed work needs correction, reopen it explicitly.
-
-```markdown
-# <NN>: <Task title>
-
-Status: pending
-Blocked by: None
-
-## What to build
-
-The end-to-end behavior this task delivers, from the user's perspective.
-
-## Acceptance criteria
-
-- [ ] Observable result 1
-- [ ] Observable result 2
-
-## Constraints
-
-The spec's constraints that apply to this task, the names of records found for the areas it touches, and any spec Supersedes entries this task carries out. Omit when none apply.
-
-## Verification
-
-Record checks and implementation commit references here as work completes.
-```
-
-Replace `None` with the blocking task numbers when applicable. Before reporting completion, verify every dependency resolves within the feature, the graph has no cycles, and each task has independently verifiable acceptance criteria. Report the feature path, task files, and initial frontier. Leave implementation and completion to the implementation workflow.
-
-Avoid specific implementation file paths or code snippets in task requirements: they go stale fast. Stable pointers to the spec, tasks, or agreed test seams are useful. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it and note briefly that it came from a prototype. Trim to the decision-rich parts, not a working demo.
+**Done:** every blocker refers to a task in this issue, the graph has no cycles, and every task has acceptance criteria that can be verified on their own. Report the task files and the initial frontier.

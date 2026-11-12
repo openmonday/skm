@@ -1,25 +1,33 @@
 ---
 name: draw-map
-description: Audit map coverage for tracked and non-ignored untracked files, record format and commit freshness; propose and apply approved repairs.
+description: Bring the project map in line with committed code, covering every file, fixing record format, updating `since`, and recording violations.
 disable-model-invocation: true
 ---
 
-# Check and update the project map
+# Reconcile the project map
 
-Read [MAP-FORMAT.md](scripts/MAP-FORMAT.md) and [MAP-RECORDS.md](MAP-RECORDS.md). Run all three bundled checks from the target Git project, resolving its path relative to this skill:
+Records live under `.context/map/` and follow [the record format](references/MAP-RECORDS.md). The run is done when all three checks in `scripts/` print ✔:
 
-```bash
-python3 /path/to/draw-map/scripts/check-coverage.py
-python3 /path/to/draw-map/scripts/check-format.py
-python3 /path/to/draw-map/scripts/check-expired.py
-```
+- `check-format.py`: every record is well-formed.
+- `check-coverage.py`: every non-ignored file is covered by a record.
+- `check-expired.py`: every record's `since` is the newest commit touching any of its covered files.
 
-Exit 0 means no deterministic findings, 1 means findings, and 2 means the check could not complete. None of the scripts edits anything. The coverage script reports unrecorded files; the format script reports malformed records; the freshness script reports expired records and identifies invalid records it skipped. Run all three even if one reports findings. Coverage includes tracked files and non-ignored untracked files, including files in listed directories. Git ignore rules (including .git/info/exclude and global excludes) exclude untracked files only; .git internals are excluded. Each record's expected hash is calculated from its covered files with HEAD history; covered files without HEAD history are reported separately. Inspect Git status as well: working tree or index changes are not necessarily represented by HEAD history. Explain them rather than claiming the records capture uncommitted work.
+Run them from the project root. Each finding says what is wrong and how to fix it.
 
-## Workflow
+## Steps
 
-1. Run all three checks and inspect records, relevant committed code and Git history. Manually review semantic format requirements and whether existing descriptions, constraints, and architecture remain accurate. A valid-looking record is not proof of correctness. Check relevant issues in `.context/issues/` and their Supersedes where applicable.
-2. Report **unrecorded**, **expired**, and **format non-compliance** separately, including empty categories. Explain invalid/unreachable hashes and files with no committed history. For each finding propose specific remedies and affected files. An unrecorded file requires valid coverage, potentially by adding it to an appropriate existing record or creating a cohesive new record. An expired record needs its `since` set to the reported latest commit; propose content changes too when needed, or a hash-only update if review shows the change is harmless. Explain semantic findings and any circular tracked-record problem. `setup-context` normally excludes `.context` from Git, but already tracked files remain tracked and must be covered.
-3. **Wait for explicit user approval before editing anything**, including creating directories or records. Do not commit, change Git tracking, or alter project code without specific approval. In shared-worktree runs, return proposed edits to the coordinator rather than editing shared files.
-4. Apply only approved repairs. Describe committed reality, organize records recursively in module subfolders, with small, cohesive responsibilities, preserve correct existing constraints, apply actual supersessions and remove contradictions. For bootstrapping, infer from code, identify inferred constraints and request user review. Do not claim uncommitted work is recorded. If a covered file has no HEAD history, ask the user to commit it before completing its record. Recalculate hashes after any approved commits.
-5. Run all three checks again, repeat the semantic review, and report applied changes, remaining findings, and any inability to converge. Do not remove completed issues automatically; propose cleanup separately if appropriate.
+1. Run `check-format.py` and fix every record it lists. The other checks skip invalid records.
+2. Run `check-coverage.py`. Add each unrecorded file to the record whose responsibility fits it, or create a record. Split a record that has outgrown one responsibility. Derive a new record's Constraints from the code and mark them as inferred.
+3. Run `check-expired.py`. For each expired record, read the `review` command's changes and compare each one with the record:
+   - The change agrees with Constraints and Architecture: update Feature, Architecture, and `files` to match the code.
+   - The change breaks a Constraint or Architecture statement: ask the user whether the code or the record is wrong.
+     - The code is wrong: keep the statement and add `- <commit> <path>: <what the code does>; breaks "<statement>".` under `## Violations`.
+     - The record is outdated: rewrite or remove the statement, and remove any Violations line that cites it.
+   - The code complies again with a statement listed under Violations: remove that line.
+
+   Then set `since` to the expected hash.
+4. Rerun all three checks until each prints ✔.
+
+## Report
+
+List the files newly covered, records created or split, inferred Constraints for the user to review, Violations added or removed, and uncommitted covered files.

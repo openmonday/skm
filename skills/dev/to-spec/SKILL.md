@@ -4,19 +4,9 @@ description: "Turn the current conversation into a local spec using the decision
 disable-model-invocation: true
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a spec. Do NOT interview the user; just synthesize what you already know.
+Turn the current conversation and your understanding of the code into a spec. Synthesize what was decided; skip the interview.
 
-## Process
-
-Write the spec using the template below and save it to `.context/issues/<issue-slug>/spec.md`. Synthesize the previous discussion, including agreed testing decisions and confirmed conflicts with map constraints. Collect every rule the user stated into the Constraints section; the spec is the only copy an implementing agent will see. Preserve existing confirmed decisions when updating a spec. Report its path and any unresolved assumptions. Do not invent missing decisions.
-
-Each spec has its own issue directory:
-
-```text
-.context/issues/
-└── <issue-slug>/
-    └── spec.md
-```
+Save it to `.context/issues/<issue-slug>/spec.md` using the template below. Put every rule the user stated under Constraints, because the spec is the only copy an implementer sees. When updating a spec, keep its confirmed decisions. Report the path and every decision the conversation left open, rather than filling it in.
 
 <spec-template>
 
@@ -57,15 +47,15 @@ Exception: if a prototype produced a snippet that encodes a decision more precis
 
 ## Constraints
 
-Rules the implementation must follow and later changes must keep, each with its reason. Include what must NOT be done, and rules for new modules that have no history yet. Architectural boundaries and hard-to-reverse choices belong here. The closing record is built from this section, so keep each rule to one line.
+Rules the implementation must follow and later changes must keep, each with its reason. Include what must NOT be done, and rules for new modules that have no history yet. Architectural boundaries and hard-to-reverse choices belong here. Keep each rule to one line, since map records are built from them.
 
 ### Supersedes
 
-Map record Constraints this work deliberately changes, each confirmed by the user. One line each:
+Map record Constraints or Architecture statements this work changes, each confirmed by the user. One line each:
 
-- `<record>.md`: "<old rule>" → "<new rule or removed>": <reason>
+- `<record>.md`: "<old statement>" → "<new statement or removed>": <reason>
 
-Write "None" when no record constraint changes. During implementation, these entries override only the rules they name; every other map record Constraint stays binding.
+Write "None" when nothing changes. Only the statements listed here may be broken; every other one stays binding.
 
 ## Testing Decisions
 

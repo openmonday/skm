@@ -1,5 +1,5 @@
 interface:
   display_name: "Implement Tasks"
-  short_description: "Integrate a local spec's task graph"
+  short_description: "Implement a task graph on an integration branch"
 policy:
   allow_implicit_invocation: false

@@ -20,9 +20,7 @@ The reader has a solid computer foundation but no software development experienc
 
 ## Workspace
 
-Use `.context/GLOSSARY.md` for domain vocabulary when present. If `.context/` is missing, ask the user to initialize it with `setup-context` or approve creating the workspace.
-
-Keep reference checkouts under `.context/reference/` and reports under `.context/issues/<issue-slug>/research.md`, with diagrams alongside the report. Never modify a reference checkout or the user's code. In a shared-worktree run, return the report and any new reference to the coordinator to save.
+Use the terms in `.context/GLOSSARY.md`. Keep reference checkouts under `.context/reference/`, and save the report as `.context/issues/<issue-slug>/research.md` with its diagrams beside it. Leave reference checkouts and the user's code unmodified.
 
 ## 1. Pin the inputs
 
@@ -55,7 +53,7 @@ Write sections 1 to 6 of the report, following the format and writing rules belo
 
 ## 4. Map onto this project
 
-Write sections 7 and 8. Read the relevant parts of the user's project and applicable map records under `.context/map/`. For each relevant project file, run `python3 /path/to/research/scripts/query-map.py <project-root-relative-file> [more-files ...]` from the target Git project, resolving the script path relative to this skill. Read all matching records, including their Constraints; continue if none exist. The query exits 1 if records were skipped and results may be incomplete, or 2 for invalid input or environment; investigate errors. As scope becomes clearer, inspect additional code and records. Check relevant records' `since` commits and covered paths against Git history and code, and report stale records, disagreements with code, or conflicting records rather than silently choosing between them. Identify constraints a suggestion would change; leave map records untouched. If the project has no relevant code yet, say so and describe the minimal starting shape instead.
+Write sections 7 and 8. Read the parts of the user's project the feature would touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every record it lists. Name each Constraint or Architecture statement a suggestion would break. If the project has no relevant code yet, say so and describe the smallest starting shape.
 
 Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or change code.
 
@@ -108,7 +106,7 @@ A table of the decisions that differ between references, and what drives each ch
 Suggestions, not decisions:
 - Where the feature would sit in this project, and what it would touch (cite files and map records).
 - Which reference approach fits this project's scale and constraints, and what to leave out.
-- Map record Constraints the feature would conflict with, as candidates to supersede.
+- Map record Constraints and Architecture statements the feature would break, as candidates to supersede.
 - Risks, and the smallest first slice worth building.
 
 ## 8. Open questions

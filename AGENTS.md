@@ -11,6 +11,22 @@ This project manages reusable agent skills. It collects reference skills, adapts
 - `scripts/` contains project automation and maintenance utilities.
 - `src/` and `test/` contain project code and its tests.
 
+## Skill design rules
+
+- Give each skill one responsibility and one job. When a task needs a second job, create a second skill instead of broadening the first.
+- Keep every skill self-contained. Never name or depend on another skill in any skill file; state the required setup, inputs, or outcome in the skill's own terms.
+- Follow the standard skill layout, with `SKILL.md` as the execution guide:
+
+  ```text
+  skill-name/
+  |-- SKILL.md
+  |-- scripts/       Optional executable helpers
+  |-- references/    Optional instructions or documentation loaded on demand
+  `-- assets/        Optional templates or files used in generated output
+  ```
+
+- Place each supporting file in the directory that matches its role instead of leaving it beside `SKILL.md` or in `scripts/` when it is not executable.
+
 ## Skill customization rules
 
 - Never modify a skill directly under `upstream/`.
@@ -26,7 +42,7 @@ This project manages reusable agent skills. It collects reference skills, adapts
 2. Copy the complete skill directory from `upstream/` to the target location under `skills/`.
 3. Make all customizations only in the copied directory.
 4. Verify that the reference directory has not changed.
-5. Check the customized `SKILL.md` and run relevant tests or validation scripts.
+5. Check the customized `SKILL.md` against the skill design rules and run relevant tests or validation scripts.
 
 ## General conventions
 

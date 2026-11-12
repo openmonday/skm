@@ -1,68 +1,46 @@
 ---
 name: implement-tasks
-description: Implement a local spec and its task graph on an integration branch using parallel worktrees.
+description: Implement a local spec's task graph on an integration branch, with parallel worktrees.
 disable-model-invocation: true
 ---
 
-# Implement Tasks
+# Implement tasks
 
-Deliver the entire spec on one **integration branch**. Treat its tasks as a dependency graph, scheduling the **frontier** as prerequisites complete.
+Deliver the spec at `.context/issues/<issue-slug>/spec.md` and its task files on one **integration branch**. Ask which issue is meant if it is unclear. Task files follow [the task format](references/TASKS.md). Worktrees and ownership follow [the worktree guide](references/WORKTREES.md).
 
-If `.context/` is missing, stop and ask the user to initialize it with `setup-context`. Resolve the spec at `.context/issues/<issue-slug>/spec.md`; ask if the issue is ambiguous. If the spec is missing, stop and ask the user for a spec; if it has no tasks, stop and ask the user for a task graph. Read [task conventions](TASKS.md) for task states and [WORKTREES.md](WORKTREES.md) for ownership and worktrees.
+## Map constraints
+
+For every file a task touches, run `scripts/query-map.py <file>...` from the project root and read every record it lists. Treat their Constraints and Architecture as requirements, except those the spec lists under Supersedes. A worker that would break any other one stops and reports, and the coordinator asks the user. `.context/map/` describes committed code; leave it as is.
 
 ## 1. Validate the plan
 
-Read the complete spec and tasks. Resolve every dependency and check the graph for missing references and cycles. Read `.context/GLOSSARY.md` when present and use its vocabulary. For affected files, run `scripts/query-map.py <file>...` from the project root and read matching map records; continue if none exist. Check their `since` commits and covered paths against Git history and code, and report stale or conflicting records. Treat Constraints as requirements alongside the spec, except for rules explicitly replaced by confirmed Supersedes entries. Pass relevant records and Supersedes to every worker; before editing additional files, workers must query and read their records too. A worker that would break any other constraint stops and reports back for user clarification. Leave map records untouched until code is committed. Reuse agreed test seams; clarify unresolved acceptance requirements before implementation.
+Read the spec, every task, and `.context/GLOSSARY.md`. Check that every blocker exists and the graph has no cycles. Settle unclear acceptance criteria with the user.
 
-Record the starting worktree status. Pin the work's initial review-base commit before implementation, record it in the spec, and reuse it on resume so final review covers the entire effort. If a resumed feature lacks that base, reconstruct and verify it from branch history before final review. Use a clean integration worktree so unrelated edits cannot enter merges or review. On resume, reconcile existing work and task ownership using the workspace rules.
+Pin the review base: the commit the work starts from. Record it and the integration branch in the spec. On resume, reuse both and reconcile task states with the existing branches.
 
-An optional exploration subagent may inspect code or external docs and return findings. The coordinator saves useful notes in the shared workspace; all workers receive pointers to these notes rather than duplicated context.
+**Done:** the graph is valid, and the review base and integration branch are recorded.
 
-**Done:** every task is accounted for, the dependency graph is valid, and implementation can start at a known baseline.
+## 2. Run the frontier
 
-## 2. Prepare integration and workers
+For each ready task, the coordinator claims it and prepares its worktree from the current integration tip. Each worker, preferably a background subagent, receives the spec and task paths, the relevant records and Supersedes, the branch, and the worktree. Each worker:
 
-Create the integration branch from the agreed base, or resume the existing integration branch for this feature. If the owner worktree has unrelated edits, use a separate clean integration worktree and prepare its shared `.context` link too. Record the integration branch and owner workspace in the spec. For each ready task, the coordinator claims it and prepares a dedicated branch and worktree from the current integration tip, following [WORKTREES.md](WORKTREES.md).
+1. Confirms its branch starts at the assigned integration commit.
+2. Implements the task with test-driven development and verifies its acceptance criteria.
+3. Commits, merges the current integration tip into its branch, resolves conflicts, and reruns affected checks.
+4. Returns its commits, check results, open problems, and proposed changes to shared files.
 
-Workers read ordinary `.context/...` paths and leave shared files to the coordinator. If parallel worktrees are unavailable, work sequentially in the owner workspace with the same task graph, verification, and review requirements.
+## 3. Integrate
 
-**Done:** each dispatched task has one owner and a verified, isolated workspace with readable shared context.
+Merge task branches into the integration branch one at a time. Verify the task's acceptance criteria on the merged result, then mark it `done` with its commits and checks under Verification. Apply proposed shared-file changes centrally. Recompute the frontier and dispatch newly ready tasks while other workers continue.
 
-## 3. Implement the frontier
+**Done:** every task is `done` or `dropped`, and no worker has an open failure.
 
-Run implementer subagents in the background when available. Each receives the spec/task paths, agreed test seams, branch, worktree, and any relevant notes. Each worker:
+## 4. Review the whole spec
 
-1. Confirms its branch descends from the assigned integration commit before editing. Reports a mismatch so the coordinator can reconcile it while preserving existing work.
-2. Uses test-driven development to implement the task and verifies its acceptance criteria.
-3. Commits its scoped changes with conventional commit messages, merges the current integration tip into its task branch, resolves conflicts, and reruns affected checks.
-4. Returns its branch/commit, check results, unresolved findings, and proposed shared-document updates.
+Run the full test suite and type checks on the integration branch. Review the full diff from the review base against the spec, every task, and project standards. Reopen tasks with findings, fix them through one worker, integrate, and rerun the affected checks.
 
-Use context pointers and concise results for communication. A worker report is ready for integration, not proof that a task is done.
+**Done:** the spec is satisfied and the final check results are recorded.
 
-## 4. Integrate and advance
+## 5. Close out
 
-Serialize integration merges. A merger subagent may perform each merge, but the coordinator owns scheduling and shared-document updates. If integration advanced after a worker synchronized, merge against the latest tip and resolve and verify any conflicts before accepting the task.
-
-Verify the merged acceptance behavior on the integration branch before marking a task `done` and recording its commit references and checks under `Verification`. Recompute the frontier and launch newly ready tasks while independent workers continue. Apply agreed glossary updates centrally so later workers read current terms.
-
-**Done:** all task implementations are integrated and verified, with recorded commit references and no outstanding worker failures.
-
-## 5. Review the whole spec
-
-Run the full applicable test suite and typechecking on the integration branch. Review the changes against the work's original review-base commit, the spec, all tasks, and project standards.
-
-Reopen tasks affected by review findings. Use one implementer subagent to fix the findings, with a shared workspace prepared as above; integrate its corrections and rerun affected checks. If subagents are unavailable, the coordinator performs the same work sequentially.
-
-**Done:** the entire spec is satisfied, review findings are addressed, and final verification results are recorded.
-
-## 6. Close out locally
-
-Finalize task states. Report the integration branch, commits, checks, and limitations.
-
-If the feature added behavior with rules, set a boundary, reshaped modules, or revealed an unenforced rule, report the architectural decisions and modified files. Keep the spec and its Constraints and Supersedes as a source for recording those decisions.
-
-Keep the issue as the source of Constraints and Supersedes; propose cleanup separately rather than removing it automatically.
-
-Completion ends at the local integration branch.
-
-Clean up only worktrees created for this effort after confirming their work is integrated and safe to remove. Preserve the owner workspace and the context workspace and map records.
+Remove the worktrees and task branches this run created, once their work is integrated. Report the integration branch, its commits, the checks run, and remaining limitations.

@@ -26,14 +26,14 @@ class QueryTests(unittest.TestCase):
         self.record('two.md', ['src/'])
         r = self.query('src/a', 'src/nested/file', 'src2/file', 'lib/new')
         self.assertEqual(r.returncode, 0, r.stderr)
-        a, nested, false, lib = r.stdout.splitlines()[0:3], r.stdout, r.stdout.split("'src2/file':")[1].split("'lib/new':")[0], r.stdout.split("'lib/new':")[1]
+        a, nested, false, lib = r.stdout.splitlines()[0:3], r.stdout, r.stdout.split("src2/file\n")[1].split("lib/new\n")[0], r.stdout.split("lib/new\n")[1]
         self.assertTrue(any('module/one.md' in line for line in a))
         self.assertIn('two.md', nested)
-        self.assertIn('(no matching records)', false)
+        self.assertIn('(no record)', false)
         self.assertIn('module/one.md', lib)
 
     def test_missing_invalid_and_incomplete(self):
-        self.assertIn('no matching', self.query('new/file').stdout)
+        self.assertIn('(no record)', self.query('new/file').stdout)
         for path in ('../x', '/x', 'a/./b', 'a//b', 'x*', 'foo/'):
             self.assertEqual(self.query(path).returncode, 2, path)
         self.record('ok.md', ['src'])
