@@ -7,6 +7,7 @@ import unittest
 
 SCRIPTS = Path(__file__).resolve().parents[1] / 'scripts'
 COVERAGE = SCRIPTS / 'check-coverage.py'
+FORMAT = SCRIPTS / 'check-format.py'
 EXPIRED = SCRIPTS / 'check-expired.py'
 
 
@@ -22,6 +23,7 @@ class Checks(unittest.TestCase):
         self.put('src/nested/b', 'b')
         self.git('add', '.')
         self.git('commit', '-qm', 'initial')
+        self.put('.git/info/exclude', '/.context/\n')
         self.initial = self.git('rev-parse', 'HEAD').strip()
 
     def git(self, *args):
@@ -55,9 +57,9 @@ class Checks(unittest.TestCase):
         self.record(paths=('src/a',))
         self.assertIn("'src/nested/b'", self.check().stdout)
         self.record(extra='```\ncode\n```\n')
-        out = self.check().stdout
+        out = self.check(FORMAT).stdout
         self.assertIn('code fences', out)
-        self.assertIn("'src/a'", out)
+        self.assertIn("'src/a'", self.check().stdout)
 
     def test_invalid_since_and_staged_file(self):
         self.record('1234567')
@@ -74,9 +76,9 @@ class Checks(unittest.TestCase):
 
     def test_bad_paths_and_tracked_records(self):
         self.record(paths=('../src',))
-        self.assertIn('invalid literal', self.check().stdout)
+        self.assertIn('invalid literal', self.check(FORMAT).stdout)
         self.record()
-        self.git('add', '.context/map/source.md')
+        self.git('add', '-f', '.context/map/source.md')
         self.assertIn("'.context/map/source.md'", self.check().stdout)
 
     def test_recursive_records_and_separate_reports(self):
@@ -98,7 +100,7 @@ class Checks(unittest.TestCase):
 
     def test_output_styles_and_streams(self):
         self.record()
-        for script, title in ((COVERAGE, 'FORMAT NON-COMPLIANCE'), (EXPIRED, 'EXPIRED')):
+        for script, title in ((COVERAGE, 'UNRECORDED'), (FORMAT, 'FORMAT NON-COMPLIANCE'), (EXPIRED, 'EXPIRED')):
             result = self.check(script)
             self.assertEqual(result.returncode, 0)
             self.assertEqual(result.stderr, '')
@@ -133,20 +135,53 @@ class Checks(unittest.TestCase):
             self.assertIn(b'\x1b[2m(0)\x1b[0m', output)
             self.assertIn(b'\x1b[2m(none)\x1b[0m', output)
 
+    def test_untracked_and_ignored_files(self):
+        self.record()
+        self.put('src/new', 'new')
+        self.put('loose', 'untracked')
+        self.put('.gitignore', 'ignored\n')
+        self.put('ignored', 'ignored')
+        result = self.check()
+        self.assertIn("'loose'", result.stdout)
+        self.assertIn("'.gitignore'", result.stdout)
+        self.assertNotIn("'src/new'", result.stdout)
+        self.assertNotIn("'ignored'", result.stdout)
+        self.assertIn('no commit at HEAD', self.check(EXPIRED).stdout)
+
+    def test_separate_format_findings(self):
+        self.record(extra='```\n')
+        self.assertNotIn('code fences', self.check().stdout)
+        self.assertIn('code fences', self.check(FORMAT).stdout)
+        result = self.check(EXPIRED)
+        self.assertIn('.context/map/source.md', result.stdout)
+        self.assertIn('check-format.py', result.stdout)
+
     def test_failure_output_is_stderr(self):
         with tempfile.TemporaryDirectory() as d:
-            for script in (COVERAGE, EXPIRED):
+            for script in (COVERAGE, FORMAT, EXPIRED):
                 result = subprocess.run(['python3', str(script)], cwd=d, capture_output=True, text=True)
                 self.assertEqual(result.returncode, 2)
                 self.assertEqual(result.stdout, '')
                 self.assertIn('Cannot check:', result.stderr)
                 self.assertNotIn('\x1b', result.stderr)
 
+    def test_scripts_run_without_sibling_modules(self):
+        self.record()
+        with tempfile.TemporaryDirectory() as directory:
+            for script in (COVERAGE, FORMAT, EXPIRED):
+                isolated = Path(directory) / script.name
+                isolated.write_bytes(script.read_bytes())
+                expected = self.check(script)
+                result = self.check(isolated)
+                self.assertEqual((result.returncode, result.stdout, result.stderr),
+                                 (expected.returncode, expected.stdout, expected.stderr))
+                isolated.unlink()
+
     def test_format_strictness(self):
         self.record(extra='x\n'*55)
-        self.assertIn('under 60 lines', self.check().stdout)
+        self.assertIn('under 60 lines', self.check(FORMAT).stdout)
         self.put('.context/map/bad.md', '---\ntype: feat\ntype: fix\nfiles: []\nsince: abcdef0\n---\n# Bad\n')
-        out = self.check().stdout
+        out = self.check(FORMAT).stdout
         self.assertIn('duplicate type', out)
         self.assertIn('nonempty block list', out)
 

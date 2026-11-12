@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check committed map coverage and record freshness; never modifies files."""
+"""Check map format; never modifies files."""
 import os
 import re
 import subprocess
@@ -54,14 +54,14 @@ def parse_front_matter(lines):
     return end, fields, paths, issues
 
 
-def run(mode):
+def run():
     try:
         root = Path(os.fsdecode(git('rev-parse', '--show-toplevel').strip()))
         os.chdir(root)
         git('rev-parse', '--verify', 'HEAD^{commit}')
         tracked = sorted(os.fsdecode(p) for p in git('ls-files', '-z', '--cached').split(b'\0') if p)
         tracked = sorted(set(tracked))
-        history = [x.decode() for x in git('rev-list', 'HEAD').splitlines()] if mode == 'freshness' else []
+        files = sorted(set(tracked) | {os.fsdecode(p) for p in git('ls-files', '-z', '--others', '--exclude-standard').split(b'\0') if p})
     except subprocess.CalledProcessError as e:
         print('Cannot check: Git repository with a committed HEAD required: ' + os.fsdecode(e.stderr).strip(), file=sys.stderr)
         return 2
@@ -69,9 +69,7 @@ def run(mode):
     if map_dir.exists() and not map_dir.is_dir():
         print('Cannot check: .context/map is not a directory', file=sys.stderr)
         return 2
-    errors, expired = [], []
-    covered = set()
-    latest_cache = {}
+    errors = []
     records = sorted(p for p in map_dir.rglob('*') if p.is_file() or p.is_symlink()) if map_dir.exists() else []
     for record in records:
         name = str(record.relative_to(root))
@@ -122,56 +120,25 @@ def run(mode):
             if not valid_path(path):
                 issues.append(f'invalid literal project-relative path: {path!r}')
                 continue
-            found = {p for p in tracked if p == path or p.startswith(path.rstrip('/') + '/')}
+            found = {p for p in files if p == path or p.startswith(path.rstrip('/') + '/')}
             if not found:
-                issues.append(f'path matches no tracked files: {path!r}')
+                issues.append(f'path matches no eligible files: {path!r}')
             matches.update(found)
         # Do not let malformed records hide coverage gaps or produce misleading freshness results.
         if issues:
             errors.append(f'{name}: ' + '; '.join(issues))
             continue
-        covered.update(matches)
-        if mode == 'coverage':
-            continue
-        try:
-            resolved = git('rev-parse', '--verify', since + '^{commit}').decode().strip()
-            if resolved not in history:
-                expired.append(f'{name}: since {since} is not reachable from HEAD')
-                continue
-        except subprocess.CalledProcessError:
-            expired.append(f'{name}: since {since} is invalid or ambiguous')
-            continue
-        no_history = []
-        commits = set()
-        for path in sorted(matches):
-            if path not in latest_cache:
-                latest_cache[path] = git('log', '-1', '--format=%H', 'HEAD', '--', ':(literal)' + path).decode().strip()
-            if latest_cache[path]:
-                commits.add(latest_cache[path])
-            else:
-                no_history.append(path)
-        if no_history:
-            expired.append(f'{name}: tracked files have no commit at HEAD: {no_history!r}; commit them before setting since')
-        if commits:
-            latest = next(h for h in history if h in commits)
-            if resolved != latest:
-                expired.append(f'{name}: since {since}, expected {latest}; covered files: {sorted(matches)!r}')
-    unrecorded = sorted(set(tracked) - covered)
-    reports = [('FORMAT NON-COMPLIANCE', errors), ('UNRECORDED', unrecorded)] if mode == 'coverage' else [('EXPIRED', expired)]
-    for index, (title, items) in enumerate(reports):
-        if index:
-            print()
-        report_section(title, items, quoted=title == 'UNRECORDED')
-    if mode == 'freshness' and errors:
-        print()
-        report_section('SKIPPED INVALID RECORDS', [item.split(':', 1)[0] for item in errors],
-                       note='; run check-coverage.py for details')
-    return 1 if any(items for _, items in reports) or (mode == 'freshness' and errors) else 0
+    report_section('FORMAT NON-COMPLIANCE', errors)
+    return 1 if errors else 0
 
 
-def main(mode):
+def main():
     try:
-        sys.exit(run(mode))
+        sys.exit(run())
     except (OSError, subprocess.CalledProcessError) as e:
         print(f'Cannot complete check: {e}', file=sys.stderr)
         sys.exit(2)
+
+
+if __name__ == "__main__":
+    main()
