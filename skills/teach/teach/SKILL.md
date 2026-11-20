@@ -45,7 +45,7 @@ Render the diagram to SVG in `diagrams/` and show it, rather than suggesting one
 - D3 with HTML/SVG for interaction or step-by-step state changes.
 - ELK with SVG only when compound graphs or explicit ports need more layout control.
 
-Check the tools first (`dot -V` for Graphviz, `npx --version` for D3 or ELK). If a tool or package is missing, stop and ask the user to install it; never create environments, install packages, or add dependencies to the user's project. Convert SVG to PNG only if inspection or the user's format requires it. The lesson reuses the diagrams shown in conversation.
+Check the tools first (`dot -V` for Graphviz, `npx --version` for D3 or ELK). If a tool or package is missing, stop and ask the user to install it; never create environments, install packages, or add dependencies to the user's project. The lesson reuses the diagrams shown in conversation.
 
 Let the primary relationships determine the layout; split crowded views or show successive states. Inspect the rendered output and fix misleading placement, overlaps, unreadable labels, and confusing connections before presenting it. If inspection is unavailable, say so.
 
