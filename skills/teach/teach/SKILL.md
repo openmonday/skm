@@ -60,14 +60,14 @@ The lesson is complete when a reader without the conversation can achieve the ob
 ## Files
 
 ```
-.lesson/python/list-comprehension/
+.lessons/python/list-comprehension/
   list-comprehension.md
   diagrams/
     evaluation-order.dot
     evaluation-order.svg
 ```
 
-- Path: `.lesson/<topic>/<lesson-slug>/`, created when absent.
+- Path: `.lessons/<topic>/<lesson-slug>/`, created when absent.
 - `<topic>` is one coarse kebab-case category, such as `database` or `python`. Put later lessons on the same subject under the existing topic.
 - `<lesson-slug>` is kebab-case, such as `list-comprehension`. The lesson is `<lesson-slug>.md`.
 - Diagrams and other generated artifacts go in `diagrams/`, created only when needed and linked with relative paths (`diagrams/evaluation-order.svg`).
