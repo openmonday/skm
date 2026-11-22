@@ -39,7 +39,7 @@ The step is complete when the user can achieve the objective: ask one question t
 
 ## 4. Write the lesson
 
-Read [references/example-lesson.md](references/example-lesson.md), then write the lesson as a finished explanation of what the conversation taught, in the same example, terms, and diagrams. State the objective at the top, and fold in the questions the user asked and the explanations that resolved them.
+Read [references/example.md](references/example.md), then write the lesson as a finished explanation of what the conversation taught, in the same example, terms, and diagrams. State the objective at the top, and fold in the questions the user asked and the explanations that resolved them.
 
 Use headings that name the ideas being explained. Let concrete behavior, code, and diagrams carry the explanation, with prose connecting causes to consequences. Use high-trust sources for claims that are specialized, current, or easy to misremember, and name the primary source for further reading.
 
