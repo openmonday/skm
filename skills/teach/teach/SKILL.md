@@ -13,9 +13,9 @@ When the request names a lesson from a roadmap, read [references/roadmap.md](ref
 
 ## 1. Read the learner profile
 
-Read `.lessons/learner.md` (see Learner profile). Name the prerequisites the lesson relies on (for CORS: HTTP requests and headers, cookies, what an origin is). A prerequisite is **settled** when the profile, the request, or this conversation shows whether the user knows it.
+Read `.lessons/learner.md` (see Learner profile). Name the prerequisites the lesson relies on (for CORS: HTTP requests and headers, cookies, what an origin is). A prerequisite is **settled** when the profile (`stated` or `checked`), the request, or this conversation shows whether the user knows it.
 
-When every prerequisite is settled, open the teaching with one line naming what you assume the user knows, and continue. Otherwise ask about only the unsettled prerequisites, in one message, and wait.
+When every prerequisite is settled, open the teaching with one line naming what you assume the user knows, and continue. When `.lessons/learner.md` marks a needed prerequisite as `covered` or lists a related `Gaps` entry, treat it as unsettled and open with a quick warm-up check on that concept before teaching the new material. Otherwise ask about only the unsettled prerequisites, in one message, and wait.
 
 ## 2. Choose the objective
 
@@ -29,19 +29,22 @@ Start from what the user knows and define every term they lack.
 
 Teach through a concrete problem: enough context to show what must be accomplished and why the mechanism matters, then one coherent example that makes its behavior visible, developed only as far as the objective needs.
 
-Organize the explanation around the subject's causal structure: what problem exists, how the mechanism addresses it, and what consequences follow. A sequence of improving designs works when each intermediate design reveals something essential; other subjects are clearer as a direct comparison, a worked execution, or a walk through how a small piece of code behaves.
+Organize the explanation around the subject's causal structure: what problem exists, how the mechanism addresses it, and what consequences follow. A sequence of improving designs works when each intermediate design reveals something essential; other subjects are clearer as a direct comparison, a worked execution, or a walk through how a small piece of code behaves. Before revealing a key mechanism or consequence, ask the user to predict what happens on a concrete input or scenario in the example; use counterexamples to surface and repair common misreadings.
 
-Present one step of that structure per message, then wait for the user's reply. Answer their questions and repair misunderstandings in the same example before moving on.
+Present one causal step per message, ending with a lightweight check or prediction prompt, then wait for the user's reply. Answer their questions and repair misunderstandings in the same example before moving on; if they already grasp a step or ask to move faster, advance directly to the next step or the objective check.
 
 When text alone would force the reader to reconstruct a structure, track several relationships, or compare changing states, render an SVG diagram and explain with it, without being asked; read [references/diagrams.md](references/diagrams.md) before the first one.
 
-The step is complete when the user can achieve the objective: ask one question that applies the objective to the example, and keep teaching until they answer it correctly in their own words, or until they ask for the files.
+The step is complete when the user achieves the objective (or asks for the files):
+
+- For an **explain** objective, ask one question that applies the objective to the example, and keep teaching until they answer it correctly in their own words.
+- For a **doing** objective (writing code, editing config, or debugging), set up minimal starter files (and a quick check script if useful, using existing tools without adding project dependencies) inside `.lessons/<topic>/<slug>/lab/`, ask the user to edit or run their solution there, and verify it handles the objective's case and edge cases.
 
 ## 4. Write the lesson
 
-Read [references/example-lesson.md](references/example-lesson.md), then write the lesson as a finished explanation of what the conversation taught, in the same example, terms, and diagrams. State the objective at the top, and fold in the questions the user asked and the explanations that resolved them.
+Read [references/example-lesson.md](references/example-lesson.md), then write the lesson as a finished explanation of what the conversation taught, in the same example, terms, and diagrams. State the objective at the top, and fold in the questions the user asked and the explanations that resolved them—distilling casual analogies into exact boundaries and edge-case clarifications.
 
-Use headings that name the ideas being explained. Let concrete behavior, code, and diagrams carry the explanation, with prose connecting causes to consequences. Use high-trust sources for claims that are specialized, current, or easy to misremember, and name the primary source for further reading.
+Use headings that name the ideas being explained. Let concrete behavior, code, and diagrams carry the explanation, with prose connecting causes to consequences. When `lab/` exists, link its key files and include the verification command or solution summary so the lesson remains runnable. Use high-trust sources for claims that are specialized, current, or easy to misremember, and name the primary source for further reading.
 
 The lesson is complete when a reader without the conversation can achieve the objective: they understand the problem, the mechanism, and why it works.
 
@@ -56,7 +59,7 @@ The step is complete when `.lessons/learner.md` records every prerequisite the u
 - Each **Knows** entry ends with its evidence: `stated` (the user said so), `checked` (they answered the check question), or `covered` (taught, but they asked for the files before answering). Only `stated` and `checked` settle a prerequisite.
 - **Gaps** holds prerequisites the user said they lack and misreadings they showed; move an entry to Knows once a later lesson resolves it.
 - **Preferences** holds only what the user asked for or what held across two or more lessons.
-- Edit entries in place: merge duplicates, upgrade evidence, delete what a later lesson disproved. Keep it under 80 lines; it is a summary, not a log.
+- Edit entries in place: merge duplicates, upgrade evidence, delete what a later lesson disproved. Keep it under 80 lines; it is a summary, not a log. When approaching 80 lines, fold foundational `Knows` entries into higher-level capabilities proven by later `checked` lessons, retaining recent `Knows`, cross-topic fundamentals, and unresolved `Gaps`.
 
 ## Files
 
@@ -66,7 +69,8 @@ The step is complete when `.lessons/learner.md` records every prerequisite the u
   web/                         <topic>: one coarse kebab-case category; reuse an existing one
     cors/                      <lesson-slug>, kebab-case
       cors.md                  <lesson-slug>.md
-      diagrams/                only when needed; link as diagrams/preflight-flow.svg
+      assets/                  only when needed; link as assets/preflight-flow.svg
         preflight-flow.dot
         preflight-flow.svg
+      lab/                     only for doing objectives: starter files, solution, and checks
 ```

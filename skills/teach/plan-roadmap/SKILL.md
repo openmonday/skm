@@ -43,25 +43,25 @@ Present the drafted roadmap before writing any files: show the proposed save pat
 
 ## 4. Save and check
 
-Save to `.lessons/<topic>/roadmap.json`, creating the folders when absent. `<topic>` is one coarse kebab-case category, such as `database` or `python`; reuse an existing topic folder for the same subject. A topic has one roadmap: extend it rather than starting a second.
+Save to `.lessons/<topic>/roadmap.json`, creating the folders when absent. `<topic>` is one coarse kebab-case category, such as `web` or `database`; reuse an existing topic folder for the same subject. A topic has one roadmap: extend it rather than starting a second.
 
 ```json
 {
-  "title": "Python iteration",
-  "goal": "Write and debug generator pipelines over large files",
+  "title": "Web cross-origin security",
+  "goal": "Diagnose and configure cross-origin browser requests safely",
   "lessons": [
     {
-      "slug": "list-comprehension",
-      "title": "List comprehensions",
-      "objective": "Explain the evaluation order of a nested list comprehension",
+      "slug": "same-origin-policy",
+      "title": "Same-origin policy",
+      "objective": "Explain what makes two URLs cross-origin and why browsers block cross-origin reads",
       "requires": [],
       "status": "planned"
     },
     {
-      "slug": "generators",
-      "title": "Generators",
-      "objective": "Write a generator that streams a large file line by line",
-      "requires": ["list-comprehension"],
+      "slug": "cors",
+      "title": "CORS",
+      "objective": "Explain why the browser blocks the dashboard from reading the API's response, and which header lets it",
+      "requires": ["same-origin-policy"],
       "status": "planned"
     }
   ]
@@ -72,10 +72,10 @@ Save to `.lessons/<topic>/roadmap.json`, creating the folders when absent. `<top
 - `status` is `planned`, `done`, or `skipped` (the user chose not to take the lesson; its edges stay so the order still reads).
 - These five lesson fields are the whole format. Lesson content, dates, and scores stay out of the roadmap.
 
-Run the checker from this skill's folder:
+Run the checker using the script in this skill's folder (`<skill-dir>`):
 
 ```bash
-node scripts/check-roadmap.mjs <project>/.lessons/<topic>/roadmap.json
+node <skill-dir>/scripts/check-roadmap.mjs <project>/.lessons/<topic>/roadmap.json
 ```
 
 **Done** when the checker passes: every field is valid, slugs are unique, every `requires` names an earlier lesson, and every `done` lesson has its file. Report the saved path and the lessons ready to teach first (those whose `requires` are all `done` or `skipped`).
