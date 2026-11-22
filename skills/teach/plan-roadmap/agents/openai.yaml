@@ -1,0 +1,5 @@
+interface:
+  display_name: "Plan Roadmap"
+  short_description: "Plan the lessons for learning a subject"
+policy:
+  allow_implicit_invocation: false
