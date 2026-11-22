@@ -96,8 +96,12 @@ def main():
     except subprocess.CalledProcessError:
         print(f'{PROG}: not inside a Git repository; run from the project', file=sys.stderr)
         return 2
-    directory = root / '.context/map'
-    if (root / '.context').is_symlink() or directory.is_symlink() or (directory.exists() and not directory.is_dir()):
+    context = root / '.context'
+    if (context.exists() or context.is_symlink()) and not context.is_dir():
+        print(f'{PROG}: .context must be a directory', file=sys.stderr)
+        return 2
+    directory = context / 'map'
+    if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
         print(f'{PROG}: .context/map must be a real directory', file=sys.stderr)
         return 2
     records, problems = scan(root, directory) if directory.exists() else ([], [])

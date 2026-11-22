@@ -63,6 +63,22 @@ class QueryTests(unittest.TestCase):
         self.assertIn('symbolic-link', r.stderr)
         self.assertIn('ok.md', r.stdout)
 
+    def test_symlink_context_directory(self):
+        with tempfile.TemporaryDirectory() as shared:
+            shared_context = Path(shared) / '.context'
+            (shared_context / 'map').mkdir(parents=True)
+            (shared_context / 'map/ok.md').write_text('---\ntype: feat\nfiles:\n  - src/\nsince: abc1234\n---\n# Title\n')
+            (self.root / '.context').symlink_to(shared_context, target_is_directory=True)
+            r = self.query('src/a')
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn('ok.md', r.stdout)
+
+    def test_broken_symlink_context(self):
+        (self.root / '.context').symlink_to(self.root / 'missing-context', target_is_directory=True)
+        r = self.query('src/a')
+        self.assertEqual(r.returncode, 2)
+        self.assertIn('.context must be a directory', r.stderr)
+
 
 if __name__ == '__main__':
     unittest.main()

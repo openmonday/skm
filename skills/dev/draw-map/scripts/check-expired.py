@@ -174,26 +174,57 @@ def main(run):
     sys.exit(2)
 
 
+def is_ancestor(ancestor, descendant='HEAD'):
+    return subprocess.run(
+        ['git', 'merge-base', '--is-ancestor', ancestor, descendant],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).returncode == 0
+
+
+def newest_commit(paths):
+    """Return the newest commit on HEAD touching any of the given committed paths."""
+    candidates = []
+    for i in range(0, len(paths), 200):
+        batch = [':(literal)' + p for p in paths[i:i + 200]]
+        commit = git('log', '-1', '--format=%H', 'HEAD', '--', *batch).decode().strip()
+        if commit and commit not in candidates:
+            candidates.append(commit)
+    if len(candidates) <= 1:
+        return candidates[0] if candidates else ''
+    best = candidates[0]
+    for candidate in candidates[1:]:
+        if is_ancestor(best, candidate):
+            best = candidate
+        elif not is_ancestor(candidate, best):
+            # Neither is an ancestor (merge branches); ask git log -1 on the combined paths.
+            # Unreachable in practice unless >200 files, fallback to timestamp order.
+            t_best = int(git('show', '-s', '--format=%ct', best).decode().strip())
+            t_cand = int(git('show', '-s', '--format=%ct', candidate).decode().strip())
+            if t_cand > t_best:
+                best = candidate
+    return best
+
+
 def run():
     root, files, records = load_project()
-    history = git('rev-list', 'HEAD').decode().split()
-    order = {h: i for i, h in enumerate(history)}
     latest_cache, expired, pending, skipped = {}, [], [], []
     for record in records:
         if record['issues']:
             skipped.append(record['name'])
             continue
-        commits = set()
+        commits, committed_paths = set(), []
         for path in sorted(record['matches']):
             if path not in latest_cache:
                 latest_cache[path] = git('log', '-1', '--format=%H', 'HEAD', '--', ':(literal)' + path).decode().strip()
             if latest_cache[path]:
                 commits.add(latest_cache[path])
+                committed_paths.append(path)
             else:
                 pending.append((path, record['name']))
         if not commits:
             continue
-        expected = min(commits, key=order.__getitem__)
+        expected = next(iter(commits)) if len(commits) == 1 else newest_commit(committed_paths)
         since = record['fields']['since']
         try:
             resolved = git('rev-parse', '--verify', '-q', since + '^{commit}').decode().strip()
@@ -201,14 +232,15 @@ def run():
             resolved = None
         if resolved == expected:
             continue
+        reachable = resolved is not None and is_ancestor(resolved, 'HEAD')
         if resolved is None:
             problem = f'since {since} is not a commit'
-        elif resolved not in order:
+        elif not reachable:
             problem = f'since {since} is not reachable from HEAD'
         else:
             problem = f'since {since}'
         review = None
-        if resolved in order:
+        if reachable:
             paths = ' '.join(shlex.quote(p) for p in record['paths'])
             review = f'git log -p {since}..{expected[:12]} -- {paths}'
         expired.append((record['name'], problem, expected, review))
