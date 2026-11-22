@@ -1,5 +1,5 @@
 ---
-name: plan-roadmap
+name: roadmap
 description: Plans a learning roadmap for a subject as ordered lessons with prerequisites, saved to .lessons/<topic>/roadmap.json.
 disable-model-invocation: true
 argument-hint: "What subject should the roadmap cover?"

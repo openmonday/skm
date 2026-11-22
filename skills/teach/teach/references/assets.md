@@ -1,4 +1,4 @@
-# Diagrams
+# Assets (Diagrams)
 
 Render each diagram to SVG in the lesson's `assets/` folder and show it, rather than suggesting one or showing its source:
 
@@ -12,4 +12,4 @@ Let the primary relationships determine the layout; split crowded views or show 
 
 Inspect the rendered output and fix misleading placement, overlaps, unreadable labels, and confusing connections before presenting it. If inspection is unavailable, say so.
 
-The lesson reuses the diagrams shown in conversation. Lessons are read as rendered Markdown, which strips scripts and embedded pages, so embed them as SVG images only.
+The lesson reuses the diagrams shown in conversation. Lessons are read as rendered Markdown, which strips scripts and embedded pages, so embed them as SVG images only (`assets/<diagram>.svg`).
