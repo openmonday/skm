@@ -10,7 +10,7 @@ Implement the spec at `.context/issues/<issue-slug>/spec.md` on the current bran
 
 ## 1. Establish scope
 
-Read the spec and `.context/GLOSSARY.md`. Record the current branch, the starting commit, and any uncommitted changes. The starting commit is the review base. Uncommitted changes that existed before the run stay out of the commit.
+Read the spec and `.context/GLOSSARY.md`. Record the current branch, the starting commit, and any uncommitted changes. The starting commit is the review base. Uncommitted changes that existed before the run stay out of the commit. Set the spec's `Status` to `in-progress`.
 
 Before editing a file, run `scripts/query-map.py <file>...` from the project root and read every record it lists. Treat their Constraints and Architecture as requirements, except those the spec lists under Supersedes. If the work would break any other one, stop and ask the user. `.context/map/` describes committed code; leave it as is.
 
@@ -24,6 +24,6 @@ Use test-driven development at the agreed seams. Run single test files and type 
 
 ## 3. Review and commit
 
-Review the diff from the review base against the spec and project standards, including new and staged files. Fix findings and rerun the affected checks. Commit only this work, and confirm the staged content is what you reviewed and tested.
+Review the diff from the review base against the spec and project standards, including new and staged files. Fix findings and rerun the affected checks. Commit only this work, and confirm the staged content is what you reviewed and tested. Then set the spec's `Status` to `done`.
 
-**Done:** the work is committed. Report the commit and check results.
+**Done:** the work is committed and the spec's Status is `done`. Report the commit and check results.

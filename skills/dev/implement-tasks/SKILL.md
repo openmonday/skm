@@ -16,7 +16,7 @@ For every file a task touches, run `scripts/query-map.py <file>...` from the pro
 
 Read the spec, every task, and `.context/GLOSSARY.md`. Check that every blocker exists and the graph has no cycles. Settle unclear acceptance criteria with the user.
 
-Pin the review base: the commit the work starts from. Record it and the integration branch in the spec. On resume, reuse both and reconcile task states with the existing branches.
+Pin the review base: the commit the work starts from. Record it and the integration branch in the spec as `Review base:` and `Integration branch:` lines under Status, and set Status to `in-progress`. On resume, reuse both and reconcile task states with the existing branches.
 
 **Done:** the graph is valid, and the review base and integration branch are recorded.
 
@@ -43,4 +43,4 @@ Run the full test suite and type checks on the integration branch. Review the fu
 
 ## 5. Close out
 
-Remove the worktrees and task branches this run created, once their work is integrated. Report the integration branch, its commits, the checks run, and remaining limitations.
+Remove the worktrees and task branches this run created, once their work is integrated. If every task is `done` or `dropped` and the final checks pass, set the spec's Status to `done`; otherwise leave it `in-progress`. Report the integration branch, its commits, the checks run, and remaining limitations.
