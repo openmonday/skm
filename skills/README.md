@@ -11,21 +11,19 @@ Install with `skm add @dev` or select individual skills, such as `skm add setup-
 | `setup-context` | Initialize the context workspace |
 | `research` | Investigate a topic using relevant code and reference material |
 | `grill-me` | Clarify requirements and discuss relevant code and map constraints |
-| `to-spec` | Turn the discussion into an issue specification |
-| `to-tasks` | Break work into actionable tasks |
-| `implement` | Implement focused work |
-| `implement-tasks` | Implement a task plan, potentially with parallel workers |
+| `to-issues` | Split the discussion into small issues with specs and module maps |
+| `implement` | Implement one issue as one commit |
 | `draw-map` | Audit and, with approval, update current-code map records |
 | `show-me` | Explain an idea with a focused visual |
 | `wait-what` | Re-explain an idea that was unclear |
 
-A possible workflow is `/research` → `/grill-me` → `/to-spec` → `/to-tasks` → `/implement-tasks` → `/draw-map`. Use `/implement` for focused work; consult each skill for prerequisites and verification.
+A possible workflow is `/research` → `/grill-me` → `/to-issues` → `/implement` once per ready issue → `/draw-map`. Consult each skill for prerequisites and verification.
 
 ```text
 .context/
 ├── GLOSSARY.md          # when present
 ├── map/                 # current code, behavior, and constraints
-├── issues/<issue-slug>/ # spec.md, tasks, and research as needed
+├── issues/<issue-slug>/ # spec.md, modules.md, and research as needed
 └── reference/           # reference code and libraries
 ```
 

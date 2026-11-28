@@ -1,5 +1,0 @@
-interface:
-  display_name: "To Tasks"
-  short_description: "Split a spec into tracer-bullet tasks"
-policy:
-  allow_implicit_invocation: false

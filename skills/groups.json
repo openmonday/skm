@@ -4,12 +4,10 @@
       "draw-map",
       "grill-me",
       "implement",
-      "implement-tasks",
       "research",
       "setup-context",
       "show-me",
-      "to-spec",
-      "to-tasks",
+      "to-issues",
       "wait-what"
     ],
     "teach": [
