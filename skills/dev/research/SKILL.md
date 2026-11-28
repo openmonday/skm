@@ -46,20 +46,20 @@ Tag every claim internally as **verified** (you read the code or ran it) or **in
 
 ## 3. Explain the references
 
-Write sections 1 to 3 of the report, following the report format below. Base them only on the references, before looking at the user's project, so the analysis is not bent toward the current code.
+Write `## The problem`, `## How the references solve it`, and (when there are several references) `## Comparison`, following the report format below. Base them only on the references, before looking at the user's project, so the analysis is not bent toward the current code.
 
-- If the core mechanism or algorithm cannot be explained in a few sentences in section 2, move the key concepts and core algorithms into `concepts.md` and link it from section 2.
+- If the core mechanism or algorithm cannot be explained in a few sentences in `## How the references solve it`, move the key concepts and core algorithms into `concepts.md` and link it from there.
 - Draw a diagram of where the feature sits in the reference, and of any flow with more than three hops or changing state. Write each as a `.dot` file in `assets/`, render it with `dot -Tsvg`, and inspect the SVG for overlaps, unreadable labels, and misleading connections; fix and re-render. Check `dot -V` first. If Graphviz is missing, ask the user whether to install it or continue with a hand-written minimal SVG. Never install tools.
 
-**Done:** sections 1 to 3 are filled, every code claim has a file-and-line citation, diagrams are rendered and inspected, and any limitation or evidence gap is stated. Diagrams that could not be verified are reported in the summary.
+**Done:** `## The problem`, `## How the references solve it`, and `## Comparison` (when applicable) are filled, every code claim has a file-and-line citation, diagrams are rendered and inspected, and any limitation or evidence gap is stated. Diagrams that could not be verified are reported in the summary.
 
 ## 4. Map onto this project
 
-Write sections 4 to 7 of the report. Read the parts of the user's project the feature would touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every module file it lists. Name each Constraint or Architecture statement an option would break. If the project has no relevant code yet, say so and design the smallest starting shape.
+Write `## Options for this project`, `## Recommendation`, `## Files to create and modify`, `## Open questions`, and `## Glossary`. Read the parts of the user's project the feature would touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every module file it lists. Name each Constraint or Architecture statement an option would break. If the project has no relevant code yet, say so and design the smallest starting shape.
 
 Compare at least two options for this project, weighing pros and cons against the project's scale and constraints. Recommend one, then give its module structure and the files to create or modify. Recommend, but do not write specs or change code.
 
-**Done:** every option cites the relevant project files and `.context/map/` module files where they exist, or says what was checked and what is missing; the recommendation gives the module structure and file list; section 7 lists every decision left to the user.
+**Done:** every option cites the relevant project files and `.context/map/` module files where they exist, or says what was checked and what is missing; `## Recommendation` gives the module structure and `## Files to create and modify` lists the files; `## Open questions` lists every decision left to the user.
 
 ## 5. Save and summarize
 

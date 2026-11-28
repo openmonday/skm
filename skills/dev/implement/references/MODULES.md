@@ -14,10 +14,12 @@ One entry per module this issue edits or creates. The tests for these files belo
 
 ### <module name>
 
-- Files: `path/to/module.ts`, `path/to/module.test.ts`
+- Files: one list item per file the module edits or creates, as a literal project-root-relative path:
+  - path/to/module.ts
+  - path/to/module.test.ts
 - Responsibility: what the module owns today, in one line, or "new".
 - Change: what this issue changes in it.
-- Map: the `.context/map/` module files covering its files, or none.
+- Map: the module file paths that `scripts/query-map.py` prints for the Files above, one per line, or `none`.
 
 ## Dependency chain
 
@@ -59,10 +61,3 @@ Each signature, schema, or message shape in the change set that this issue adds 
 The existing test files for the change set, the seam each new test should use, and the commands that run them. Name reusable fixtures and helpers, with their contracts when they live outside the change set.
 
 </modules-template>
-
-## Rules
-
-- Copy declarations only: signatures, types, schemas, and message shapes. Never function bodies.
-- A contract describes behavior a caller can rely on, not how the module achieves it.
-- When a blocking issue changes a neighbor, its contract describes the state the blocker leaves, marked `after <blocker-slug>`.
-- A neighbor that cannot be used correctly from a contract belongs in the change set, or the issue is too large.
