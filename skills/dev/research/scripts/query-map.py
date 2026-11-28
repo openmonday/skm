@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""List the map records that cover each given file. Never modifies files."""
+"""List the module files that cover each given file. Never modifies files."""
 import argparse
 import os
 import re
@@ -59,8 +59,8 @@ def parse_files(lines):
 
 
 def scan(root, directory):
-    """Return (record name, files list) pairs and the problems that skipped records."""
-    records, problems = [], []
+    """Return (module file name, files list) pairs and the problems that skipped module files."""
+    module_files, problems = [], []
     # Do not follow symlinks: they could point outside the map.
     for current, dirs, names in os.walk(directory, followlinks=False, onerror=lambda e: problems.append(str(e))):
         base = Path(current)
@@ -69,22 +69,22 @@ def scan(root, directory):
                 problems.append(f'{(base / name).relative_to(root)}: symbolic-link directory skipped')
         dirs[:] = sorted(d for d in dirs if not (base / d).is_symlink())
         for name in sorted(names):
-            record = base / name
-            label = str(record.relative_to(root))
-            if record.is_symlink():
-                problems.append(f'{label}: symbolic-link record skipped')
+            module_file = base / name
+            label = str(module_file.relative_to(root))
+            if module_file.is_symlink():
+                problems.append(f'{label}: symbolic-link module file skipped')
                 continue
             try:
-                records.append((label, parse_files(record.read_text(encoding='utf-8').splitlines())))
+                module_files.append((label, parse_files(module_file.read_text(encoding='utf-8').splitlines())))
             except (OSError, UnicodeError, ValueError) as e:
                 problems.append(f'{label}: {e}')
-    return records, problems
+    return module_files, problems
 
 
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
-        epilog='Paths are literal and relative to the project root. Exit 1 means some records '
+        epilog='Paths are literal and relative to the project root. Exit 1 means some module files '
                'were unreadable, so the results may be incomplete; 2 means the query could not run.')
     parser.add_argument('files', nargs='+', metavar='file', help='project-root-relative file path')
     args = parser.parse_args()
@@ -104,19 +104,19 @@ def main():
     if directory.is_symlink() or (directory.exists() and not directory.is_dir()):
         print(f'{PROG}: .context/map must be a real directory', file=sys.stderr)
         return 2
-    records, problems = scan(root, directory) if directory.exists() else ([], [])
+    module_files, problems = scan(root, directory) if directory.exists() else ([], [])
     for query in args.files:
-        found = [name for name, paths in records
+        found = [name for name, paths in module_files
                  if any((query == p and not p.endswith('/')) or query.startswith(p.rstrip('/') + '/') for p in paths)]
         print(style(show(query), '1'))
         for name in sorted(found):
             print('  ' + name)
         if not found:
-            print('  ' + style('(no record)', '2'))
+            print('  ' + style('(no module file)', '2'))
     for problem in problems:
         print(f'{PROG}: {problem}', file=sys.stderr)
     if problems:
-        print(f'{PROG}: results may be incomplete; fix the records above and rerun', file=sys.stderr)
+        print(f'{PROG}: results may be incomplete; fix the module files above and rerun', file=sys.stderr)
     return 1 if problems else 0
 
 

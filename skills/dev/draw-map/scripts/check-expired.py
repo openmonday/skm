@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report map records whose since is not the newest commit of their files. Never modifies files."""
+"""Report module files whose since is not the newest commit of their files. Never modifies files."""
 import os
 import re
 import shlex
@@ -52,7 +52,7 @@ def valid_path(path):
 
 
 def load_project():
-    """Return the project's eligible files and map records, or raise Fatal."""
+    """Return the project's eligible files and module files, or raise Fatal."""
     try:
         root = Path(os.fsdecode(git('rev-parse', '--show-toplevel').strip()))
     except subprocess.CalledProcessError:
@@ -67,8 +67,8 @@ def load_project():
         raise Fatal('.context/map is not a directory; create it, then rerun')
     raw = git('ls-files', '-z', '--cached', '--others', '--exclude-standard')
     files = sorted({os.fsdecode(p) for p in raw.split(b'\0') if p})
-    records = sorted(p for p in map_dir.rglob('*') if p.is_file() or p.is_symlink())
-    return root, files, [check_record(root, p, files) for p in records]
+    module_files = sorted(p for p in map_dir.rglob('*') if p.is_file() or p.is_symlink())
+    return root, files, [check_module_file(root, p, files) for p in module_files]
 
 
 def parse_front_matter(lines):
@@ -94,17 +94,17 @@ def parse_front_matter(lines):
     return end, fields, paths, issues
 
 
-def check_record(root, record, files):
+def check_module_file(root, module_file, files):
     """Return a dict with name, fields, paths, matches, and issues."""
-    result = {'name': str(record.relative_to(root)), 'fields': {}, 'paths': [], 'matches': set(), 'issues': []}
+    result = {'name': str(module_file.relative_to(root)), 'fields': {}, 'paths': [], 'matches': set(), 'issues': []}
     issues = result['issues']
-    if record.is_symlink():
+    if module_file.is_symlink():
         issues.append('is a symbolic link; replace it with a regular file')
         return result
-    if not re.fullmatch(r'[a-z]+(?:-[a-z]+)*\.md', record.name):
+    if not re.fullmatch(r'[a-z]+(?:-[a-z]+)*\.md', module_file.name):
         issues.append('filename must be lowercase words joined by hyphens, ending in .md')
     try:
-        lines = record.read_text(encoding='utf-8').splitlines()
+        lines = module_file.read_text(encoding='utf-8').splitlines()
     except (UnicodeError, OSError) as e:
         issues.append(f'cannot be read as UTF-8: {e}')
         return result
@@ -207,25 +207,25 @@ def newest_commit(paths):
 
 
 def run():
-    root, files, records = load_project()
+    root, files, module_files = load_project()
     latest_cache, expired, pending, skipped = {}, [], [], []
-    for record in records:
-        if record['issues']:
-            skipped.append(record['name'])
+    for module_file in module_files:
+        if module_file['issues']:
+            skipped.append(module_file['name'])
             continue
         commits, committed_paths = set(), []
-        for path in sorted(record['matches']):
+        for path in sorted(module_file['matches']):
             if path not in latest_cache:
                 latest_cache[path] = git('log', '-1', '--format=%H', 'HEAD', '--', ':(literal)' + path).decode().strip()
             if latest_cache[path]:
                 commits.add(latest_cache[path])
                 committed_paths.append(path)
             else:
-                pending.append((path, record['name']))
+                pending.append((path, module_file['name']))
         if not commits:
             continue
         expected = next(iter(commits)) if len(commits) == 1 else newest_commit(committed_paths)
-        since = record['fields']['since']
+        since = module_file['fields']['since']
         try:
             resolved = git('rev-parse', '--verify', '-q', since + '^{commit}').decode().strip()
         except subprocess.CalledProcessError:
@@ -241,17 +241,17 @@ def run():
             problem = f'since {since}'
         review = None
         if reachable:
-            paths = ' '.join(shlex.quote(p) for p in record['paths'])
+            paths = ' '.join(shlex.quote(p) for p in module_file['paths'])
             review = f'git log -p {since}..{expected[:12]} -- {paths}'
-        expired.append((record['name'], problem, expected, review))
+        expired.append((module_file['name'], problem, expected, review))
     if not expired and not skipped:
-        ok(f'all {len(records)} records are up to date')
+        ok(f'all {len(module_files)} module files are up to date')
     elif expired:
-        heading('Expired records', len(expired))
+        heading('Expired module files', len(expired))
         for name, problem, expected, review in expired:
             row('✘', '31', name, f'{problem}, expected {expected[:12]}')
-            print('      ' + style('review  ' + (review or 'compare the whole record with the code'), '2'))
-        hint('Reconcile each record with the changes shown, then set since to the expected hash.')
+            print('      ' + style('review  ' + (review or 'compare the whole module file with the code'), '2'))
+        hint('Reconcile each module file with the changes shown, then set since to the expected hash.')
     if pending:
         print()
         heading('Uncommitted covered files', len(pending))
@@ -261,7 +261,7 @@ def run():
     if skipped:
         if expired or pending:
             print()
-        heading('Skipped invalid records', len(skipped))
+        heading('Skipped invalid module files', len(skipped))
         for name in skipped:
             row('!', '33', name)
         hint('Fix these with check-format.py, then rerun.')

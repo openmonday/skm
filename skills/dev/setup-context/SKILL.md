@@ -9,7 +9,7 @@ disable-model-invocation: true
 Run `scripts/setup-context.sh` from the project root. It creates the following and excludes `.context/` through `.git/info/exclude`:
 
 - `.context/GLOSSARY.md`: domain terms.
-- `.context/map/`: records of the committed code.
+- `.context/map/`: module files describing the committed code.
 - `.context/issues/`: specs, module maps, and research, one folder per issue.
 - `.context/reference/`: checkouts of reference projects.
 

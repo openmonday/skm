@@ -7,7 +7,7 @@ Interview the user relentlessly until you reach a shared understanding. Map this
 
 Use the terms in `.context/GLOSSARY.md` and point out conflicts or ambiguity in them. When the session ends, add confirmed domain terms to the glossary, leaving implementation decisions out.
 
-Before the first round, find the files the idea touches and read their code. Run `scripts/query-map.py <file>...` from the project root and read every record it lists. Repeat for new areas as the discussion widens. When the idea would break a record's Constraint or Architecture, name the record and the statement, and ask whether the change is intended. Keep confirmed changes in the discussion; `.context/map/` describes committed code and stays as is.
+Before the first round, find the files the idea touches and read their code. Run `scripts/query-map.py <file>...` from the project root and read every module file it lists. Repeat for new areas as the discussion widens. When the idea would break a module file's Constraint or Architecture, name the module file and the statement, and ask whether the change is intended. Keep confirmed changes in the discussion; `.context/map/` describes committed code and stays as is.
 
 Work the tree in **rounds**. The **frontier** is every decision whose prerequisites are already settled: the questions you can ask _now_ without guessing at answers you haven't heard yet. Ask the whole frontier in one round: number each question and give your recommended answer. Then wait for the user's answers before the next round.
 

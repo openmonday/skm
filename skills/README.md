@@ -13,7 +13,7 @@ Install with `skm add @dev` or select individual skills, such as `skm add setup-
 | `grill-me` | Clarify requirements and discuss relevant code and map constraints |
 | `to-issues` | Split the discussion into small issues with specs and module maps |
 | `implement` | Implement one issue as one commit |
-| `draw-map` | Audit and, with approval, update current-code map records |
+| `draw-map` | Audit and, with approval, update the map's module files |
 | `show-me` | Explain an idea with a focused visual |
 | `wait-what` | Re-explain an idea that was unclear |
 

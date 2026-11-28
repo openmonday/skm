@@ -1,6 +1,6 @@
-# Map records
+# Module files
 
-A record is a Markdown file anywhere under `.context/map/`, such as `.context/map/payments/retry.md`. It describes what the committed code does and the rules it must keep. Give each record one cohesive responsibility and group records in module folders.
+A module file is a Markdown file anywhere under `.context/map/`, such as `.context/map/payments/retry.md`. It describes what the committed code does and the rules it must keep. Give each module file one cohesive responsibility and group module files in module folders.
 
 ```markdown
 ---

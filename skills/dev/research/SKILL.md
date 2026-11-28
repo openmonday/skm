@@ -30,20 +30,20 @@ Use the terms in `.context/GLOSSARY.md`. Keep reference checkouts under `.contex
   - Given as a Git URL: `git clone <url> .context/reference/<project-slug>`.
   - Given as a local Git repository: create a symbolic link at `.context/reference/<project-slug>` to its absolute path. Keep the linked repository unmodified, including its branch and commit.
   - Given as a local path that is not a Git repository, or by name only: ask the user for a Git repository URL or path; never guess one.
-- Record each reference's source and full commit SHA (`git -C <ref> rev-parse HEAD`). Use `git -C <ref> remote get-url origin` when available; otherwise record the supplied source or state that it is unavailable. A local origin is a local source, not necessarily an upstream URL. Every code citation in the report identifies the reference and refers to its pinned commit.
+- Note each reference's source and full commit SHA (`git -C <ref> rev-parse HEAD`). Use `git -C <ref> remote get-url origin` when available; otherwise note the supplied source or state that it is unavailable. A local origin is a local source, not necessarily an upstream URL. Every code citation in the report identifies the reference and refers to its pinned commit.
 - Use only the references the user named.
 
 **Done:** a feature sentence, and every reference checked out under `.context/reference/` and pinned to a commit.
 
 ## 2. Locate the feature in each reference
 
-Find where the feature lives before reading deeply. Search by user-visible names (commands, config keys, error messages, flags), then follow callers and callees. Read the feature's **tests** early: they show the contract (inputs, outputs, edge cases) more reliably than comments. Read design docs, decision records, or well-known talks and posts about the project when they exist, and cite them.
+Find where the feature lives before reading deeply. Search by user-visible names (commands, config keys, error messages, flags), then follow callers and callees. Read the feature's **tests** early: they show the contract (inputs, outputs, edge cases) more reliably than comments. Read design docs, architecture decision documents, or well-known talks and posts about the project when they exist, and cite them.
 
 For several or large references, run one exploration subagent per reference in parallel. Each returns entry points, the call tree, key types, and `<project-slug>:<file>:<line>` citations, but no conclusions about the user's project.
 
 Tag every claim internally as **verified** (you read the code or ran it) or **inferred** (from names, docs, or partial reading). Running a reference's existing tests to confirm behavior is fine. Do not install dependencies or change the reference to do it.
 
-**Done:** for each reference, the entry points and main call path are identified with citations, and the relevant tests are cited or the test search and its result are recorded.
+**Done:** for each reference, the entry points and main call path are identified with citations, and the relevant tests are cited or the test search and its result are noted.
 
 ## 3. Explain the references
 
@@ -53,11 +53,11 @@ Write sections 1 to 6 of the report, following the format and writing rules belo
 
 ## 4. Map onto this project
 
-Write sections 7 and 8. Read the parts of the user's project the feature would touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every record it lists. Name each Constraint or Architecture statement a suggestion would break. If the project has no relevant code yet, say so and describe the smallest starting shape.
+Write sections 7 and 8. Read the parts of the user's project the feature would touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every module file it lists. Name each Constraint or Architecture statement a suggestion would break. If the project has no relevant code yet, say so and describe the smallest starting shape.
 
 Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or change code.
 
-**Done:** section 7 cites relevant project files and map records for each suggestion where they exist; otherwise it says what was checked and what is missing. Section 8 lists every decision left to the user.
+**Done:** section 7 cites relevant project files and `.context/map/` module files for each suggestion where they exist; otherwise it says what was checked and what is missing. Section 8 lists every decision left to the user.
 
 ## 5. Save and summarize
 
@@ -104,9 +104,9 @@ A table of the decisions that differ between references, and what drives each ch
 
 ## 7. Fit with this project
 Suggestions, not decisions:
-- Where the feature would sit in this project, and what it would touch (cite files and map records).
+- Where the feature would sit in this project, and what it would touch (cite project files and `.context/map/` module files).
 - Which reference approach fits this project's scale and constraints, and what to leave out.
-- Map record Constraints and Architecture statements the feature would break, as candidates to supersede.
+- Module file Constraints and Architecture statements the feature would break, as candidates to supersede.
 - Risks, and the smallest first slice worth building.
 
 ## 8. Open questions

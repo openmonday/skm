@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report map records that break the record format. Never modifies files."""
+"""Report module files that break the module file format. Never modifies files."""
 import os
 import re
 import shlex
@@ -52,7 +52,7 @@ def valid_path(path):
 
 
 def load_project():
-    """Return the project's eligible files and map records, or raise Fatal."""
+    """Return the project's eligible files and module files, or raise Fatal."""
     try:
         root = Path(os.fsdecode(git('rev-parse', '--show-toplevel').strip()))
     except subprocess.CalledProcessError:
@@ -67,8 +67,8 @@ def load_project():
         raise Fatal('.context/map is not a directory; create it, then rerun')
     raw = git('ls-files', '-z', '--cached', '--others', '--exclude-standard')
     files = sorted({os.fsdecode(p) for p in raw.split(b'\0') if p})
-    records = sorted(p for p in map_dir.rglob('*') if p.is_file() or p.is_symlink())
-    return root, files, [check_record(root, p, files) for p in records]
+    module_files = sorted(p for p in map_dir.rglob('*') if p.is_file() or p.is_symlink())
+    return root, files, [check_module_file(root, p, files) for p in module_files]
 
 
 def parse_front_matter(lines):
@@ -94,17 +94,17 @@ def parse_front_matter(lines):
     return end, fields, paths, issues
 
 
-def check_record(root, record, files):
+def check_module_file(root, module_file, files):
     """Return a dict with name, fields, paths, matches, and issues."""
-    result = {'name': str(record.relative_to(root)), 'fields': {}, 'paths': [], 'matches': set(), 'issues': []}
+    result = {'name': str(module_file.relative_to(root)), 'fields': {}, 'paths': [], 'matches': set(), 'issues': []}
     issues = result['issues']
-    if record.is_symlink():
+    if module_file.is_symlink():
         issues.append('is a symbolic link; replace it with a regular file')
         return result
-    if not re.fullmatch(r'[a-z]+(?:-[a-z]+)*\.md', record.name):
+    if not re.fullmatch(r'[a-z]+(?:-[a-z]+)*\.md', module_file.name):
         issues.append('filename must be lowercase words joined by hyphens, ending in .md')
     try:
-        lines = record.read_text(encoding='utf-8').splitlines()
+        lines = module_file.read_text(encoding='utf-8').splitlines()
     except (UnicodeError, OSError) as e:
         issues.append(f'cannot be read as UTF-8: {e}')
         return result
@@ -175,15 +175,15 @@ def main(run):
 
 
 def run():
-    root, files, records = load_project()
-    invalid = [r for r in records if r['issues']]
+    root, files, module_files = load_project()
+    invalid = [r for r in module_files if r['issues']]
     if not invalid:
-        ok(f'all {len(records)} records are well-formed')
+        ok(f'all {len(module_files)} module files are well-formed')
         return 0
-    heading('Invalid records', len(invalid))
-    for record in invalid:
-        row('✘', '31', record['name'])
-        for issue in record['issues']:
+    heading('Invalid module files', len(invalid))
+    for module_file in invalid:
+        row('✘', '31', module_file['name'])
+        for issue in module_file['issues']:
             print('      ' + issue)
     return 1
 

@@ -34,11 +34,11 @@ Testing: what makes a good test here (external behavior only, not implementation
 
 ## Constraints
 
-Rules the implementation must follow and later changes must keep, each with its reason. Include what must NOT be done, and rules for new modules that have no history yet. Architectural boundaries and hard-to-reverse choices belong here. Keep each rule to one line, since map records are built from them.
+Rules the implementation must follow and later changes must keep, each with its reason. Include what must NOT be done, and rules for new modules that have no history yet. Architectural boundaries and hard-to-reverse choices belong here. Keep each rule to one line, since the map's module files are built from them.
 
-**Supersedes:** map record Constraints or Architecture statements this issue changes, each confirmed by the user. One line each:
+**Supersedes:** Constraints or Architecture statements in `.context/map/` module files that this issue changes, each confirmed by the user. One line each:
 
-- `<record>.md`: "<old statement>" → "<new statement or removed>": <reason>
+- `<module-file>.md`: "<old statement>" → "<new statement or removed>": <reason>
 
 Write "None" when nothing changes. Only the statements listed here may be broken; every other one stays binding.
 
@@ -48,7 +48,7 @@ What this issue leaves out, naming the issue that covers it when there is one.
 
 ## Verification
 
-Left empty when the issue is written. The implementer records the commit and the checks run, with their results.
+Left empty when the issue is written. The implementer writes the commit and the checks run, with their results.
 
 </spec-template>
 

@@ -18,11 +18,11 @@ Turn the current conversation and your understanding of the code into one or mor
 
 ## 1. Trace the change
 
-Find the modules the decided change touches and read their code. Follow their callers up and their callees down, one hop beyond the modules that change. For every file you read, run `scripts/query-map.py <file>...` from the project root and read every record it lists. When the change would break a record's Constraint or Architecture statement that the conversation did not confirm, ask the user. `.context/map/` describes committed code; leave it as is.
+Find the modules the decided change touches and read their code. Follow their callers up and their callees down, one hop beyond the modules that change. For every file you read, run `scripts/query-map.py <file>...` from the project root and read every module file it lists. When the change would break a module file's Constraint or Architecture statement that the conversation did not confirm, ask the user. `.context/map/` describes committed code; leave it as is.
 
 For a wide area, dispatch one exploration subagent per area in parallel. Each returns call paths, declarations, and `path:symbol` citations.
 
-**Done:** the modules to change, their callers and callees, and the map records covering them are known.
+**Done:** the modules to change, their callers and callees, and the `.context/map/` module files covering them are known.
 
 ## 2. Split into issues
 

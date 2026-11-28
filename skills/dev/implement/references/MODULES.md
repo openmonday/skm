@@ -1,4 +1,4 @@
-# Module file
+# Module map
 
 `modules.md` says where one issue's change lands and what surrounds it. Its purpose is narrow reading: the implementer reads and edits only the **change set**, and uses every other module through its **contract** here instead of reading its code. Paths, symbols, and signatures describe the code at the `Base` commit.
 
@@ -17,7 +17,7 @@ One entry per module this issue edits or creates. The tests for these files belo
 - Files: `path/to/module.ts`, `path/to/module.test.ts`
 - Responsibility: what the module owns today, in one line, or "new".
 - Change: what this issue changes in it.
-- Map records: the `.context/map/` records covering its files, or none.
+- Map: the `.context/map/` module files covering its files, or none.
 
 ## Dependency chain
 
