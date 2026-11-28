@@ -2,12 +2,12 @@
 name: research
 description: Explain how reference projects implement a feature and assess how their approaches fit the current project.
 disable-model-invocation: true
-argument-hint: "Which feature or architecture change, and which reference projects (name with Git URL, or local path)?"
+argument-hint: "Which feature or architecture change? Optional: reference paths or URLs."
 ---
 
 # Research
 
-Produce a research report that explains how a feature works by reconstructing it from the problem up, then grounding every step in real reference code. The goal is that the user understands the design well enough to make their own decisions about it.
+Produce a research report that explains how a feature works by reconstructing it from the problem up, then grounding every step in real reference code. Then recommend how to build it in this project. The goal is that the user understands the design well enough to make their own decisions about it.
 
 ## Reader
 
@@ -20,20 +20,19 @@ The reader has a solid computer foundation but no software development experienc
 
 ## Workspace
 
-Use the terms in `.context/GLOSSARY.md`. Keep reference checkouts under `.context/reference/`, and save the report as `.context/issues/<issue-slug>/research.md` with its diagrams beside it. Leave reference checkouts and the user's code unmodified.
+Use the terms in `.context/GLOSSARY.md`. Keep new reference checkouts under `.context/reference/`. Leave existing references and the user's code unmodified.
 
-## 1. Pin the inputs
+Save the report as `.context/issues/<issue-slug>/research.md`. Put each diagram's Graphviz source (`.dot`) and rendered `.svg` in `.context/issues/<issue-slug>/assets/`, and link the SVG from the report as `assets/<diagram>.svg`. Save a concepts file, when one is needed, as `.context/issues/<issue-slug>/concepts.md`, beside `research.md`. Use the relevant issue directory or choose a descriptive slug; ask if the intended issue is ambiguous.
+
+## 1. Choose references
 
 - State the feature in one sentence, in the user's terms. Ask only if the feature is ambiguous.
-- For each reference project the user named, choose a `<project-slug>` (the project's own name, lowercase) and make sure `.context/reference/<project-slug>/` is a checkout of that project:
-  - Already present: verify it is a Git repository and that its source matches the requested project. If its identity is unclear or it is the wrong project, ask the user before proceeding. Reuse it at its current commit; ask before pulling or switching commits, because existing reports cite that commit.
-  - Given as a Git URL: `git clone <url> .context/reference/<project-slug>`.
-  - Given as a local Git repository: create a symbolic link at `.context/reference/<project-slug>` to its absolute path. Keep the linked repository unmodified, including its branch and commit.
-  - Given as a local path that is not a Git repository, or by name only: ask the user for a Git repository URL or path; never guess one.
-- Note each reference's source and full commit SHA (`git -C <ref> rev-parse HEAD`). Use `git -C <ref> remote get-url origin` when available; otherwise note the supplied source or state that it is unavailable. A local origin is a local source, not necessarily an upstream URL. Every code citation in the report identifies the reference and refers to its pinned commit.
-- Use only the references the user named.
+- Start with the paths or URLs the user explicitly provided. Read local files and folders in place, whether or not they are Git repositories. Read supplied project pages and documentation at their URLs. For a supplied Git repository URL, reuse a matching checkout or clone it into `.context/reference/<project-slug>/`.
+- If the user supplied no references, inspect `.context/reference/` and read the projects relevant to the feature. A missing or empty directory is not a blocker.
+- After a first pass, list the important mechanisms or questions the current references cannot explain. Unless the user restricts the scope, search GitHub for those gaps and clone the best matching public projects into `.context/reference/`. Prefer maintained projects with clear code, tests or documentation, a clear license, and substantial adoption or many stars. Relevance comes before stars: a popular project that doesn't implement the missing mechanism is not evidence. Reuse a matching local checkout; never overwrite, pull, or switch an existing one without asking. Clone only what you need, and don't install dependencies or run setup scripts just to inspect it.
+- Use legible project labels and cite the files and lines you actually read. Record a URL, version, or short revision only if it helps the reader find or distinguish the evidence. A source inventory and full commit SHAs are not required, including for local snapshots.
 
-**Done:** a feature sentence, and every reference checked out under `.context/reference/` and pinned to a commit.
+**Done:** the feature is stated, the available references have been read or queued for exploration, and gaps have either led to useful additional references or been explicitly noted.
 
 ## 2. Locate the feature in each reference
 
@@ -47,23 +46,26 @@ Tag every claim internally as **verified** (you read the code or ran it) or **in
 
 ## 3. Explain the references
 
-Write sections 1 to 6 of the report, following the format and writing rules below. Base them only on the references, before looking at the user's project, so the analysis is not bent toward the current code.
+Write sections 1 to 3 of the report, following the report format below. Base them only on the references, before looking at the user's project, so the analysis is not bent toward the current code.
 
-**Done:** sections 1 to 6 are filled or marked not applicable, every code claim has a pinned citation, and diagrams have been rendered and inspected where possible; any limitation is reported.
+- If the core mechanism or algorithm cannot be explained in a few sentences in section 2, move the key concepts and core algorithms into `concepts.md` and link it from section 2.
+- Draw a diagram of where the feature sits in the reference, and of any flow with more than three hops or changing state. Write each as a `.dot` file in `assets/`, render it with `dot -Tsvg`, and inspect the SVG for overlaps, unreadable labels, and misleading connections; fix and re-render. Check `dot -V` first. If Graphviz is missing, ask the user whether to install it or continue with a hand-written minimal SVG. Never install tools.
+
+**Done:** sections 1 to 3 are filled, every code claim has a file-and-line citation, diagrams are rendered and inspected, and any limitation or evidence gap is stated. Diagrams that could not be verified are reported in the summary.
 
 ## 4. Map onto this project
 
-Write sections 7 and 8. Read the parts of the user's project the feature would touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every module file it lists. Name each Constraint or Architecture statement a suggestion would break. If the project has no relevant code yet, say so and describe the smallest starting shape.
+Write sections 4 to 7 of the report. Read the parts of the user's project the feature would touch. For those files, run `scripts/query-map.py <file>...` from the project root and read every module file it lists. Name each Constraint or Architecture statement an option would break. If the project has no relevant code yet, say so and design the smallest starting shape.
 
-Keep section 7 to suggestions with trade-offs. Do not decide, write specs, or change code.
+Compare at least two options for this project, weighing pros and cons against the project's scale and constraints. Recommend one, then give its module structure and the files to create or modify. Recommend, but do not write specs or change code.
 
-**Done:** section 7 cites relevant project files and `.context/map/` module files for each suggestion where they exist; otherwise it says what was checked and what is missing. Section 8 lists every decision left to the user.
+**Done:** every option cites the relevant project files and `.context/map/` module files where they exist, or says what was checked and what is missing; the recommendation gives the module structure and file list; section 7 lists every decision left to the user.
 
 ## 5. Save and summarize
 
-Save the report as `.context/issues/<issue-slug>/research.md` and diagrams alongside it, with relative links to diagrams. Use the relevant issue directory or choose a descriptive slug; ask if the intended issue is ambiguous. Update an existing report on the same topic instead of starting a second one.
+Save the report as `.context/issues/<issue-slug>/research.md` and its diagrams and concepts file alongside it. Update an existing report on the same topic instead of starting a second one.
 
-Then tell the user the report path, the key design idea in three to five lines, and the open questions. Stop there. Answer follow-up questions inline, and update the report when an answer changes it.
+Then tell the user the report path, the key design idea and recommendation in three to five lines, and the open questions. Stop there. Answer follow-up questions inline, and update the report when an answer changes it.
 
 **Done:** the report is saved and the user has the summary.
 
@@ -72,56 +74,49 @@ Then tell the user the report path, the key design idea in three to five lines, 
 ```markdown
 # <Feature>: research
 
-References: `.context/reference/<project-slug>` @ <full commit SHA> (source: <URL or path, or unavailable>), ...
 Date: <YYYY-MM-DD>
+References:
 
-## 1. The problem
-What the feature must accomplish, from a user's point of view, with one concrete running example used through the whole report.
+- <local path or URL of each reference>
 
-## 2. Simplest workable version
-A minimal solution in short, commented pseudocode, written by you, not taken from a reference.
+## The problem
 
-## 3. From simple to real
-Repeat for each pressure the references actually handle:
-### 3.n <Pressure>: <what breaks>
-- The new requirement and how the previous version fails it (inability vs. mere inconvenience).
-- The change that fixes it and why it works.
-- Where the reference does this: `<project-slug>:path/to/file.c:120-148` with a short quoted excerpt (only the lines that carry the idea), and what each part does.
+What the feature must accomplish, from the user's point of view, with one concrete example used through the whole report.
 
-## 4. Where it sits in the reference
-- Position: a module/layer diagram showing the feature and its neighbors.
-- Entry points and call tree from the trigger down to the effect.
-- Inputs: what arrives, from whom, in what form.
-- Outputs and side effects: return values, state changes, I/O, events.
-- State and invariants it owns or relies on.
-- Considerations in between: errors and recovery, concurrency, performance, resource limits, compatibility, security, configuration.
+## How the references solve it
 
-## 5. Why it is designed this way
-The forces behind the shape: what each boundary protects, what the design makes cheap and what it makes expensive. Alternatives the reference rejected, or that another reference chose, and when each would be better. Mark inferences as inferred.
+The solution in plain words, built up from the problem: each part, why it is needed, and what breaks without it. Start with where the feature lives: its entry point and the call path to its effect (diagram: `assets/<diagram>.svg`). Cite code as `<project-slug>:<file>:<lines>` and say what the code does. Quote only short excerpts. Mark inferred claims as inferred. Link `concepts.md` when it exists.
 
-## 6. Comparison (several references only)
-A table of the decisions that differ between references, and what drives each choice.
+## Comparison
 
-## 7. Fit with this project
-Suggestions, not decisions:
-- Where the feature would sit in this project, and what it would touch (cite project files and `.context/map/` module files).
-- Which reference approach fits this project's scale and constraints, and what to leave out.
-- Module file Constraints and Architecture statements the feature would break, as candidates to supersede.
-- Risks, and the smallest first slice worth building.
+Only when there are several references: a short table of the decisions that differ, and what drives each one.
 
-## 8. Open questions
-Decisions the user must make, each with the options and a recommended answer.
+## Options for this project
+
+At least two options, each as:
+
+### Option <letter>: <name>
+
+- Idea: one or two sentences.
+- Pros:
+- Cons:
+- Constraints it would break: the `.context/map/` statements, or none.
+- Files it touches: project files and `.context/map/` module files.
+
+## Recommendation
+
+The option to build and why, in a few sentences. Then the module structure as a tree, with one line per module on its responsibility. Mark new modules `(new)`.
+
+## Files to create and modify
+
+- Create: `path` — purpose.
+- Modify: `path` — change.
+
+## Open questions
+
+Decisions the user must make, each with the options and your recommended answer.
 
 ## Glossary
+
 Terms introduced in the report, one line each, in plain language.
 ```
-
-Writing rules:
-
-- **Problem before mechanism.** Every mechanism answers a need already established in the running example. Never present a component before the reader knows why it exists.
-- **Explain code, not just paths.** For each excerpt, say what calls it, what it receives, what it returns or changes, and why it is shaped that way. A citation without an explanation is not enough.
-- **Quote sparingly.** Use the shortest excerpt that shows the idea, preserved exactly, with an ellipsis comment for skipped lines. Cite `<project-slug>:<file>:<lines>` relative to the reference root at its pinned commit.
-- **Present it as reconstruction, not history.** Say "a simpler version would fail because...", not "the authors first tried...", unless commit history or docs show it.
-- **Stay honest.** Do not invent limitations, overstate a reference, or imply its design is the only correct one. Keep verified and inferred claims distinguishable.
-- **Show evidence gaps.** If tests or design rationale cannot be found, say what was searched and what remains unknown. Mark a report item not applicable when it does not fit the feature; do not treat missing evidence as not applicable.
-- **Visualize when structure matters.** Draw the module position (section 4) and any flow with more than three hops or changing state. Default to Graphviz. Check `dot -V` first. If it is missing, use Mermaid in the Markdown and tell the user. Never install tools. Render and inspect diagrams when possible; fix overlaps or misleading layout. If rendering or inspection is unavailable, say what could not be verified in the report and summary.
